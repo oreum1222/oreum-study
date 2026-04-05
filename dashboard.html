@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>가경T 대시보드 · 오름 국어</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #080c08;
+  --bg-card: #0f1710;
+  --bg-card2: #141e15;
+  --border: rgba(255,255,255,.1);
+  --border-h: rgba(255,255,255,.2);
+  --green: #4a5a3a;
+  --green-a: #6b8f5e;
+  --green-l: #8aad7a;
+  --green-b: #4ade80;
+  --gold: #c9a84c;
+  --gold-d: #a08838;
+  --text: #ece8e0;
+  --text2: #c4bfb4;
+  --text3: #928d82;
+  --text4: #6a6560;
+  --red: #ef4444;
+  --orange: #f59e0b;
+  --blue: #3b82f6;
+  --radius: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* Layout */
+.app{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+
+/* Header */
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.dash-brand{display:flex;align-items:center;gap:14px}
+.dash-badge{background:linear-gradient(135deg,var(--green),var(--green-a));color:#fff;font-family:'Noto Serif KR',serif;font-weight:900;font-size:13px;padding:6px 12px;border-radius:6px}
+.dash-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900}
+.dash-title span{color:var(--gold)}
+.dash-sub{font-size:12px;color:var(--text3)}
+.dash-actions{display:flex;gap:10px}
+.dash-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text3);font-size:12px;font-family:'Noto Sans KR',sans-serif;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.dash-btn:hover{border-color:var(--border-h);color:var(--text)}
+.dash-btn.primary{background:var(--green);border-color:var(--green-a);color:#fff}
+
+/* Summary Cards */
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden}
+.summary-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.summary-card.green::before{background:var(--green-a)}
+.summary-card.gold::before{background:var(--gold)}
+.summary-card.blue::before{background:var(--blue)}
+.summary-card.red::before{background:var(--red)}
+.summary-label{font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500}
+.summary-value{font-size:28px;font-weight:700;letter-spacing:-.5px}
+.summary-sub{font-size:12px;color:var(--text4);margin-top:4px}
+
+/* Sections */
+.section{margin-bottom:28px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:var(--text)}
+.section-title .icon{margin-right:8px}
+
+/* Table */
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:var(--bg-card2)}
+th{padding:12px 16px;text-align:left;font-weight:600;font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:hover td{background:rgba(255,255,255,.02)}
+tr:last-child td{border-bottom:none}
+.rank{font-weight:700;color:var(--gold);width:40px;text-align:center}
+.rank.top1{color:#fbbf24;font-size:16px}
+.rank.top2{color:#c0c0c0}
+.rank.top3{color:#cd7f32}
+.name-cell{font-weight:600}
+.rate-cell{font-weight:700}
+.rate-cell.high{color:var(--green-b)}
+.rate-cell.mid{color:var(--orange)}
+.rate-cell.low{color:var(--red)}
+.grade{display:inline-block;width:28px;height:28px;border-radius:6px;text-align:center;line-height:28px;font-weight:700;font-size:12px}
+.grade-A{background:rgba(34,197,94,.12);color:var(--green-b)}
+.grade-B{background:rgba(59,130,246,.12);color:var(--blue)}
+.grade-C{background:rgba(245,158,11,.12);color:var(--orange)}
+.grade-D{background:rgba(249,115,22,.12);color:#f97316}
+.grade-F{background:rgba(239,68,68,.12);color:var(--red)}
+
+/* Work Analysis */
+.work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.work-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:border-color .2s}
+.work-card:hover{border-color:var(--border-h)}
+.work-name{font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text)}
+.work-genre{font-size:11px;color:var(--text4);margin-bottom:10px}
+.work-bar-bg{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.work-bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.work-stats{display:flex;justify-content:space-between;font-size:12px;color:var(--text3)}
+.work-stats .rate{font-weight:700}
+
+/* Student Detail Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{background:var(--bg-card);border:1px solid var(--border-h);border-radius:16px;padding:32px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:'Noto Serif KR',serif;font-size:20px;margin-bottom:4px}
+.modal .modal-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
+.modal .close-btn{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer}
+.modal-table{width:100%;font-size:13px}
+.modal-table th{font-size:11px;padding:8px 12px}
+.modal-table td{padding:8px 12px}
+.wrong-list{font-size:11px;color:var(--red);max-width:200px;word-break:break-all}
+
+/* Loading */
+.loading{text-align:center;padding:60px;color:var(--text3)}
+.loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green-a);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Empty */
+.empty{text-align:center;padding:60px;color:var(--text4);font-size:14px}
+
+/* Responsive */
+@media(max-width:768px){
+  .summary-row{grid-template-columns:repeat(2,1fr)}
+  .dash-header{flex-direction:column;align-items:flex-start}
+  .work-grid{grid-template-columns:1fr}
+  .summary-value{font-size:22px}
+  th,td{padding:8px 10px;font-size:12px}
+}
+@media(max-width:480px){
+  .summary-row{grid-template-columns:1fr}
+  .app{padding:16px 12px 40px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div>데이터를 불러오는 중...</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// ⬇️ 본문해석 도구와 동일한 Apps Script URL ⬇️
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
+
+let rawData = [];
+let students = {};
+let workStats = {};
+
+async function loadData() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?mode=data');
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    rawData = json.rows || [];
+    processData();
+    renderDashboard();
+  } catch(err) {
+    console.error(err);
+    document.getElementById('app').innerHTML = `
+      <div class="empty">
+        <p>데이터를 불러올 수 없습니다.</p>
+        <p style="font-size:12px;margin-top:8px;color:var(--text4)">Apps Script에 doGet 데이터 API가 추가되었는지 확인하세요.</p>
+        <button class="dash-btn primary" style="margin-top:16px" onclick="loadData()">다시 시도</button>
+      </div>`;
+  }
+}
+
+function processData() {
+  students = {};
+  workStats = {};
+
+  rawData.forEach(row => {
+    const name = row.name.trim();
+    if (!name) return;
+
+    if (!students[name]) students[name] = { latest: '', submissions: [] };
+    if (row.time > students[name].latest) students[name].latest = row.time;
+    students[name].submissions.push(row);
+  });
+
+  // 학생별: 최신 제출만
+  Object.keys(students).forEach(name => {
+    const st = students[name];
+    st.current = st.submissions.filter(s => s.time === st.latest);
+    st.summary = st.current.find(s => s.work === '【전체 요약】') || null;
+    st.works = st.current.filter(s => s.work !== '【전체 요약】');
+  });
+
+  // 작품별 통계
+  Object.values(students).forEach(st => {
+    st.works.forEach(w => {
+      if (!workStats[w.work]) workStats[w.work] = { total: 0, sumRate: 0, count: 0, wrongMap: {} };
+      const ws = workStats[w.work];
+      ws.count++;
+      ws.sumRate += Number(w.rate) || 0;
+      if (w.wrongs) {
+        w.wrongs.split(',').map(s=>s.trim()).filter(s=>s).forEach(wr => {
+          ws.wrongMap[wr] = (ws.wrongMap[wr] || 0) + 1;
+        });
+      }
+    });
+  });
+}
+
+function renderDashboard() {
+  const names = Object.keys(students);
+  const totalStudents = names.length;
+
+  // 전체 평균
+  let sumRate = 0, rateCount = 0;
+  names.forEach(n => {
+    if (students[n].summary) {
+      sumRate += Number(students[n].summary.rate) || 0;
+      rateCount++;
+    }
+  });
+  const avgRate = rateCount ? Math.round(sumRate / rateCount) : 0;
+
+  // 80% 이상 비율
+  let above80 = 0;
+  names.forEach(n => {
+    if (students[n].summary && Number(students[n].summary.rate) >= 80) above80++;
+  });
+  const above80pct = totalStudents ? Math.round(above80 / totalStudents * 100) : 0;
+
+  // 가장 어려운 작품
+  let hardestWork = '-', hardestRate = 100;
+  Object.entries(workStats).forEach(([work, ws]) => {
+    const avg = ws.count ? Math.round(ws.sumRate / ws.count) : 0;
+    if (avg < hardestRate) { hardestRate = avg; hardestWork = work; }
+  });
+
+  // 순위 정렬
+  const ranked = names.map(n => ({
+    name: n,
+    rate: students[n].summary ? Number(students[n].summary.rate) : 0,
+    correct: students[n].summary ? students[n].summary.correct : 0,
+    total: students[n].summary ? students[n].summary.total : 0,
+    time: students[n].latest
+  })).sort((a, b) => b.rate - a.rate);
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="dash-header">
+      <div class="dash-brand">
+        <div class="dash-badge">[오름] 국어</div>
+        <div>
+          <div class="dash-title"><span>가경T</span> 대시보드</div>
+          <div class="dash-sub">고전시가 본문해석 · 실시간 학습 현황</div>
+        </div>
+      </div>
+      <div class="dash-actions">
+        <button class="dash-btn" onclick="loadData()">↻ 새로고침</button>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-row">
+      <div class="summary-card green">
+        <div class="summary-label">응시 학생 수</div>
+        <div class="summary-value">${totalStudents}<span style="font-size:14px;color:var(--text3)">명</span></div>
+      </div>
+      <div class="summary-card gold">
+        <div class="summary-label">전체 평균 정답률</div>
+        <div class="summary-value" style="color:${avgRate>=80?'var(--green-b)':avgRate>=60?'var(--orange)':'var(--red)'}">${avgRate}%</div>
+      </div>
+      <div class="summary-card blue">
+        <div class="summary-label">80% 이상 비율</div>
+        <div class="summary-value">${above80pct}%</div>
+        <div class="summary-sub">${above80}명 / ${totalStudents}명</div>
+      </div>
+      <div class="summary-card red">
+        <div class="summary-label">가장 어려운 작품</div>
+        <div class="summary-value" style="font-size:16px;line-height:1.3">${hardestWork.length>12?hardestWork.slice(0,12)+'…':hardestWork}</div>
+        <div class="summary-sub">평균 ${hardestRate}%</div>
+      </div>
+    </div>
+
+    <!-- Student Rankings -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title"><span class="icon">🏆</span>학생별 순위</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:50px">순위</th><th>학생</th><th>정답</th><th>총빈칸</th><th>정답률</th><th>등급</th><th>제출시각</th></tr>
+          </thead>
+          <tbody>
+            ${ranked.map((s, i) => {
+              const grade = s.rate>=90?'A':s.rate>=80?'B':s.rate>=70?'C':s.rate>=60?'D':'F';
+              const rCls = s.rate>=80?'high':s.rate>=60?'mid':'low';
+              const rankCls = i===0?'top1':i===1?'top2':i===2?'top3':'';
+              return `<tr style="cursor:pointer" onclick="showStudent('${s.name}')">
+                <td class="rank ${rankCls}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td>
+                <td class="name-cell">${s.name}</td>
+                <td>${s.correct}</td>
+                <td>${s.total}</td>
+                <td class="rate-cell ${rCls}">${s.rate}%</td>
+                <td><span class="grade grade-${grade}">${grade}</span></td>
+                <td style="color:var(--text4);font-size:12px">${s.time}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Work Analysis -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title"><span class="icon">📊</span>작품별 난이도 분석</div>
+      </div>
+      <div class="work-grid">
+        ${Object.entries(workStats).sort((a,b)=>{
+          const aAvg=a[1].count?a[1].sumRate/a[1].count:0;
+          const bAvg=b[1].count?b[1].sumRate/b[1].count:0;
+          return aAvg-bAvg;
+        }).map(([work, ws]) => {
+          const avg = ws.count ? Math.round(ws.sumRate / ws.count) : 0;
+          const barColor = avg>=80?'var(--green-b)':avg>=60?'var(--orange)':'var(--red)';
+          const topWrongs = Object.entries(ws.wrongMap).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+          return `<div class="work-card">
+            <div class="work-name">${work}</div>
+            <div class="work-bar-bg"><div class="work-bar-fill" style="width:${avg}%;background:${barColor}"></div></div>
+            <div class="work-stats">
+              <span>응시 ${ws.count}명</span>
+              <span class="rate" style="color:${barColor}">${avg}%</span>
+            </div>
+            ${topWrongs.length?`<div style="margin-top:8px;font-size:11px;color:var(--text4)">빈출 오답: <span style="color:var(--red)">${topWrongs.join(', ')}</span></div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function showStudent(name) {
+  const st = students[name];
+  if (!st) return;
+  const works = st.works;
+  const summary = st.summary;
+  const rate = summary ? Number(summary.rate) : 0;
+  const grade = rate>=90?'A':rate>=80?'B':rate>=70?'C':rate>=60?'D':'F';
+
+  document.getElementById('modalContent').innerHTML = `
+    <h3>${name}</h3>
+    <div class="modal-sub">제출: ${st.latest} · 전체 정답률: <strong style="color:${rate>=80?'var(--green-b)':rate>=60?'var(--orange)':'var(--red)'}">${rate}%</strong> · 등급: <span class="grade grade-${grade}" style="display:inline-block;vertical-align:middle">${grade}</span></div>
+    <table class="modal-table">
+      <thead><tr><th>작품</th><th>정답</th><th>총빈칸</th><th>정답률</th><th>오답</th></tr></thead>
+      <tbody>
+        ${works.map(w => {
+          const r = Number(w.rate) || 0;
+          return `<tr>
+            <td style="font-weight:500">${w.work}</td>
+            <td>${w.correct}</td>
+            <td>${w.total}</td>
+            <td class="rate-cell ${r>=80?'high':r>=60?'mid':'low'}">${r}%</td>
+            <td class="wrong-list">${w.wrongs||'-'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('show');
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
