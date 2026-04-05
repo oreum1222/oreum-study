@@ -2,7 +2,13 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e0a">
 <title>고전시가 본문해석 · 오름 국어</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -36,12 +42,13 @@
   --radius: 10px;
   --radius-sm: 6px;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
 body {
   font-family:'Noto Sans KR',sans-serif;
   background:var(--bg-deep); color:var(--text-primary);
   line-height:1.75; word-break:keep-all; overflow-wrap:break-word; min-height:100vh;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* ── Header ── */
@@ -196,6 +203,133 @@ body {
 
 .section-controls { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
 
+/* ── Enroll Toggle ── */
+.section-header-top {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+}
+
+/* ── Selection Screen ── */
+.select-screen {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:40px 20px;
+  background:radial-gradient(ellipse at 50% 20%, rgba(74,90,58,.18) 0%, transparent 60%);
+}
+.select-card {
+  background:linear-gradient(180deg, rgba(17,26,17,.95), rgba(10,14,10,.98));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px; padding:48px 44px; max-width:720px; width:100%;
+  box-shadow:0 24px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.select-brand {
+  display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:12px;
+}
+.select-brand .logo-badge { font-size:14px; padding:6px 14px; }
+.select-card h2 {
+  font-family:'Noto Serif KR',serif; font-size:34px; font-weight:900;
+  color:var(--text-primary); margin-bottom:2px; text-align:center;
+  letter-spacing:-0.5px;
+}
+.select-card h2 .highlight { color:var(--gold); }
+.select-card .select-sub {
+  font-size:14px; color:var(--text-dim); margin-bottom:6px; text-align:center;
+}
+.select-card .select-info {
+  font-size:18px; color:var(--text-secondary); margin-bottom:32px;
+  padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,.08);
+  text-align:center;
+}
+.select-list {
+  list-style:none;
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.select-item {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px;
+  border-radius:10px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.02);
+  transition:all .2s;
+}
+.select-item:hover {
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.2);
+  transform:translateY(-1px);
+}
+.select-item.checked {
+  background:rgba(74,90,58,.12);
+  border-color:rgba(107,143,94,.4);
+}
+.select-check {
+  width:26px; height:26px; border-radius:7px;
+  border:2.5px solid rgba(255,255,255,.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; font-weight:700; color:transparent; transition:all .2s;
+  flex-shrink:0;
+  background:rgba(255,255,255,.03);
+}
+.select-item:hover .select-check { border-color:rgba(255,255,255,.45); }
+.select-item.checked .select-check {
+  background:var(--green-brand); border-color:var(--green-accent); color:var(--green-light);
+  box-shadow:0 2px 8px rgba(74,90,58,.4);
+}
+.select-item-info { flex:1; min-width:0; }
+.select-item-title {
+  font-size:15px; font-weight:600; color:var(--text-primary);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.select-item-genre {
+  font-size:12px; color:var(--text-dim); margin-top:2px;
+}
+.select-count {
+  font-size:17px; color:var(--green-light); font-weight:700;
+  margin-top:24px; text-align:center;
+  letter-spacing:.3px;
+}
+.select-count .num { font-size:22px; color:var(--green-bright); }
+.select-actions {
+  margin-top:20px; display:flex; gap:12px; align-items:center;
+  justify-content:space-between;
+}
+.select-actions .select-toggle {
+  font-size:13px; color:var(--text-dim); cursor:pointer;
+  text-decoration:underline; background:none; border:none;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.select-actions .select-toggle:hover { color:var(--text-secondary); }
+.start-btn {
+  background:linear-gradient(135deg, var(--green-brand), var(--green-accent));
+  border:none; color:#fff; font-family:'Noto Sans KR',sans-serif;
+  font-size:17px; font-weight:700;
+  padding:14px 48px; border-radius:10px;
+  cursor:pointer; transition:all .25s;
+  letter-spacing:.5px;
+  box-shadow:0 4px 16px rgba(74,90,58,.3);
+}
+.start-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(74,90,58,.5); }
+.start-btn:disabled { opacity:.35; cursor:not-allowed; transform:none; box-shadow:none; }
+
+.back-btn {
+  background:none; border:1px solid rgba(255,255,255,.2);
+  color:var(--text-muted); font-size:12px; font-family:'Noto Sans KR',sans-serif;
+  padding:5px 12px; border-radius:var(--radius-sm); cursor:pointer; white-space:nowrap;
+}
+.back-btn:hover { color:var(--text-primary); border-color:rgba(255,255,255,.35); }
+
+.study-screen { display:none; }
+.study-screen.active { display:block; }
+
+.not-enrolled-msg {
+  text-align:center; padding:40px 20px;
+  color:var(--text-dim); font-size:14px;
+  background:var(--bg-card); border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius); margin-bottom:20px;
+}
+
+.nav-tab.nav-disabled { opacity:.4; text-decoration:line-through; }
+
+.section-disabled .section-title { opacity:.4; }
+.section-disabled .section-genre { opacity:.4; }
+
 .toast {
   position:fixed; bottom:24px; left:50%;
   transform:translateX(-50%) translateY(80px);
@@ -207,18 +341,79 @@ body {
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
 @media(max-width:768px) {
+  /* Selection screen */
+  .select-screen { padding:20px 14px; }
+  .select-card { padding:28px 20px; border-radius:14px; }
+  .select-card h2 { font-size:24px; }
+  .select-card .select-sub { font-size:12px; }
+  .select-card .select-info { font-size:15px; margin-bottom:20px; padding-bottom:16px; }
+  .select-list { grid-template-columns:1fr; gap:8px; }
+  .select-item { padding:14px 14px; }
+  .select-item-title { font-size:14px; }
+  .select-count { font-size:15px; }
+  .select-count .num { font-size:18px; }
+  .start-btn { font-size:15px; padding:12px 32px; width:100%; }
+  .select-actions { flex-direction:column-reverse; gap:12px; }
+  .select-actions .select-toggle { text-align:center; }
+
+  /* Header */
+  .header { flex-wrap:wrap; padding:10px 14px; gap:10px; }
+  .header-left { gap:8px; }
+  .header-title { font-size:14px; }
+  .header-sub { font-size:10px; }
+  .logo-badge { font-size:11px; padding:4px 8px; }
+  .back-btn { font-size:11px; padding:4px 10px; }
+  .header-right { gap:8px; }
+  .progress-ring-wrap { width:38px; height:38px; }
+  .progress-ring-wrap svg { width:38px; height:38px; }
+  .progress-ring-text { font-size:10px; }
+
+  /* Submit bar */
+  .submit-bar { padding:8px 14px; }
+  .submit-bar-inner { flex-direction:column; gap:8px; }
+  .submit-left { width:100%; }
+  .name-input { flex:1; width:auto; font-size:13px; }
+  .submit-btn { width:100%; text-align:center; }
+
+  /* Nav */
+  .nav-tab { padding:10px 12px; font-size:12px; }
+
+  /* Main content */
+  .main { padding:16px 12px 60px; }
+  .section-title { font-size:18px; }
+  .section-genre { font-size:12px; }
+
+  /* Dual card - stack vertically */
   .dual-header { grid-template-columns:1fr; }
   .dual-header-cell.right { border-left:none; border-top:1px solid var(--border-row); }
   .dual-row { grid-template-columns:1fr; }
-  .dual-cell.left { border-right:none; border-bottom:1px solid var(--border-row); padding-bottom:8px; }
-  .dual-cell.right { padding-top:8px; }
-  .header { flex-wrap:wrap; padding:10px 14px; }
-  .header-title { font-size:14px; }
-  .main { padding:18px 12px 60px; }
-  .section-title { font-size:20px; }
-  .blank-input { min-width:60px; font-size:13px; }
-  .ctrl-btn { font-size:11px; padding:5px 10px; }
-  .nav-tab { padding:10px 12px; font-size:12px; }
+  .dual-cell { padding:10px 14px; }
+  .dual-cell.left {
+    border-right:none; border-bottom:1px solid var(--border-row);
+    padding-bottom:8px; font-size:14px;
+  }
+  .dual-cell.right { padding-top:8px; font-size:13px; }
+  .line-num { width:20px; height:20px; font-size:9px; margin-right:8px; }
+
+  /* Blanks - 16px minimum to prevent iOS zoom */
+  .blank-input { min-width:55px; font-size:16px; padding:3px 7px; }
+  .name-input { font-size:16px; }
+  .reveal-btn { width:20px; height:20px; font-size:10px; }
+
+  /* Analysis */
+  .analysis-card { padding:16px; }
+  .analysis-text { font-size:13.5px; line-height:1.8; }
+  .card-label { font-size:10px; margin-bottom:10px; }
+
+  /* Controls */
+  .section-controls { gap:8px; }
+  .ctrl-btn { font-size:11px; padding:6px 12px; }
+
+  /* Toast */
+  .toast { font-size:12px; padding:8px 16px; bottom:16px; }
+
+  /* Disclaimer */
+  .disclaimer-wrap { padding:16px 14px 40px; }
 }
 
 /* ── Submit Bar ── */
@@ -296,8 +491,30 @@ body {
 </head>
 <body>
 <div class="watermark"></div>
+
+<!-- Selection Screen -->
+<div class="select-screen" id="selectScreen">
+  <div class="select-card">
+    <div class="select-brand">
+      <div class="logo-badge">[오름] 국어</div>
+    </div>
+    <h2><span class="highlight">고전시가</span> 본문해석</h2>
+    <div class="select-sub">2026학년도 1차고사 대비 · 수능특강</div>
+    <div class="select-info">시험 범위에 해당하는 작품을 선택하세요.</div>
+    <ul class="select-list" id="selectList"></ul>
+    <div class="select-count" id="selectCount"></div>
+    <div class="select-actions">
+      <button class="select-toggle" onclick="toggleAll()">전체 선택 / 해제</button>
+      <button class="start-btn" id="startBtn" onclick="startStudy()">시작하기 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Study Screen -->
+<div class="study-screen" id="studyScreen">
 <div class="header">
   <div class="header-left">
+    <button class="back-btn" onclick="backToSelect()">← 작품 선택</button>
     <div class="logo-badge">[오름] 국어</div>
     <div>
       <div class="header-title">고전시가 본문해석</div>
@@ -327,6 +544,7 @@ body {
 </div>
 <div class="nav-bar" id="navBar"></div>
 <div class="main" id="mainContent"></div>
+</div><!-- /study-screen -->
 <div class="submit-overlay" id="submitOverlay">
   <div class="submit-modal">
     <h3>결과 제출 확인</h3>
@@ -487,7 +705,135 @@ const DATA = [
       { orig:"겨울(冬)에 눈비 서리 치더라도 녹지 않을 그리 하여라", notes:["{겨울}. {계절적} 배경.", "임과 화자 사이의 {시련}.", "{설의적} 표현으로 임과 떨어지지 않겠다는 마음을 드러냄."] }
     ],
     analysis:"이 작품은 임과 영원히 함께하고 싶은 화자의 소망을 담은 사설시조이다. 임의 몸과 자신의 몸이 각각 {오리나무}와 {칡넝쿨}로 변하여 {얽히고} 뒤엉키기를 바라는 {참신한} 발상을 통해 이별 없는 사랑을 갈망하고 있다. {대구법}을 통해 서로 대응하는 구조를 만들고, 마지막에 '눈비 서리'라는 {시련}에도 녹지 않겠다는 {설의적} 표현을 통해 변치 않는 {사랑}의 의지를 강조하고 있다."
+  },
+  // ── 06강 ──
+  {
+    author:"송순", work:"면앙정가", genre:"가사 (조선)",
+    lines:[
+      { orig:"무등산 한 줄기 동쪽으로 뻗어 있어", notes:["{의인법}. 자연물에 {인격}을 부여하며 자신의 {정서}를 드러냄."] },
+      { orig:"멀리 떨쳐 와 제월봉이 되었거늘", notes:[] },
+      { orig:"넓은 들판에 무슨 짐작 하느라", notes:["{제월봉}의 형세를 선잠을 막 깬 늙은 용의 머리에 비유함."] },
+      { orig:"선잠을 갓 깨어 머리를 얹었으니", notes:[] },
+      { orig:"너럭바위 위에 송죽(松竹)을 헤치고", notes:[] },
+      { orig:"정자를 얹었는데 구름 탄 청학이 천 리를 가리라 두 날개 벌였는 듯", notes:[] },
+      { orig:"옥천산 용천산 내린 물이 정자 앞 넓은 들에 올올이 펼친 듯이", notes:["{직유법}. 시냇물이 흐르는 모습을 {비유}적으로 표현함."] },
+      { orig:"넓거든 길지 말든지 푸르거든 희지 말든지", notes:["유사한 구절이 반복됨. {대구법}."] },
+      { orig:"어디로 가느라고 무슨 일 바빠서 내닫는 듯 따르는 듯 밤낮으로 흐르는 듯", notes:[] },
+      { orig:"물가의 모래밭은 눈같이 펼쳤는데", notes:[] },
+      { orig:"넓은 길 바깥이요 긴 하늘 아래에 두르고 꽂은 것은 산인가 병풍인가", notes:[] },
+      { orig:"용귀산 봉선산 불대산 어등산 용진산 금성산이 허공에 벌였느니", notes:["산의 다양한 모습을 {열거법}, {대구법}을 활용하여 나타냄."] },
+      { orig:"원근의 푸른 절벽에 머문 것도 많기도 많구나", notes:["{면앙정} 주위에 둘러서 있는 산봉우리들의 모습."] },
+      { orig:"흰 구름 뿌연 연하(煙霞) 푸른 것은 산람(山嵐)이라", notes:["{시각적} 이미지. 계절적 배경이 {봄}임을 알 수 있음."] },
+      { orig:"석양과 섞이어 가랑비마저 뿌리네", notes:[] },
+      { orig:"가마를 급히 타고 솔 아래 굽은 길로", notes:["화자의 신분이 {양반}임을 짐작할 수 있음."] },
+      { orig:"나무 풀 우거지어 녹음이 짙어진 때", notes:["계절적 배경이 {여름}임을 알 수 있음."] },
+      { orig:"수풀에 우는 것은 새인가 꾀꼬리인가", notes:["화자의 감정을 {꾀꼬리}에 이입함. 화자와 꾀꼬리의 {동일성}을 드러냄."] },
+      { orig:"금수(錦繡)로 수놓은 듯 황운(黃雲)이 만경(萬頃)인 제", notes:["계절적 배경이 {가을}임을 알 수 있음. 화자는 {단풍}으로 덮인 아름다운 산과 곡식이 익은 {누런 들판}을 바라보고 있음."] },
+      { orig:"경물이 비할 데 없으니 이 아니 좋을시고", notes:["{감탄형 종결어미}를 사용함. {영탄법}. 자연의 아름다움에 대한 {경탄}."] },
+      { orig:"초목이 다 진 후에 강산이 매몰하니", notes:["계절적 배경이 {겨울}임을 알 수 있음. 온 세상이 눈으로 덮인 광경을 보며 {경이로움}을 느끼고 있음. 계절의 변화에 따른 정경 등을 {세밀하게 묘사}함."] },
+      { orig:"조대에 술 걸러 놓고 풍월강산 둘러 보며 잔 들어 하는 말이", notes:["{대구법}과 {열거법}을 통해 화자가 바쁜 이유를 제시함. 주변에 즐길 만한 것이 {많음}."] },
+      { orig:"조물을 탓하거니 물아일체어늘 흥을 못 이기어 너 좋은 줄 모르느냐", notes:["화자가 {자연}에서의 삶을 즐기느라 바쁘고 흥겨운 마음을 표현. {설의법}."] },
+      { orig:"춘풍에 화만산하고 추야에 월만대라", notes:["{청각적} 이미지로 벗과 어울려 {풍류}를 즐기는 모습을 드러냄."] },
+      { orig:"사시가절 풍류도 하도 할샤 날 잡으려 하건마는", notes:["{설의법}을 통해 근심과 시름이 없음을 드러냄."] },
+      { orig:"거나하여 누어시니 거문고와 노래 소리", notes:["취흥에 젖은 화자의 행동을 {열거}함. {청각적} 이미지를 통해 {흥취}를 드러냄."] },
+      { orig:"태평성대를 누려 보려 하노라", notes:["현재 화자의 상황을 {태평성대}로 인식함. 자신의 삶에 대한 {만족감}을 드러내고 있음."] },
+      { orig:"이백의 풍류를 부러워하랴 역군은이샷다", notes:["자신을 {신선}에 견주어 자신의 풍류에 대한 {자부심}을 드러냄. 중국 고사를 {인용}하여 이백보다 자신의 풍류가 더 즐거움을 드러냄. 자신의 풍류 생활이 {임금} 덕분이라고 생각하고 있음. {임금의 은혜}에 대한 감사."] }
+    ],
+    analysis:"이 작품은 작가가 고향에 내려와 {면앙정}을 짓고 살면서 창작한 것으로, 아름다운 자연 속에 {은거}하는 삶의 {즐거움}과 {임금}에 대한 {은혜}를 노래하고 있다. 면앙정 주변의 자연 풍경을 근경과 원경으로 그려 내고, 계절의 변화에 따른 정경 등을 {세밀하게} 묘사하면서, 그 속에서 풍류를 누리는 삶에 대한 {만족감}을 나타내고 있다. 또한 결사 부분의 '역군은이샷다'와 같은 {관습적} 표현을 통해 {임금}에 대한 감사의 마음을 드러내고 있다. 이 작품은 형식과 내용에서 정극인의 「상춘곡」의 영향을 받고, 정철의 「성산별곡」에 영향을 주면서 {강호가도}의 전통을 이었다는 점에서 문학사적 의의를 갖는다."
+  },
+  // ── 07강 ──
+  {
+    author:"작자 미상", work:"사친가", genre:"가사 (조선)",
+    lines:[
+      { orig:"소년들아 부모 봉양 생각하라", notes:[] },
+      { orig:"신체발부는 사대절이요", notes:[] },
+      { orig:"태산같이 높은 덕과 하해같이 깊은 정", notes:[] },
+      { orig:"불로초와 불사약을 인력으로 얻을쏜가 슬프다", notes:[] },
+      { orig:"수욕정이 풍부지하고 자욕양이 친부재라", notes:[] },
+      { orig:"공산낙목 한 줌 흙 되어 영원한 이별", notes:[] },
+      { orig:"일 년 삼백육십 일 사친(事親)에 소식이 영영 끊기니", notes:[] },
+      { orig:"슬프다 우리 부모 대보름인 줄 모르시나", notes:[] },
+      { orig:"원산에 봄이 드니 불탄 풀에 속잎 난다", notes:[] },
+      { orig:"당우삼대 성제들도 승피백운 하셨도다", notes:[] }
+    ],
+    analysis:"이 작품은 {효}를 주제로 한 가사로, 부모에 대한 {봉양}의 중요성을 강조하고 있다. 부모의 {은혜}를 태산과 하해에 비유하며, {불로초}와 {불사약}도 인력으로 얻을 수 없다는 {설의적} 표현을 통해 부모를 모시는 것의 소중함을 역설하고 있다. 부모와의 {이별}을 슬퍼하며 {유교적} 효 사상을 드러낸 작품이다."
+  },
+  // ── 08강 ──
+  {
+    author:"조위", work:"만분가", genre:"가사 (조선)",
+    lines:[
+      { orig:"신축년 사월 그믐께 해도(海島)에 안치하니", notes:["화자의 상황: 화자는 섬에서 {유배} 생활을 하고 있음. {구체적}인 수치를 제시하여 유배 기간이 길었음을 드러냄."] },
+      { orig:"박청(薄靑)이 유한(幽閑)하여 선음(善淫)에 통(通)하였으니", notes:["{설의}적 표현으로 자신의 {억울}함을 호소함.", "화자를 {모함}하여 유배 보낸 조정의 {간신배}들을 {비유}함.", "소인배가 {군자}를 모함함을 뜻함."] },
+      { orig:"어육(魚肉)이 핍절(乏絶)하고 조석(朝夕) 상차림은", notes:["먹을 것이 {부족}하고 겨울 추위에 시달리고 있음. 유배지의 척박한 생활 환경을 알려 주는 구체적 생활상을 {나열}함.", "{의문}의 형식을 사용하여 {참담}한 생활상을 부각하고 있음.", "설날의 초라한 상차림을 {묘사}하여 유배지에서 겪은 {시련}을 구체적으로 드러냄."] },
+      { orig:"자신의 비참한 형상에 대해", notes:["자신의 {비참}한 형상에 대해 {탄식}함."] },
+      { orig:"춘풍도화(春風桃李花) 낙모가절(落帽佳節)에도", notes:["{풍토}가 달라 국화꽃도 볼 수 없는 {유배지}의 상황."] },
+      { orig:"백악(百惡)이 구비(具備)한 곳에", notes:["중국의 {고사}를 인용하여 자신이 처한 상황이 과거의 {비극}적 인물들보다 더 {혹독}함을 강조함.", "겨울에서 {여름}으로 {계절}의 변화가 나타남.", "유배지의 열악한 환경을 {사실}적으로 묘사함."] },
+      { orig:"반계(盤溪)에서 학문에 정진하던 시절은", notes:["{혈육}의 정조차 기대할 수 없는 {절대 고독}의 상황을 제시함.", "자신이 학문에 {정진}했던 {선비}임을 드러내며 현재의 상황과 {대조}시킴으로써 학문적 {이상}을 펼칠 수 없는 현실에 대한 {안타까움}을 드러냄."] },
+      { orig:"뜰 안의 꽃이 방치되어", notes:["집을 떠나 유배생활을 하게 되면서 뜰 안의 꽃이 방치되어 있을 것을 {걱정}하고 있음. 본래 살던 집의 상황을 {짐작}하며 안타까워하고 있음."] },
+      { orig:"결초(結草)로 보은하리이다", notes:["자신의 {결백}을 주장함.", "{고사}를 인용하여 어진 정치가 이 나라에서도 펼쳐지면 자신이 반드시 임금의 어진 정치에 일조하는 {신하}가 될 것이라고 말하고 있음."] },
+      { orig:"백두냉(白頭冷)에 장문부(長門賦)를", notes:["화자에게 임은 {의지}해야 할 대상임.", "자신의 유배를 {운명}의 탓으로 돌리며 임금을 {원망}하지 않으려는 태도를 보임."] },
+      { orig:"옛 잘못은 자신의 과오라 하며", notes:["옛 잘못은 자신의 {과오}를 의미하며, 자신의 과거 행동을 {반성}하고 있음.", "자신이 한 행동은 모두 {임}을 위한 것이었음을 밝히고 있음."] },
+      { orig:"일월은 밝으시니 살펴 주옵소서", notes:["일월은 {임금}을 의미하며 임을 향한 자신의 {진심}을 임이 헤아려 줄 것이라는 생각을 드러내고 있음.", "{임금}의 은혜에 보답하겠다는 {유교}적 {충} 사상을 드러냄."] },
+      { orig:"연부용(蓮芙蓉) 옷과 치마는", notes:["'옷'과 '치마'는 임을 위해 자신을 {단장}하려고 준비한 사물로, 임을 향한 화자의 {애정}과 {정성}을 상징함.", "임이 {부재}한 상황에서 자신의 정성과 아름다움이 {무의미}함을 탄식함."] },
+      { orig:"벽해(碧海)를 건너 옥루(玉樓)에서 임을 뵙는 꿈", notes:["{꿈}속에서나마 {장애물}인 바다를 건너 임에게 가고 싶은 {간절함}을 표현함.", "만남의 꿈을 {깨뜨}리고 화자를 다시 {고통}스러운 {현실}로 되돌리는 {청각적} 매개체임."] },
+      { orig:"임을 그리워하는 마음 어로향(御爐香)에", notes:["임을 {그리워}하는 마음이 드러남. {청각}적, {후각}적 심상을 활용하여 꿈속에서의 만남이 매우 {생생}했음을 강조하고 그리움의 여운을 남김.", "임을 다시 모시고 싶은 자신의 {바람}을 나타내고 있음.", "임금이 자신을 {구원}해 주기를 바람."] }
+    ],
+    analysis:"이 작품은 {유배} 문학의 대표작으로, {조위}가 유배지에서 겪은 고통과 {억울}함, 그리고 {임금}에 대한 변함없는 {충성}을 노래하고 있다. 유배지의 {척박}한 환경과 {고립무원}의 처지를 사실적으로 묘사하면서도, 중국의 {고사}를 다수 인용하여 자신의 상황에 빗대고 있다. {결백}을 주장하고 {임금}에 대한 {충의}를 거듭 강조하며, {꿈}속에서나마 임을 만나고자 하는 {간절한} 소망을 드러낸 작품이다."
+  },
+  // ── 09강 ──
+  {
+    author:"작자 미상", work:"장산곶이~", genre:"민요 (황해도)",
+    lines:[
+      { orig:"장산곶이 뻗어 나려 진어옹을 불러든다", notes:["{황해}도에 있는 곶. {구체적}인 지명을 등장시켜 {향토}적 정서를 자아냄.", "{청각}적 이미지를 통해 {활기}찬 분위기를 드러냄."] },
+      { orig:"에 에 에 에헤요 에 에 에 에헤요", notes:["{후렴구}에 해당함. {반복}을 통해 {운율}을 형성하고 {흥취}를 돋움."] },
+      { orig:"서해바다 배를 놓아 님 싣고 가는 저 배야", notes:["1연: {배}를 탄 {임}과의 {재회}에 대한 {소망}."] },
+      { orig:"돛대야 높이 달아 돌아오소서", notes:["2연: {돌아오는} 배에 대한 기원.", "배의 {순조로}운 운항을 {기원}함."] },
+      { orig:"해주 포구 옹진 포구 여러 포구 들르시오", notes:["3연: 여러 {포구}에 들르길 바라는 마음."] },
+      { orig:"쌍쌍이 닻을 올려 나 혼자 외로워라", notes:["쌍쌍이 있는 {돛}의 모습과 외로운 {화자}의 상황이 {대조}됨. 임에 대한 {그리움}."] },
+      { orig:"임이 배를 타고 떠난 뒤 외로운 밤", notes:["8연: 임과 헤어진 상황으로 인한 {외로움}."] },
+      { orig:"몽금포에 노을이 들면 붉은 고기 뛰노나니", notes:["{시각}적 이미지, {색채} 이미지를 통해 몽금포의 {정경}을 묘사함.", "9연: 몽금포의 {정경}."] },
+      { orig:"임이 돌아온다는 소식이 들려오니", notes:["임이 {돌아온다}는 소식.", "10연: {배}를 탄 {임}이 {돌아온다}는 소식."] },
+      { orig:"만선(滿船)을 이루고 돌아오는 진어옹", notes:["{만선}을 이루고 돌아오는 진어옹의 모습이 드러남. 이 작품에는 {생업}을 위해 {바다}로 나가는 어부의 모습이 드러남.", "11연: {만선}으로 돌아온 임."] },
+      { orig:"반돛을 올려라 온 돛을 달아라", notes:["{대구}법. 임을 태우러 가는 배는 {반돛}을, 임을 태우고 오는 배는 {온 돛}을 닮.", "12연: 떠났던 임이 {돌아오는} 상황.", "{시각}적, {청각}적 이미지를 통해 임이 배를 타고 돌아오는 모습을 {묘사}함."] },
+      { orig:"돌아오는 임 반가워라", notes:["14연: {돌아오}는 임에 대한 {반가움}."] }
+    ],
+    analysis:"이 작품은 {황해도} 지역의 {민요}로, 바다에 나간 임의 무사 귀환을 기원하며 부르는 노래이다. {후렴구}의 {반복}을 통해 {운율}을 형성하고, 각 연에서 {배}를 탄 임과의 {이별}과 {재회}를 다루고 있다. {시각적}·{청각적} 이미지와 {구체적}인 지명을 활용하여 {향토}적 정서를 자아내며, {만선}을 이루고 돌아오는 임에 대한 {반가움}과 {그리움}이 작품 전체에 드러나 있다."
+  },
+  // ── 10강 ──
+  {
+    author:"윤선도", work:"어부사시사", genre:"연시조 (조선)",
+    lines:[
+      { orig:"이중에 시비 없으니 어옹이 이렇다 하리라", notes:["과거의 {세속}적인 삶에 대한 {반성}.", "{명예}와 {이익}을 의미함. 즉 {세속}적인 삶.", "자연에서 {안분지족}하고 있음."] },
+      { orig:"제2수", notes:["제2수: 지난 삶에 대한 {반성}과 자연 속에서 지내는 현재 삶에 대한 {만족}감."] },
+      { orig:"어옹은 시시비비를 가리지 않고 낚시를 드리운다", notes:["{시시비비}를 가리지 않는 태도.", "{화자 자신}. {속세}를 떠나 살아가는 가어옹에 해당함. {생계} 유지를 위해서가 아니라 소일거리로 고기를 낚음."] },
+      { orig:"어부의 생활인데 무엇이 잘못이리", notes:["{설의}적 표현을 통해 어부의 생활인데 무엇이 잘못됐냐는, 즉 잘못될 것이 {없다}는 인식을 드러냄.", "제3수: 세상의 {시비}와 거리를 둔 {어부}의 삶에 대한 {긍정}."] },
+      { orig:"세상에 구제할 사람이 있으랴", notes:["{설의}적 표현으로 세상을 {구제}할 사람이 {있다}는 인식을 드러냄.", "{태평성대}를 바라고 있는 화자."] },
+      { orig:"필부의 뜻이나 펼쳐볼까", notes:["'필부'는 {화자 자신}을 의미하며 자신의 뜻을 펼치지 못하는 {사회}적 상황에 대한 {작가}의 인식이 드러나며 {유교}적 {충} 사상이 드러남.", "제4수: {위국 충심}을 내어 보일 수 없는 한계."] },
+      { orig:"어촌에 해 지고 달이 뜨니", notes:["{대구}와 {반복}을 통해 {운율}을 형성함."] },
+      { orig:"산고수장(山高水長)은", notes:["산은 {높}고 물은 {길}다는 뜻으로 {군자}의 {덕행}이 높은 것을 {비유}적으로 표현한 것임."] },
+      { orig:"자연 속 즐거움이 이 아니 좋을시고", notes:["{영탄}적, {설의}적 표현으로 {자연}에 대한 화자의 {만족}감을 드러냄.", "{자연} 속에서 살아가며 참된 {즐거움}을 얻고 있는 화자."] },
+      { orig:"일한인(一閑人)으로 살리라", notes:["{한가}한 사람을 의미하며 {화자 자신}을 나타냄.", "제6수: 자연에서 {한가롭}게 사는 삶에 대한 {지향}."] }
+    ],
+    analysis:"이 작품은 {윤선도}가 보길도에서 지은 연시조로, 사계절의 변화에 맞춰 {어부}의 생활을 노래하며 {자연} 속에서의 삶의 {즐거움}과 {만족감}을 드러내고 있다. {속세}를 떠나 {안분지족}하면서도 {태평성대}에 대한 소망과 {충} 사상을 드러내는 이중적 태도가 나타난다. {대구}와 {반복}을 통한 {운율} 형성, {설의법}과 {영탄법}을 통한 정서 표현 등 다양한 수사법이 활용되었다. {강호가도} 문학의 대표작으로 평가된다."
+  },
+  // ── 11강 ──
+  {
+    author:"정철", work:"성산별곡", genre:"가사 (조선)",
+    lines:[
+      { orig:"화란춘성(花爛春城) 만화방창(萬化方暢)하니", notes:[] },
+      { orig:"죽장망혜(竹杖芒鞋) 단표자(簞瓢子)로 산수간에 노닐 적에", notes:[] },
+      { orig:"만산홍록(滿山紅綠) 일년일도(一年一度)라", notes:[] },
+      { orig:"창송취죽(蒼松翠竹) 창창울울(蒼蒼鬱鬱)하고 기화요초(琪花瑤草) 난만(爛漫)하니", notes:[] },
+      { orig:"유상앵비(柳上鶯飛) 편편금(片片金)이요 화간접무(花間蝶舞) 분분설(紛紛雪)이라", notes:[] },
+      { orig:"삼춘가절(三春佳節) 도화만발점점홍(桃花滿發點點紅)", notes:[] },
+      { orig:"어주축수애산춘(漁舟逐水愛山春)", notes:[] },
+      { orig:"양류세지사사록(楊柳細枝絲絲綠) 황산곡리당춘절(黃山谷裏當春節)", notes:[] },
+      { orig:"연명오류(淵明五柳) 백운간(白雲間)에", notes:["고대 중국 요임금 때 기산 영수에서 은거하던 이들의 이름. {허유}는 요임금이 천하를 주겠다고 하자 더러운 소리를 들었다며 강물에 귀를 씻었고, {소부}는 그 이야기를 듣고 귀 씻은 물을 소에게 먹일 수 없다고 하였음."] },
+      { orig:"합수(合水)에 수정렴(水晶簾)을 걸고", notes:[] }
+    ],
+    analysis:"이 작품은 {정철}이 {성산}에서의 사계절 자연 풍경과 그 속에서의 풍류를 노래한 {가사}이다. 봄·여름·가을·겨울의 아름다운 자연을 {한자} 성어를 활용하여 {세밀하게} 묘사하고 있으며, {도연명}의 오류와 같은 {은거}의 삶을 지향하고 있다. {허유}와 {소부}의 고사를 인용하여 {세속}을 초월한 삶의 태도를 드러내며, 성산의 아름다운 자연 속에서 {풍류}를 즐기는 {선비}의 삶을 형상화한 작품이다."
   }
+
 ];
 
 // ── Helpers ──
@@ -503,7 +849,7 @@ DATA.forEach((sec,si)=>{
   const ans=[];
   sec.lines.forEach(l=>l.notes.forEach(n=>parseBlanks(n).filter(p=>p.type==='blank').forEach(b=>ans.push(b.value))));
   parseBlanks(sec.analysis).filter(p=>p.type==='blank').forEach(b=>ans.push(b.value));
-  state[si]={answers:ans,inputs:ans.map(()=>''),checked:ans.map(()=>null)};
+  state[si]={answers:ans,inputs:ans.map(()=>''),checked:ans.map(()=>null),enrolled:false};
 });
 
 // ── Build blank HTML ──
@@ -518,8 +864,54 @@ function blankHTML(si,bi,answer,val,chk){
 // ── Render ──
 function render(){renderNav();renderSec();updateProg();}
 
+// ── Selection Screen ──
+function renderSelectScreen(){
+  const list=document.getElementById('selectList');
+  list.innerHTML=DATA.map((s,i)=>{
+    const checked=state[i].enrolled?'checked':'';
+    return `<li class="select-item ${checked}" onclick="toggleSelect(${i})">
+      <div class="select-check">✓</div>
+      <div class="select-item-info">
+        <div class="select-item-title">${s.author}, ‹${s.work}›</div>
+        <div class="select-item-genre">${s.genre}</div>
+      </div>
+    </li>`;
+  }).join('');
+  const count=Object.values(state).filter(s=>s.enrolled).length;
+  document.getElementById('selectCount').innerHTML=count>0?`<span class="num">${count}</span>개 작품 선택됨`:`작품을 선택해 주세요`;
+  document.getElementById('startBtn').disabled=count===0;
+}
+
+function toggleSelect(i){
+  state[i].enrolled=!state[i].enrolled;
+  renderSelectScreen();
+}
+
+function toggleAll(){
+  const allOn=Object.values(state).every(s=>s.enrolled);
+  Object.values(state).forEach(s=>s.enrolled=!allOn);
+  renderSelectScreen();
+}
+
+function startStudy(){
+  const anySelected=Object.values(state).some(s=>s.enrolled);
+  if(!anySelected){showToast('최소 1개 작품을 선택하세요');return;}
+  // Set cur to first enrolled section
+  cur=DATA.findIndex((_,i)=>state[i].enrolled);
+  document.getElementById('selectScreen').style.display='none';
+  document.getElementById('studyScreen').classList.add('active');
+  render();
+}
+
+function backToSelect(){
+  document.getElementById('studyScreen').classList.remove('active');
+  document.getElementById('selectScreen').style.display='flex';
+  renderSelectScreen();
+}
+
 function renderNav(){
   document.getElementById('navBar').innerHTML=DATA.map((s,i)=>{
+    if(!state[i].enrolled) return '';
     const done=isComplete(i);
     const lb=s.work.length>8?s.work.slice(0,8)+'…':s.work;
     return `<div class="nav-tab ${i===cur?'active':''}" onclick="sw(${i})">${s.author}, ‹${lb}›${done?'<span class="tab-check">✓</span>':''}</div>`;
@@ -562,6 +954,7 @@ function renderSec(){
 
     const filled=state[si].inputs.every(v=>v.trim()!=='');
     const lk=filled?'':'disabled';
+    if(!state[si].enrolled) return '';
 
     return `<div class="section ${si===cur?'active':''}" id="sec-${si}">
       <div class="section-header">
@@ -585,7 +978,7 @@ function renderSec(){
   updateProg();
 }
 
-function sw(i){cur=i;render();}
+function sw(i){if(!state[i].enrolled)return;cur=i;render();}
 
 // ── Input ──
 function onI(si,bi,el){
@@ -626,9 +1019,9 @@ function updateShowAll(){
   const f=Object.values(state).every(s=>s.inputs.every(v=>v.trim()!==''));
   b.disabled=!f;b.querySelector('.lock-icon').textContent=f?'':'🔒';
 }
-function isComplete(si){return state[si].answers.length>0&&state[si].checked.every(c=>c===true);}
+function isComplete(si){return state[si].enrolled&&state[si].answers.length>0&&state[si].checked.every(c=>c===true);}
 function updateProg(){
-  let t=0,c=0;Object.values(state).forEach(s=>{t+=s.answers.length;c+=s.checked.filter(x=>x===true).length;});
+  let t=0,c=0;Object.entries(state).forEach(([si,s])=>{if(s.enrolled){t+=s.answers.length;c+=s.checked.filter(x=>x===true).length;}});
   const p=t?Math.round(c/t*100):0;
   document.getElementById('ringFg').style.strokeDashoffset=2*Math.PI*18*(1-p/100);
   document.getElementById('ringText').textContent=p+'%';
@@ -647,6 +1040,7 @@ function getResultData(){
   let totalB=0,totalC=0;
   DATA.forEach((sec,si)=>{
     const s=state[si];
+    if(!s.enrolled) return;
     const total=s.answers.length;
     let correct=0;const wrongs=[];
     s.answers.forEach((ans,bi)=>{
@@ -663,8 +1057,8 @@ function getResultData(){
 function submitResults(){
   const name=document.getElementById('studentName').value.trim();
   if(!name){showToast('이름을 입력해 주세요');document.getElementById('studentName').focus();return;}
-  const anyChecked=Object.values(state).some(s=>s.checked.some(c=>c!==null));
-  if(!anyChecked){showToast('먼저 빈칸을 채우고 채점해 주세요');return;}
+  const anyChecked=Object.entries(state).some(([si,s])=>s.enrolled&&s.checked.some(c=>c!==null));
+  if(!anyChecked){showToast('먼저 응시 작품의 빈칸을 채우고 채점해 주세요');return;}
   const data=getResultData();
   let html=`<strong>${data.studentName}</strong> 학생 결과:<br><br>`;
   data.sections.forEach(sec=>{
@@ -716,7 +1110,7 @@ async function confirmSubmit(){
   }
 }
 
-render();
+renderSelectScreen();
 </script>
 
 <div style="max-width:1100px; margin:0 auto; padding:20px 24px 48px; text-align:center;">
