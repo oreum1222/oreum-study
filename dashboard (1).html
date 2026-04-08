@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>[오름] 국어 - 선생님 대시보드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg-deep:#0a0e0a;--bg-card:#111a11;--border-outer:rgba(255,255,255,.35);--green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--green-bright:#4ade80;--gold:#c9a84c;--text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82;--correct:#22c55e;--wrong:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;font-size:15px;line-height:1.7;padding:20px}
+h1{font-family:'Noto Serif KR',serif;color:var(--gold);font-size:24px;text-align:center;margin-bottom:4px}
+.sub{text-align:center;color:var(--green-light);font-size:13px;margin-bottom:20px}
+.refresh{display:block;margin:0 auto 20px;background:var(--green-brand);color:var(--text-primary);border:1px solid var(--green-accent);padding:8px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit}
+.refresh:hover{background:var(--green-accent)}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;max-width:900px;margin-left:auto;margin-right:auto}
+.s-card{background:var(--bg-card);border:1px solid var(--border-outer);border-radius:10px;padding:16px;text-align:center}
+.s-card .val{font-size:28px;font-weight:700;color:var(--gold);margin:4px 0}
+.s-card .lbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.section{max-width:900px;margin:0 auto 24px}
+.section h2{font-size:16px;color:var(--green-light);margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:6px}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);border-radius:10px;overflow:hidden;border:1px solid var(--border-outer)}
+th{background:var(--green-brand);color:var(--text-primary);padding:8px 12px;font-size:12px;text-align:left;font-weight:500}
+td{padding:8px 12px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.08)}
+tr:last-child td{border-bottom:none}
+.rank{font-size:16px}
+.grade{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.grade-A{background:rgba(34,197,94,.15);color:var(--correct)}
+.grade-B{background:rgba(74,222,128,.1);color:var(--green-light)}
+.grade-C{background:rgba(201,168,76,.1);color:var(--gold)}
+.grade-D{background:rgba(239,68,68,.1);color:#f87171}
+.grade-F{background:rgba(239,68,68,.15);color:var(--wrong)}
+.bar-wrap{width:100%;height:18px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.bar{height:100%;background:var(--green-accent);border-radius:4px;transition:.3s}
+.wrongs{font-size:11px;color:var(--text-muted)}
+.loading{text-align:center;padding:40px;color:var(--text-muted)}
+.error{text-align:center;padding:20px;color:var(--wrong)}
+.url-input{display:block;width:100%;max-width:600px;margin:0 auto 12px;background:var(--bg-card);border:1px solid var(--border-outer);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;font-family:inherit;text-align:center}
+.url-input:focus{outline:none;border-color:var(--gold)}
+</style>
+</head>
+<body>
+<h1>[오름] 국어 📊</h1>
+<div class="sub">선생님 대시보드 — 수능특강 현대시 본문해석</div>
+<input class="url-input" id="urlInput" placeholder="Apps Script 웹 앱 URL을 입력하세요" oninput="localStorage.setItem('dashUrl',this.value)">
+<button class="refresh" onclick="loadData()">🔄 새로고침</button>
+
+<div class="summary" id="summary"></div>
+<div class="section" id="rankSection"></div>
+<div class="section" id="workSection"></div>
+
+<script>
+document.getElementById('urlInput').value = localStorage.getItem('dashUrl')||'';
+
+function getGrade(r){return r>=90?'A':r>=80?'B':r>=70?'C':r>=60?'D':'F'}
+function getRankEmoji(i){return ['🥇','🥈','🥉'][i]||(i+1)}
+
+async function loadData(){
+  const url=document.getElementById('urlInput').value.trim();
+  if(!url){document.getElementById('summary').innerHTML='<div class="error">URL을 입력해 주세요.</div>';return}
+  document.getElementById('summary').innerHTML='<div class="loading">불러오는 중...</div>';
+  try{
+    const r=await fetch(url+'?mode=data');
+    const d=await r.json();
+    if(d.error){document.getElementById('summary').innerHTML=`<div class="error">${d.error}</div>`;return}
+    render(d.rows);
+  }catch(e){document.getElementById('summary').innerHTML=`<div class="error">로드 실패: ${e.message}</div>`}
+}
+
+function render(rows){
+  // Aggregate by student (latest summary row)
+  const students={}, works={};
+  rows.forEach(r=>{
+    if(r.work==='【전체 요약】'){
+      if(!students[r.name]||r.time>students[r.name].time) students[r.name]={...r,rate:parseFloat(r.rate)||0};
+    } else {
+      if(!works[r.work]) works[r.work]={total:0,correct:0,count:0,wrongs:{}};
+      const w=works[r.work]; w.total+=r.total; w.correct+=r.correct; w.count++;
+      if(r.wrongs) r.wrongs.split(',').map(s=>s.trim()).filter(Boolean).forEach(wr=>{w.wrongs[wr]=(w.wrongs[wr]||0)+1});
+    }
+  });
+
+  const sList=Object.entries(students).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.rate-a.rate);
+  const wList=Object.entries(works).map(([n,d])=>({work:n,avg:d.total>0?Math.round(d.correct/d.total*100):0,count:d.count,
+    topWrongs:Object.entries(d.wrongs).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0])})).sort((a,b)=>a.avg-b.avg);
+
+  const total=sList.length;
+  const avgRate=total>0?Math.round(sList.reduce((s,x)=>s+x.rate,0)/total):0;
+  const above80=total>0?Math.round(sList.filter(s=>s.rate>=80).length/total*100):0;
+  const hardest=wList.length>0?wList[0].work:'—';
+
+  document.getElementById('summary').innerHTML=`
+    <div class="s-card"><div class="lbl">응시 학생</div><div class="val">${total}</div></div>
+    <div class="s-card"><div class="lbl">평균 정답률</div><div class="val">${avgRate}%</div></div>
+    <div class="s-card"><div class="lbl">80%↑ 비율</div><div class="val">${above80}%</div></div>
+    <div class="s-card"><div class="lbl">가장 어려운 작품</div><div class="val" style="font-size:14px">${hardest}</div></div>`;
+
+  document.getElementById('rankSection').innerHTML=`<h2>📋 학생별 순위</h2><table><tr><th>#</th><th>이름</th><th>정답률</th><th>등급</th></tr>
+    ${sList.map((s,i)=>{const g=getGrade(s.rate);return `<tr><td class="rank">${getRankEmoji(i)}</td><td>${s.name}</td><td>${s.rate}%</td><td><span class="grade grade-${g}">${g}</span></td></tr>`}).join('')}</table>`;
+
+  document.getElementById('workSection').innerHTML=`<h2>📚 작품별 난이도</h2><table><tr><th>작품</th><th>평균 정답률</th><th>빈출 오답</th></tr>
+    ${wList.map(w=>`<tr><td>${w.work}</td><td><div class="bar-wrap"><div class="bar" style="width:${w.avg}%"></div></div>${w.avg}%</td><td class="wrongs">${w.topWrongs.join(', ')||'—'}</td></tr>`).join('')}</table>`;
+}
+</script>
+</body>
+</html>
