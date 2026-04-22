@@ -11,201 +11,75 @@
 <title>[오름] 국어 - 본문해석</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-deep: #0a0e0a;
-  --bg-card: #111a11;
-  --border-outer: rgba(255,255,255,.35);
-  --green-brand: #4a5a3a;
-  --green-accent: #6b8f5e;
-  --green-light: #8aad7a;
-  --gold: #c9a84c;
-  --gold-dim: #a08838;
-  --text-primary: #ece8e0;
-  --text-secondary: #c4bfb4;
-  --text-muted: #928d82;
-}
-* { margin:0; padding:0; box-sizing:border-box }
-body {
-  background: var(--bg-deep);
-  color: var(--text-primary);
-  font-family: 'Noto Sans KR', sans-serif;
-  word-break: keep-all;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  -webkit-tap-highlight-color: transparent;
-}
-.logo {
-  font-family: 'Noto Serif KR', serif;
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--gold);
-  text-align: center;
-  margin-bottom: 6px;
-}
-.subtitle {
-  font-size: 17px;
-  color: var(--green-light);
-  text-align: center;
-  margin-bottom: 6px;
-}
-.info {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-align: center;
-  margin-bottom: 36px;
-}
-.cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 1020px;
-  width: 100%;
-}
-.card {
-  flex: 1 1 280px;
-  max-width: 320px;
-  background: linear-gradient(145deg, #141e14, #0e160e);
-  border: 1px solid var(--border-outer);
-  border-radius: 16px;
-  padding: 32px 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .25s;
-  text-decoration: none;
-  box-shadow: 0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
-  position: relative;
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(106,143,94,.08), transparent 60%);
-  opacity: 0;
-  transition: .25s;
-}
-.card:hover {
-  transform: translateY(-4px);
-  border-color: var(--green-accent);
-  box-shadow: 0 12px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1);
-}
-.card:hover::before { opacity: 1 }
-.card-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  display: block;
-  position: relative;
-}
-.card-title {
-  font-family: 'Noto Serif KR', serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--gold);
-  margin-bottom: 8px;
-  position: relative;
-}
-.card-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  position: relative;
-}
-.card-tag {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  position: relative;
-}
-.tag-gojeon {
-  background: rgba(106,143,94,.15);
-  color: var(--green-light);
-  border: 1px solid rgba(106,143,94,.3);
-}
-.tag-hyundae {
-  background: rgba(201,168,76,.1);
-  color: var(--gold);
-  border: 1px solid rgba(201,168,76,.25);
-}
-.footer {
-  margin-top: 48px;
-  text-align: center;
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.6;
-  opacity: .7;
-}
-.footer span {
-  color: var(--gold-dim);
-  font-weight: 500;
-}
-@media (max-width: 640px) {
-  .logo { font-size: 28px }
-  .cards { flex-direction: column; align-items: center }
-  .card { max-width: 100% }
-}
+:root{--bg-deep:#0a0e0a;--bg-card:#111a11;--border-outer:rgba(255,255,255,.35);--green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--gold:#c9a84c;--gold-dim:#a08838;--text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;-webkit-tap-highlight-color:transparent}
+.logo{font-family:'Noto Serif KR',serif;font-size:34px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px}
+.subtitle{font-size:16px;color:var(--green-light);text-align:center;margin-bottom:4px}
+.info{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:30px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:960px;width:100%}
+.card{background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(106,143,94,.08),transparent 60%);opacity:0;transition:.25s}
+.card:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 36px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
+.card:hover::before{opacity:1}
+.card-icon{font-size:40px;margin-bottom:12px;display:block;position:relative}
+.card-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--gold);margin-bottom:6px;position:relative}
+.card-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;position:relative}
+.card-tag{display:inline-block;margin-top:10px;padding:3px 12px;border-radius:16px;font-size:10px;font-weight:500;letter-spacing:1px;position:relative}
+.tag-g{background:rgba(106,143,94,.15);color:var(--green-light);border:1px solid rgba(106,143,94,.3)}
+.tag-h{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
+.tag-m{background:rgba(138,173,122,.1);color:var(--green-light);border:1px solid rgba(138,173,122,.2)}
+.footer{margin-top:36px;text-align:center;font-size:11px;color:var(--text-muted);line-height:1.6;opacity:.7}
+.footer span{color:var(--gold-dim);font-weight:500}
+@media(max-width:768px){.cards{grid-template-columns:1fr 1fr;gap:12px}.logo{font-size:26px}}
+@media(max-width:480px){.cards{grid-template-columns:1fr}.card{padding:20px 16px}}
 </style>
 </head>
 <body>
-
 <div class="logo">[오름] 국어</div>
 <div class="subtitle">본문 해석</div>
 <div class="info">2026학년도 1차고사 대비 · 수능특강(문학)</div>
-
 <div class="cards">
   <a class="card" href="gojeon.html">
     <span class="card-icon">🏛️</span>
     <div class="card-title">고전시가</div>
-    <div class="card-desc">
-      향가 · 고려가요 · 시조 · 가사 등<br>
-      고전시가 작품의 본문해석 빈칸 채우기
-    </div>
-    <span class="card-tag tag-gojeon">CLASSICAL POETRY</span>
+    <div class="card-desc">향가 · 고려가요 · 시조 · 가사</div>
+    <span class="card-tag tag-g">19작품</span>
   </a>
-
   <a class="card" href="hyundaesi.html">
     <span class="card-icon">🌿</span>
     <div class="card-title">현대시</div>
-    <div class="card-desc">
-      저항시 · 모더니즘 · 서정시 등<br>
-      현대시 작품의 본문해석 빈칸 채우기
-    </div>
-    <span class="card-tag tag-hyundae">MODERN POETRY</span>
+    <div class="card-desc">저항시 · 모더니즘 · 서정시</div>
+    <span class="card-tag tag-h">18작품</span>
   </a>
-
   <a class="card" href="gojeon-sosel.html">
     <span class="card-icon">📜</span>
     <div class="card-title">고전산문</div>
-    <div class="card-desc">
-      고전 소설 · 몽유록 · 전(傳) 등<br>
-      고전산문 작품의 본문해석 빈칸 채우기
-    </div>
-    <span class="card-tag tag-gojeon">CLASSICAL PROSE</span>
+    <div class="card-desc">고전소설 · 몽유록 · 전(傳)</div>
+    <span class="card-tag tag-g">8작품</span>
   </a>
-
   <a class="card" href="hyundae-sosel.html">
     <span class="card-icon">📖</span>
     <div class="card-title">현대소설</div>
-    <div class="card-desc">
-      세태소설 · 리얼리즘 · 전후소설 등<br>
-      현대소설 작품의 본문해석 빈칸 채우기
-    </div>
-    <span class="card-tag tag-hyundae">MODERN FICTION</span>
+    <div class="card-desc">세태소설 · 리얼리즘 · 전후소설</div>
+    <span class="card-tag tag-h">8작품</span>
+  </a>
+  <a class="card" href="gallae.html">
+    <span class="card-icon">🔗</span>
+    <div class="card-title">갈래복합</div>
+    <div class="card-desc">시+수필 · 가사+산문 복합 세트</div>
+    <span class="card-tag tag-m">23작품</span>
+  </a>
+  <a class="card" href="gyogwaseo.html">
+    <span class="card-icon">📚</span>
+    <div class="card-title">교과서개념학습</div>
+    <div class="card-desc">교과서 수록 핵심 작품</div>
+    <span class="card-tag tag-m">6작품</span>
   </a>
 </div>
-
 <div class="footer">
   성적이 오름, 자신감이 오름!<br>
   방법의 옳음, 선택의 옳음! <span>[오름] 국어</span>
 </div>
-
 </body>
 </html>
