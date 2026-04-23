@@ -4,104 +4,247 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>[오름] 국어 - 선생님 대시보드</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>가경T 대시보드 · 오름 국어</title>
 <style>
-:root{--bg-deep:#0a0e0a;--bg-card:#111a11;--border-outer:rgba(255,255,255,.35);--green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--green-bright:#4ade80;--gold:#c9a84c;--text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82;--correct:#22c55e;--wrong:#ef4444}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+:root{--bg:#080c08;--bg-card:#0f1710;--bg-card2:#141e15;--border:rgba(255,255,255,.1);--border-h:rgba(255,255,255,.2);--green:#4a5a3a;--green-a:#6b8f5e;--green-l:#8aad7a;--green-b:#4ade80;--gold:#c9a84c;--text:#ece8e0;--text2:#c4bfb4;--text3:#928d82;--text4:#6a6560;--red:#ef4444;--orange:#f59e0b;--blue:#3b82f6;--radius:12px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;font-size:15px;line-height:1.7;padding:20px}
-h1{font-family:'Noto Serif KR',serif;color:var(--gold);font-size:24px;text-align:center;margin-bottom:4px}
-.sub{text-align:center;color:var(--green-light);font-size:13px;margin-bottom:20px}
-.refresh{display:block;margin:0 auto 20px;background:var(--green-brand);color:var(--text-primary);border:1px solid var(--green-accent);padding:8px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit}
-.refresh:hover{background:var(--green-accent)}
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;max-width:900px;margin-left:auto;margin-right:auto}
-.s-card{background:var(--bg-card);border:1px solid var(--border-outer);border-radius:10px;padding:16px;text-align:center}
-.s-card .val{font-size:28px;font-weight:700;color:var(--gold);margin:4px 0}
-.s-card .lbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
-.section{max-width:900px;margin:0 auto 24px}
-.section h2{font-size:16px;color:var(--green-light);margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:6px}
-table{width:100%;border-collapse:collapse;background:var(--bg-card);border-radius:10px;overflow:hidden;border:1px solid var(--border-outer)}
-th{background:var(--green-brand);color:var(--text-primary);padding:8px 12px;font-size:12px;text-align:left;font-weight:500}
-td{padding:8px 12px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,.08)}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.app{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.dash-brand{display:flex;align-items:center;gap:14px}
+.dash-badge{background:linear-gradient(135deg,var(--green),var(--green-a));color:#fff;font-family:'Noto Serif KR',serif;font-weight:900;font-size:13px;padding:6px 12px;border-radius:6px}
+.dash-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900}
+.dash-title span{color:var(--gold)}
+.dash-sub{font-size:12px;color:var(--text3)}
+.dash-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text3);font-size:12px;font-family:'Noto Sans KR',sans-serif;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.dash-btn:hover{border-color:var(--border-h);color:var(--text)}
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden}
+.summary-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.summary-card.c1::before{background:var(--green-a)}.summary-card.c2::before{background:var(--gold)}.summary-card.c3::before{background:var(--blue)}.summary-card.c4::before{background:var(--red)}
+.summary-label{font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500}
+.summary-value{font-size:28px;font-weight:700;letter-spacing:-.5px}
+.summary-sub{font-size:12px;color:var(--text4);margin-top:4px}
+.section{margin-bottom:28px}
+.section-head{margin-bottom:14px}
+.section-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700}
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:var(--bg-card2)}
+th{padding:12px 16px;text-align:left;font-weight:600;font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:hover td{background:rgba(255,255,255,.02)}
 tr:last-child td{border-bottom:none}
-.rank{font-size:16px}
-.grade{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
-.grade-A{background:rgba(34,197,94,.15);color:var(--correct)}
-.grade-B{background:rgba(74,222,128,.1);color:var(--green-light)}
-.grade-C{background:rgba(201,168,76,.1);color:var(--gold)}
-.grade-D{background:rgba(239,68,68,.1);color:#f87171}
-.grade-F{background:rgba(239,68,68,.15);color:var(--wrong)}
-.bar-wrap{width:100%;height:18px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
-.bar{height:100%;background:var(--green-accent);border-radius:4px;transition:.3s}
-.wrongs{font-size:11px;color:var(--text-muted)}
-.loading{text-align:center;padding:40px;color:var(--text-muted)}
-.error{text-align:center;padding:20px;color:var(--wrong)}
-.url-input{display:block;width:100%;max-width:600px;margin:0 auto 12px;background:var(--bg-card);border:1px solid var(--border-outer);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;font-family:inherit;text-align:center}
-.url-input:focus{outline:none;border-color:var(--gold)}
+.rank{font-weight:700;color:var(--gold);width:40px;text-align:center}
+.rank.top1{color:#fbbf24;font-size:16px}.rank.top2{color:#c0c0c0}.rank.top3{color:#cd7f32}
+.name-cell{font-weight:600}
+.rate-cell{font-weight:700}.rate-cell.high{color:var(--green-b)}.rate-cell.mid{color:var(--orange)}.rate-cell.low{color:var(--red)}
+.grade{display:inline-block;width:28px;height:28px;border-radius:6px;text-align:center;line-height:28px;font-weight:700;font-size:12px}
+.grade-A{background:rgba(34,197,94,.12);color:var(--green-b)}.grade-B{background:rgba(59,130,246,.12);color:var(--blue)}.grade-C{background:rgba(245,158,11,.12);color:var(--orange)}.grade-D{background:rgba(249,115,22,.12);color:#f97316}.grade-F{background:rgba(239,68,68,.12);color:var(--red)}
+.work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.work-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.work-card:hover{border-color:var(--border-h)}
+.work-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.work-bar-bg{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.work-bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.work-stats{display:flex;justify-content:space-between;font-size:12px;color:var(--text3)}
+.work-stats .rate{font-weight:700}
+.missing-alert{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);padding:20px;margin-bottom:28px}
+.missing-title{font-size:15px;font-weight:700;color:var(--red);margin-bottom:12px}
+.missing-grid{display:flex;flex-wrap:wrap;gap:8px}
+.missing-tag{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:6px 12px;font-size:13px}
+.missing-tag .sch{font-size:11px;color:var(--text4);margin-left:4px}
+.tab-row{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);overflow-x:auto}
+.tab{padding:10px 18px;font-size:13px;color:var(--text4);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.tab:hover{color:var(--text2)}.tab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:600}
+.tab-content{display:none}.tab-content.active{display:block}
+.time-chart{display:flex;align-items:flex-end;gap:3px;height:140px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 12px 12px}
+.time-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.time-bar{width:100%;background:var(--green-a);border-radius:3px 3px 0 0;min-height:1px;transition:height .5s}
+.time-lbl{font-size:9px;color:var(--text4)}.time-cnt{font-size:9px;color:var(--text3);font-weight:600}
+.growth-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.growth-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.growth-hd{display:flex;justify-content:space-between;margin-bottom:10px}
+.growth-nm{font-weight:600;font-size:14px}
+.growth-bars{display:flex;align-items:flex-end;gap:6px;height:70px}
+.growth-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.growth-v{font-size:11px;font-weight:700}
+.growth-b{width:100%;border-radius:3px;opacity:.75}
+.growth-d{font-size:9px;color:var(--text4)}
+.retry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.retry-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.retry-nm{font-weight:600;font-size:13px;margin-bottom:4px}
+.retry-cnt{font-size:24px;font-weight:700;color:var(--gold)}
+.retry-lb{font-size:11px;color:var(--text4)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{background:var(--bg-card);border:1px solid var(--border-h);border-radius:16px;padding:32px;max-width:650px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:'Noto Serif KR',serif;font-size:20px;margin-bottom:4px}
+.modal .msub{font-size:13px;color:var(--text3);margin-bottom:20px}
+.modal-table{width:100%;font-size:13px}
+.modal-table th{font-size:11px;padding:8px 12px}.modal-table td{padding:8px 12px}
+.wrong-list{font-size:11px;color:var(--red);max-width:180px;word-break:break-all}
+.loading{text-align:center;padding:60px;color:var(--text3)}
+.spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green-a);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){.summary-row{grid-template-columns:repeat(2,1fr)}.work-grid,.growth-grid,.retry-grid{grid-template-columns:1fr}.summary-value{font-size:22px}th,td{padding:8px 10px;font-size:12px}.tab{padding:8px 12px;font-size:12px}}
+@media(max-width:480px){.summary-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<h1>[오름] 국어 📊</h1>
-<div class="sub">선생님 대시보드 — 수능특강 현대시 본문해석</div>
-<input class="url-input" id="urlInput" placeholder="Apps Script 웹 앱 URL을 입력하세요" oninput="localStorage.setItem('dashUrl',this.value)">
-<button class="refresh" onclick="loadData()">🔄 새로고침</button>
-
-<div class="summary" id="summary"></div>
-<div class="section" id="rankSection"></div>
-<div class="section" id="workSection"></div>
-
+<div class="app" id="app"><div class="loading"><div class="spinner"></div><div>데이터를 불러오는 중...</div></div></div>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="mc"></div></div>
 <script>
-document.getElementById('urlInput').value = localStorage.getItem('dashUrl')||'https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
-
-function getGrade(r){return r>=90?'A':r>=80?'B':r>=70?'C':r>=60?'D':'F'}
-function getRankEmoji(i){return ['🥇','🥈','🥉'][i]||(i+1)}
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
+const ROSTER=[
+  {name:'공두영',school:'산본고'},{name:'김민주',school:'군포고'},{name:'김보민',school:'군포고'},
+  {name:'김수진',school:'산본고'},{name:'김영재',school:'흥진고'},{name:'김주아',school:'수리고'},
+  {name:'문수영',school:'용호고'},{name:'박상범',school:'산본고'},{name:'박서희',school:'용호고'},
+  {name:'박채원',school:'군포고'},{name:'방승윤',school:'용호고'},{name:'배진우',school:'산본고'},
+  {name:'신지환',school:'산본고'},{name:'윤영채',school:'수리고'},{name:'윤하진',school:'산본고'},
+  {name:'이연우',school:'군포고'},{name:'이윤서',school:'용호고'},{name:'이지수',school:'용호고'},
+  {name:'임수아',school:'군포고'}
+];
+let rawData=[],students={},workStats={};
 
 async function loadData(){
-  const url=document.getElementById('urlInput').value.trim();
-  if(!url){document.getElementById('summary').innerHTML='<div class="error">URL을 입력해 주세요.</div>';return}
-  document.getElementById('summary').innerHTML='<div class="loading">불러오는 중...</div>';
-  try{
-    const r=await fetch(url+'?mode=data');
-    const d=await r.json();
-    if(d.error){document.getElementById('summary').innerHTML=`<div class="error">${d.error}</div>`;return}
-    render(d.rows);
-  }catch(e){document.getElementById('summary').innerHTML=`<div class="error">로드 실패: ${e.message}</div>`}
+  try{const r=await fetch(SCRIPT_URL+'?mode=data');const j=await r.json();if(j.error)throw j.error;rawData=j.rows||[];processData();renderAll();}
+  catch(e){console.error(e);document.getElementById('app').innerHTML='<div style="text-align:center;padding:60px;color:var(--text4)">데이터를 불러올 수 없습니다. <button class="dash-btn" style="margin-top:12px" onclick="loadData()">다시 시도</button></div>';}
 }
 
-function render(rows){
-  // Aggregate by student (latest summary row)
-  const students={}, works={};
-  rows.forEach(r=>{
-    if(r.work==='【전체 요약】'){
-      if(!students[r.name]||r.time>students[r.name].time) students[r.name]={...r,rate:parseFloat(r.rate)||0};
-    } else {
-      if(!works[r.work]) works[r.work]={total:0,correct:0,count:0,wrongs:{}};
-      const w=works[r.work]; w.total+=r.total; w.correct+=r.correct; w.count++;
-      if(r.wrongs) r.wrongs.split(',').map(s=>s.trim()).filter(Boolean).forEach(wr=>{w.wrongs[wr]=(w.wrongs[wr]||0)+1});
-    }
+function processData(){
+  students={};workStats={};
+  rawData.forEach(row=>{
+    const n=row.name.trim();if(!n)return;
+    if(!students[n])students[n]={latest:'',subs:[]};
+    if(row.time>students[n].latest)students[n].latest=row.time;
+    students[n].subs.push(row);
   });
-
-  const sList=Object.entries(students).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.rate-a.rate);
-  const wList=Object.entries(works).map(([n,d])=>({work:n,avg:d.total>0?Math.round(d.correct/d.total*100):0,count:d.count,
-    topWrongs:Object.entries(d.wrongs).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0])})).sort((a,b)=>a.avg-b.avg);
-
-  const total=sList.length;
-  const avgRate=total>0?Math.round(sList.reduce((s,x)=>s+x.rate,0)/total):0;
-  const above80=total>0?Math.round(sList.filter(s=>s.rate>=80).length/total*100):0;
-  const hardest=wList.length>0?wList[0].work:'—';
-
-  document.getElementById('summary').innerHTML=`
-    <div class="s-card"><div class="lbl">응시 학생</div><div class="val">${total}</div></div>
-    <div class="s-card"><div class="lbl">평균 정답률</div><div class="val">${avgRate}%</div></div>
-    <div class="s-card"><div class="lbl">80%↑ 비율</div><div class="val">${above80}%</div></div>
-    <div class="s-card"><div class="lbl">가장 어려운 작품</div><div class="val" style="font-size:14px">${hardest}</div></div>`;
-
-  document.getElementById('rankSection').innerHTML=`<h2>📋 학생별 순위</h2><table><tr><th>#</th><th>이름</th><th>정답률</th><th>등급</th></tr>
-    ${sList.map((s,i)=>{const g=getGrade(s.rate);return `<tr><td class="rank">${getRankEmoji(i)}</td><td>${s.name}</td><td>${s.rate}%</td><td><span class="grade grade-${g}">${g}</span></td></tr>`}).join('')}</table>`;
-
-  document.getElementById('workSection').innerHTML=`<h2>📚 작품별 난이도</h2><table><tr><th>작품</th><th>평균 정답률</th><th>빈출 오답</th></tr>
-    ${wList.map(w=>`<tr><td>${w.work}</td><td><div class="bar-wrap"><div class="bar" style="width:${w.avg}%"></div></div>${w.avg}%</td><td class="wrongs">${w.topWrongs.join(', ')||'—'}</td></tr>`).join('')}</table>`;
+  Object.keys(students).forEach(n=>{
+    const st=students[n];
+    // 작품별 최신 점수
+    const wm={};
+    st.subs.forEach(s=>{if(s.work!=='【전체 요약】'){if(!wm[s.work]||s.time>wm[s.work].time)wm[s.work]=s;}});
+    st.works=Object.values(wm);
+    let tc=0,tb=0;
+    st.works.forEach(w=>{tc+=Number(w.correct)||0;tb+=Number(w.total)||0;});
+    st.summary={correct:tc,total:tb,rate:tb?Math.round(tc/tb*100):0};
+    // 성장 추이: 제출 날짜별
+    const gm={};
+    st.subs.filter(s=>s.work==='【전체 요약】').forEach(s=>{
+      const d=s.time.split(' ').slice(0,3).join(' ');
+      if(!gm[d]||s.time>gm[d].time)gm[d]=s;
+    });
+    st.growth=Object.values(gm).sort((a,b)=>a.time>b.time?1:-1).map(s=>({date:s.time.split(' ').slice(0,3).join(' '),rate:Number(s.rate)||0,correct:Number(s.correct)||0,total:Number(s.total)||0}));
+    // 재응시 횟수
+    const dates=new Set();st.subs.filter(s=>s.work==='【전체 요약】').forEach(s=>dates.add(s.time.split(' ').slice(0,3).join(' ')));
+    st.retries=dates.size;
+  });
+  // 작품별 통계
+  Object.values(students).forEach(st=>{
+    st.works.forEach(w=>{
+      if(!workStats[w.work])workStats[w.work]={sumRate:0,count:0,wrongMap:{}};
+      const ws=workStats[w.work];ws.count++;ws.sumRate+=Number(w.rate)||0;
+      if(w.wrongs)w.wrongs.split(',').map(s=>s.trim()).filter(s=>s).forEach(wr=>{ws.wrongMap[wr]=(ws.wrongMap[wr]||0)+1;});
+    });
+  });
 }
+
+function renderAll(){
+  const names=Object.keys(students);
+  const missing=ROSTER.filter(r=>!names.includes(r.name));
+  let sumR=0,rc=0;names.forEach(n=>{if(students[n].summary){sumR+=students[n].summary.rate;rc++;}});
+  const avgR=rc?Math.round(sumR/rc):0;
+  let a80=0;names.forEach(n=>{if(students[n].summary&&students[n].summary.rate>=80)a80++;});
+  let hw='-',hr=100;Object.entries(workStats).forEach(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;if(a<hr){hr=a;hw=w;}});
+  const ranked=names.map(n=>({name:n,...students[n].summary,wc:students[n].works.length,time:students[n].latest})).sort((a,b)=>b.rate-a.rate||b.correct-a.correct);
+
+  // 응시 시간대
+  const th={};for(let i=0;i<24;i++)th[i]=0;
+  rawData.forEach(row=>{
+    const m=row.time.match(/(\d+):(\d+):\d+/);if(!m)return;
+    let h=parseInt(m[1]);if(row.time.toLowerCase().includes('pm')&&h<12)h+=12;if(row.time.toLowerCase().includes('am')&&h===12)h=0;
+    th[h]=(th[h]||0)+1;
+  });
+  const maxT=Math.max(...Object.values(th),1);
+  let peakH=0,peakC=0;Object.entries(th).forEach(([h,c])=>{if(c>peakC){peakC=c;peakH=h;}});
+
+  // 빈출 오답 TOP 15
+  const gw={};Object.values(workStats).forEach(ws=>{Object.entries(ws.wrongMap).forEach(([w,c])=>{gw[w]=(gw[w]||0)+c;});});
+  const topW=Object.entries(gw).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  const maxWC=topW.length?topW[0][1]:1;
+
+  document.getElementById('app').innerHTML=`
+  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">[오름] 국어</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">고전시가 본문해석 · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()">↻ 새로고침</button></div>
+
+  <div class="summary-row">
+    <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${ROSTER.length}명</span></div></div>
+    <div class="summary-card c2"><div class="summary-label">평균 정답률</div><div class="summary-value" style="color:${avgR>=80?'var(--green-b)':avgR>=60?'var(--orange)':'var(--red)'}">${avgR}%</div></div>
+    <div class="summary-card c3"><div class="summary-label">80% 이상</div><div class="summary-value">${rc?Math.round(a80/rc*100):0}%</div><div class="summary-sub">${a80} / ${rc}명</div></div>
+    <div class="summary-card c4"><div class="summary-label">가장 어려운 작품</div><div class="summary-value" style="font-size:15px;line-height:1.3">${hw.length>14?hw.slice(0,14)+'…':hw}</div><div class="summary-sub">평균 ${hr}%</div></div>
+  </div>
+
+  ${missing.length?`<div class="missing-alert"><div class="missing-title">🚨 미응시 학생 ${missing.length}명</div><div class="missing-grid">${missing.map(s=>`<div class="missing-tag">${s.name}<span class="sch">${s.school}</span></div>`).join('')}</div></div>`:'<div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:var(--radius);padding:16px;text-align:center;color:var(--green-b);font-weight:600;margin-bottom:28px">✅ 전원 응시 완료!</div>'}
+
+  <div class="tab-row">
+    <div class="tab active" onclick="sw(0)">🏆 학생 순위</div>
+    <div class="tab" onclick="sw(1)">📊 작품 난이도</div>
+    <div class="tab" onclick="sw(2)">❌ 빈출 오답</div>
+    <div class="tab" onclick="sw(3)">📈 성장 추이</div>
+    <div class="tab" onclick="sw(4)">🕐 응시 시간대</div>
+    <div class="tab" onclick="sw(5)">🔄 재응시 현황</div>
+  </div>
+
+  <div class="tab-content active" id="t0"><div class="table-wrap"><table><thead><tr><th style="width:50px">순위</th><th>학생</th><th>작품 수</th><th>누적 정답</th><th>누적 빈칸</th><th>정답률</th><th>등급</th><th>최근 제출</th></tr></thead><tbody>
+  ${ranked.map((s,i)=>{const g=s.rate>=90?'A':s.rate>=80?'B':s.rate>=70?'C':s.rate>=60?'D':'F';const rc2=s.rate>=80?'high':s.rate>=60?'mid':'low';return `<tr style="cursor:pointer" onclick="showSt('${s.name}')"><td class="rank ${i<3?'top'+(i+1):''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td><td class="name-cell">${s.name}</td><td style="text-align:center">${s.wc}</td><td>${s.correct}</td><td>${s.total}</td><td class="rate-cell ${rc2}">${s.rate}%</td><td><span class="grade grade-${g}">${g}</span></td><td style="color:var(--text4);font-size:12px">${s.time}</td></tr>`;}).join('')}
+  </tbody></table></div></div>
+
+  <div class="tab-content" id="t1"><div class="work-grid">
+  ${Object.entries(workStats).sort((a,b)=>{const aa=a[1].count?a[1].sumRate/a[1].count:0;const bb=b[1].count?b[1].sumRate/b[1].count:0;return aa-bb;}).map(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;const c=a>=80?'var(--green-b)':a>=60?'var(--orange)':'var(--red)';const tw2=Object.entries(s.wrongMap).sort((x,y)=>y[1]-x[1]).slice(0,3).map(e=>e[0]);return `<div class="work-card"><div class="work-name">${w}</div><div class="work-bar-bg"><div class="work-bar-fill" style="width:${a}%;background:${c}"></div></div><div class="work-stats"><span>응시 ${s.count}명</span><span class="rate" style="color:${c}">${a}%</span></div>${tw2.length?`<div style="margin-top:8px;font-size:11px;color:var(--text4)">빈출 오답: <span style="color:var(--red)">${tw2.join(', ')}</span></div>`:''}</div>`;}).join('')}
+  </div></div>
+
+  <div class="tab-content" id="t2"><div class="table-wrap"><table><thead><tr><th>#</th><th>오답 키워드</th><th>틀린 횟수</th><th>비율</th></tr></thead><tbody>
+  ${topW.map(([w,c],i)=>`<tr><td style="text-align:center;font-weight:700;color:var(--gold)">${i+1}</td><td style="font-weight:600;color:var(--red)">${w}</td><td>${c}회</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:${Math.round(c/maxWC*100)}%;height:100%;background:var(--red);border-radius:3px"></div></div>${Math.round(c/maxWC*100)}%</div></td></tr>`).join('')}
+  </tbody></table></div></div>
+
+  <div class="tab-content" id="t3"><div class="growth-grid">
+  ${ranked.filter(s=>(students[s.name].growth||[]).length>0).map(s=>{const g=students[s.name].growth;return `<div class="growth-card"><div class="growth-hd"><div class="growth-nm">${s.name}</div><div style="font-size:12px;color:var(--text4)">${g.length}회</div></div><div class="growth-bars">${g.map(p=>{const h=Math.max(6,Math.round(p.rate/100*55));const c=p.rate>=80?'var(--green-b)':p.rate>=60?'var(--orange)':'var(--red)';return `<div class="growth-col"><div class="growth-v" style="color:${c}">${p.rate}%</div><div class="growth-b" style="height:${h}px;background:${c}"></div><div class="growth-d">${p.date.replace(/2026\.\s*/,'').replace(/\.\s*$/,'')}</div></div>`;}).join('')}</div></div>`;}).join('')}
+  </div></div>
+
+  <div class="tab-content" id="t4">
+  <div style="margin-bottom:12px;font-size:13px;color:var(--text3)">학생들이 주로 응시하는 시간대 · 가장 활발: <strong style="color:var(--gold)">${String(peakH).padStart(2,'0')}시</strong></div>
+  <div class="time-chart">${(()=>{let h='';for(let i=6;i<30;i++){const hr=i%24;const c=th[hr]||0;const p=Math.round(c/maxT*100);h+=`<div class="time-col"><div class="time-cnt">${c||''}</div><div class="time-bar" style="height:${p}%"></div><div class="time-lbl">${String(hr).padStart(2,'0')}</div></div>`;}return h;})()}</div>
+  </div>
+
+  <div class="tab-content" id="t5">
+  <div style="margin-bottom:12px;font-size:13px;color:var(--text3)">학생별 제출 횟수 (반복 학습 지표)</div>
+  <div class="retry-grid">
+  ${Object.entries(students).sort((a,b)=>(b[1].retries||0)-(a[1].retries||0)).map(([n,st])=>{const c=st.retries>=3?'var(--green-b)':st.retries>=2?'var(--gold)':'var(--text3)';return `<div class="retry-card"><div class="retry-nm">${n}</div><div class="retry-cnt" style="color:${c}">${st.retries||1}</div><div class="retry-lb">회 제출</div></div>`;}).join('')}
+  </div></div>
+  `;
+}
+
+function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));document.querySelectorAll('.tab-content').forEach((t,j)=>t.classList.toggle('active',j===i));}
+
+function showSt(name){
+  const st=students[name];if(!st)return;
+  const r=st.summary?st.summary.rate:0;
+  const g=r>=90?'A':r>=80?'B':r>=70?'C':r>=60?'D':'F';
+  document.getElementById('mc').innerHTML=`
+    <h3>${name}</h3>
+    <div class="msub">최근: ${st.latest} · 누적: <strong style="color:${r>=80?'var(--green-b)':r>=60?'var(--orange)':'var(--red)'}">${st.summary.correct}/${st.summary.total} (${r}%)</strong> · <span class="grade grade-${g}" style="display:inline-block;vertical-align:middle">${g}</span> · ${st.retries||1}회 제출</div>
+    <table class="modal-table"><thead><tr><th>작품</th><th>정답</th><th>빈칸</th><th>정답률</th><th>오답</th><th>제출일</th></tr></thead><tbody>
+    ${st.works.map(w=>{const wr=Number(w.rate)||0;return `<tr><td style="font-weight:500">${w.work}</td><td>${w.correct}</td><td>${w.total}</td><td class="rate-cell ${wr>=80?'high':wr>=60?'mid':'low'}">${wr}%</td><td class="wrong-list">${w.wrongs||'-'}</td><td style="font-size:11px;color:var(--text4)">${w.time?w.time.split(' ').slice(0,3).join(' '):''}</td></tr>`;}).join('')}
+    </tbody></table>
+    ${(st.growth||[]).length>1?`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)"><div style="font-size:12px;color:var(--text3);margin-bottom:8px">📈 성장 추이</div><div style="display:flex;gap:10px;align-items:flex-end">${st.growth.map(p=>{const c=p.rate>=80?'var(--green-b)':p.rate>=60?'var(--orange)':'var(--red)';return `<div style="text-align:center;flex:1"><div style="font-size:13px;font-weight:700;color:${c}">${p.rate}%</div><div style="height:${Math.max(6,p.rate*.5)}px;background:${c};border-radius:3px;margin:4px 0;opacity:.7"></div><div style="font-size:10px;color:var(--text4)">${p.date.replace(/2026\.\s*/,'')}</div></div>`;}).join('')}</div></div>`:''}
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('show');}
+
+loadData();
 </script>
 </body>
 </html>
