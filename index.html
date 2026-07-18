@@ -7,158 +7,154 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#070b14">
+<meta name="theme-color" content="#0a0c10">
 <title>김가경 국어 연구소 · 복습 시험 시스템</title>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#070b14;
-  --panel-a:#141c2e; --panel-b:#0c1320;
-  --line:rgba(168,184,214,.15); --line-2:rgba(168,184,214,.34);
-  --silver:#e6ebf3; --silver-2:#a7b1c5; --muted:#616c84;
-  --accent:#c2cee2; --accent-2:#8194b4;
-  --serif:'Nanum Myeongjo',serif; --num:'Cormorant Garamond',serif;
+  --bg:#0a0c10;
+  --surf:#0e131c; --card-a:#161d2b; --card-b:#0f1520;
+  --line:rgba(148,163,190,.16); --line-2:rgba(148,163,190,.3);
+  --mint:#4ae3c0; --mint-2:#3ec4a8; --mint-glow:rgba(74,227,192,.28); --mint-soft:rgba(74,227,192,.10);
+  --silver:#e8ecf4; --silver-2:#9aa4bd; --muted:#5c667f;
+  --serif:'Nanum Myeongjo',serif; --num:'Inter',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  background:radial-gradient(1100px 560px at 50% -12%, #17233c 0%, rgba(23,35,60,0) 62%), linear-gradient(180deg,#0a1120 0%,#070b14 100%);
+  background:radial-gradient(900px 460px at 50% -8%, rgba(74,227,192,.07), transparent 60%), linear-gradient(180deg,#0c1018,#0a0c10);
   background-attachment:fixed;
   color:var(--silver);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;padding:58px 22px;-webkit-tap-highlight-color:transparent;
+  display:flex;flex-direction:column;align-items:center;padding:52px 22px;-webkit-tap-highlight-color:transparent;
 }
-.num{font-family:var(--num)}
+.num{font-family:var(--num);font-weight:600}
+.ms{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;-webkit-font-feature-settings:'liga';font-feature-settings:'liga';display:inline-block}
 
 /* 헤더 */
-.logo{font-family:var(--serif);font-size:34px;font-weight:800;letter-spacing:6px;text-align:center;color:#eef2f8;margin-bottom:15px}
-.orn{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:15px}
-.orn i{display:block;width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--line-2))}
+.logo{font-family:var(--serif);font-size:33px;font-weight:800;letter-spacing:6px;text-align:center;color:#f0f3f9;margin-bottom:14px}
+.orn{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:22px}
+.orn i{display:block;width:44px;height:1px;background:linear-gradient(90deg,transparent,var(--mint))}
 .orn i:last-child{transform:scaleX(-1)}
-.orn b{width:5px;height:5px;transform:rotate(45deg);background:var(--accent-2);opacity:.85}
-.subtitle{font-size:12px;color:var(--accent-2);text-align:center;letter-spacing:9px;margin-bottom:48px;font-weight:500}
+.orn b{width:6px;height:6px;transform:rotate(45deg);background:var(--mint);box-shadow:0 0 10px var(--mint-glow)}
+
+/* 탭바 */
+.tabbar{display:inline-flex;gap:4px;background:var(--surf);border:1px solid var(--line);border-radius:999px;padding:5px;margin:0 auto 34px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.tab{border:none;background:none;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--silver-2);padding:9px 22px;border-radius:999px;letter-spacing:.5px;transition:.22s;white-space:nowrap}
+.tab:hover{color:var(--silver)}
+.tab.on{color:#06251f;background:var(--mint);box-shadow:0 0 20px var(--mint-soft),0 4px 14px rgba(0,0,0,.35)}
 
 .view{width:100%;max-width:940px}
 .view.hidden{display:none}
-.view.show{animation:fade .3s ease}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pane{animation:fade .32s cubic-bezier(.22,1,.36,1)}
+@keyframes fade{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 
 /* 히어로 */
-.hero{display:flex;align-items:center;gap:26px;background:linear-gradient(160deg,rgba(22,32,52,0),#0e1626);
-  border:1px solid var(--line-2);border-radius:18px;padding:34px 36px;cursor:pointer;transition:.28s;
-  box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(190,205,235,.07);position:relative;overflow:hidden;margin-bottom:24px}
-.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(560px 190px at 88% 0%,rgba(160,180,215,.10),transparent 70%);opacity:.7;pointer-events:none}
-.hero:hover{transform:translateY(-3px);border-color:rgba(194,206,226,.5);box-shadow:0 20px 52px rgba(0,0,0,.6)}
-.hero-bar{width:3px;align-self:stretch;border-radius:3px;margin:2px 0;flex-shrink:0;
-  background:linear-gradient(180deg,rgba(224,233,248,.9),rgba(129,148,180,.12))}
+.hero{display:flex;align-items:center;gap:24px;background:linear-gradient(150deg,#141d2b,#0e1420);
+  border:1px solid var(--line-2);border-radius:20px;padding:32px 34px;cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 14px 40px rgba(0,0,0,.5);position:relative;overflow:hidden;margin-bottom:22px}
+.hero::after{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(74,227,192,.14),transparent 70%);pointer-events:none}
+.hero:hover{transform:translateY(-4px);border-color:rgba(74,227,192,.4);box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 0 1px var(--mint-glow)}
+.hero-ic{width:60px;height:60px;flex-shrink:0;border-radius:16px;background:rgba(74,227,192,.1);border:1px solid rgba(74,227,192,.25);display:flex;align-items:center;justify-content:center;position:relative}
+.hero-ic .ms{font-size:30px;color:var(--mint)}
 .hero-body{flex:1;min-width:0;position:relative}
-.hero-k{font-size:11px;letter-spacing:4px;color:var(--accent-2);margin-bottom:9px;font-weight:500}
-.hero-title{font-family:var(--serif);font-size:27px;font-weight:800;letter-spacing:1px;color:var(--silver);margin-bottom:11px;line-height:1.2}
-.hero-title .num{font-weight:600;letter-spacing:1px}
-.hero-desc{font-size:13px;color:var(--silver-2);line-height:1.7;margin-bottom:12px}
-.hero-meta{font-size:11.5px;color:var(--accent-2);letter-spacing:.6px}
-.hero-cta{flex-shrink:0;font-size:14px;font-weight:700;color:var(--accent);letter-spacing:1px;white-space:nowrap;position:relative}
+.hero-k{font-family:var(--num);font-size:11px;letter-spacing:3px;color:var(--mint);margin-bottom:8px;text-transform:uppercase;font-weight:600}
+.hero-title{font-family:var(--serif);font-size:26px;font-weight:800;letter-spacing:1px;color:var(--silver);margin-bottom:10px;line-height:1.2}
+.hero-desc{font-size:13px;color:var(--silver-2);line-height:1.7;margin-bottom:11px}
+.hero-meta{font-size:11.5px;color:var(--mint-2);letter-spacing:.5px}
+.hero-cta{flex-shrink:0;font-family:var(--num);font-size:13px;font-weight:600;color:var(--mint);letter-spacing:.5px;white-space:nowrap;position:relative}
 
-/* 카테고리 4열 */
-.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.tile{background:linear-gradient(160deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:15px;
-  padding:30px 16px 26px;text-align:center;text-decoration:none;display:block;transition:.25s;position:relative;
-  box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(190,205,235,.05)}
-.tile::before{content:'';position:absolute;top:0;left:26%;right:26%;height:1px;background:linear-gradient(90deg,transparent,var(--line-2),transparent);opacity:.6}
-.tile:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 16px 40px rgba(0,0,0,.55)}
-.tile .t{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--silver);letter-spacing:2px;margin-bottom:14px}
-.tile .g{display:inline-block;padding:2.5px 12px;border-radius:20px;font-size:10px;letter-spacing:1px;
-  color:var(--accent);background:rgba(194,206,226,.07);border:1px solid var(--line-2)}
-.tile.soon{opacity:.5;cursor:not-allowed;border-style:dashed}
-.tile.soon::before{display:none}
-.tile.soon .t{color:var(--silver-2)}
-.tile.soon .g{color:var(--muted);background:none}
+/* 그리드 카드 공통 */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.crd{background:linear-gradient(150deg,var(--card-a),var(--card-b));border:1px solid var(--line);border-radius:16px;
+  padding:26px 18px;text-align:center;text-decoration:none;display:block;transition:all .28s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 10px 26px rgba(0,0,0,.4);position:relative;overflow:hidden}
+.crd:hover{transform:translateY(-4px);border-color:rgba(74,227,192,.4);box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 0 1px var(--mint-glow)}
+.crd .ic{width:46px;height:46px;margin:0 auto 14px;border-radius:13px;background:rgba(74,227,192,.09);border:1px solid rgba(74,227,192,.2);display:flex;align-items:center;justify-content:center}
+.crd .ic .ms{font-size:24px;color:var(--mint)}
+.crd .t{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--silver);letter-spacing:1px;margin-bottom:6px}
+.crd .d{font-size:11.5px;color:var(--silver-2);line-height:1.5;margin-bottom:12px}
+.crd .g{display:inline-block;font-family:var(--num);padding:2.5px 12px;border-radius:999px;font-size:10.5px;font-weight:500;letter-spacing:.5px;color:var(--mint);background:var(--mint-soft);border:1px solid rgba(74,227,192,.3)}
+.crd .badge{display:inline-block;font-family:var(--num);font-size:10px;font-weight:600;letter-spacing:1px;color:var(--mint-2);border:1px solid rgba(74,227,192,.28);border-radius:999px;padding:1.5px 12px;margin-bottom:12px}
+.crd.soon{opacity:.5;cursor:not-allowed;border-style:dashed}
+.crd.soon .ic{background:rgba(148,163,190,.05);border-color:var(--line)}
+.crd.soon .ic .ms,.crd.soon .badge{color:var(--muted);border-color:var(--line)}
+.crd.soon .t{color:var(--silver-2)}
+.crd.soon .g{color:var(--muted);background:none;border-color:var(--line)}
 
-/* MEXX */
-.mexx{margin-top:48px}
-.mexx-head{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--accent);text-align:center;letter-spacing:5px;margin-bottom:22px;position:relative}
-.mexx-head::before,.mexx-head::after{content:'';position:absolute;top:50%;width:18%;height:1px;background:linear-gradient(90deg,transparent,var(--line-2))}
-.mexx-head::before{left:4%;transform:scaleX(-1)}.mexx-head::after{right:4%}
-.mexx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.mexx-card{background:linear-gradient(160deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:15px;
-  padding:28px 22px;text-align:center;text-decoration:none;display:block;transition:.25s;
-  box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(190,205,235,.05)}
-.mexx-card:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 16px 40px rgba(0,0,0,.55)}
-.mexx-card .badge{display:inline-block;font-size:10px;letter-spacing:2px;color:var(--accent-2);border:1px solid var(--line-2);border-radius:11px;padding:2px 13px;margin-bottom:13px}
-.mexx-card .t{font-family:var(--serif);font-size:17.5px;font-weight:700;color:var(--silver);letter-spacing:1px;margin-bottom:12px}
-.mexx-card .g{display:inline-block;padding:2.5px 13px;border-radius:20px;font-size:10px;letter-spacing:1px;color:var(--accent);background:rgba(194,206,226,.07);border:1px solid var(--line-2)}
-.mexx-card.soon{opacity:.5;cursor:not-allowed;border-style:dashed}
-.mexx-card.soon .t{color:var(--silver-2)}
-.mexx-card.soon .badge,.mexx-card.soon .g{color:var(--muted);background:none}
-
-/* 2단계 세부 */
-.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:16px;font-family:inherit}
+/* 드릴다운 */
+.back{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--mint);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:16px;font-family:inherit}
 .back:hover{color:var(--silver)}
-.sec-k{font-size:11px;letter-spacing:4px;color:var(--accent-2);text-align:center;margin-bottom:8px;font-weight:500}
-.sec-title{font-family:var(--serif);font-size:25px;font-weight:800;color:var(--silver);text-align:center;letter-spacing:1px;margin-bottom:7px}
-.sec-title .num{font-weight:600;letter-spacing:1px}
-.sec-info{font-size:12px;color:var(--muted);text-align:center;letter-spacing:.4px;margin-bottom:28px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-.card{background:linear-gradient(160deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:15px;
-  padding:30px 20px;text-align:center;text-decoration:none;display:block;transition:.25s;position:relative;
-  box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(190,205,235,.05)}
-.card::before{content:'';position:absolute;top:0;left:30%;right:30%;height:1px;background:linear-gradient(90deg,transparent,var(--line-2),transparent);opacity:.6}
-.card:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 16px 42px rgba(0,0,0,.55)}
-.card .t{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--silver);letter-spacing:1px;margin-bottom:10px}
-.card .d{font-size:12px;color:var(--silver-2);line-height:1.55;margin-bottom:14px}
-.card .g{display:inline-block;padding:3px 13px;border-radius:20px;font-size:10px;letter-spacing:1px;color:var(--accent);background:rgba(194,206,226,.07);border:1px solid var(--line-2)}
+.sec-k{font-family:var(--num);font-size:11px;letter-spacing:3px;color:var(--mint);text-align:center;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+.sec-title{font-family:var(--serif);font-size:24px;font-weight:800;color:var(--silver);text-align:center;letter-spacing:1px;margin-bottom:7px}
+.sec-info{font-size:12px;color:var(--muted);text-align:center;margin-bottom:26px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
 
-.footer{margin-top:auto;padding-top:52px;text-align:center;line-height:1.9;letter-spacing:.5px}
+/* MEXX 헤더 */
+.mexx-head{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--mint-2);text-align:center;letter-spacing:4px;margin-bottom:22px;position:relative}
+.mexx-head::before,.mexx-head::after{content:'';position:absolute;top:50%;width:18%;height:1px;background:linear-gradient(90deg,transparent,rgba(74,227,192,.4))}
+.mexx-head::before{left:4%;transform:scaleX(-1)}.mexx-head::after{right:4%}
+
+.footer{margin-top:auto;padding-top:50px;text-align:center;line-height:1.9}
 .footer .f1{font-size:12px;color:var(--silver-2)}
-.footer .f2{font-family:var(--serif);font-size:13px;font-weight:700;letter-spacing:3px;color:var(--accent-2);margin-top:4px}
+.footer .f2{font-family:var(--serif);font-size:13px;font-weight:700;letter-spacing:3px;color:var(--mint-2);margin-top:4px}
 
-@media(max-width:768px){.logo{font-size:27px;letter-spacing:4px}.hero{flex-direction:column;text-align:center;gap:16px;padding:30px 24px}.hero-bar{width:38px;height:3px;align-self:center}.cat-grid{grid-template-columns:1fr 1fr;gap:11px}.cards{grid-template-columns:1fr 1fr;gap:12px}}
-@media(max-width:480px){.cards{grid-template-columns:1fr}}
+@media(max-width:768px){.logo{font-size:26px;letter-spacing:4px}.hero{flex-direction:column;text-align:center;gap:16px;padding:28px 24px}.grid4{grid-template-columns:1fr 1fr;gap:11px}.grid3{grid-template-columns:1fr 1fr;gap:12px}}
+@media(max-width:480px){.grid3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="logo">김가경 국어 연구소</div>
 <div class="orn"><i></i><b></b><i></i></div>
-<div class="subtitle">복습 시험 시스템</div>
 
-<div class="view show" id="catView">
+<div class="tabbar">
+  <button class="tab on" id="tab-content" onclick="switchTab('content')">복습 콘텐츠</button>
+  <button class="tab" id="tab-mexx" onclick="switchTab('mexx')">한티 MEXX</button>
+</div>
+
+<!-- 복습 콘텐츠 -->
+<div class="view pane" id="contentView">
   <div class="hero" onclick="openSuneung()">
-    <div class="hero-bar"></div>
+    <div class="hero-ic"><span class="ms">auto_stories</span></div>
     <div class="hero-body">
-      <div class="hero-k">복습 콘텐츠</div>
+      <div class="hero-k">본문 해석</div>
       <div class="hero-title"><span class="num">2026</span> 수능특강 문학</div>
       <div class="hero-desc">고전시가 · 현대시 · 고전산문 · 현대소설 · 갈래복합 · 교과서개념학습</div>
       <div class="hero-meta">6개 영역 · 93작품 · 본문 해석 복습</div>
     </div>
     <div class="hero-cta">들어가기 →</div>
   </div>
-  <div class="cat-grid">
-    <a class="tile" href="gomunhak.html"><div class="t">고전 문학</div><div class="g">8작품</div></a>
-    <div class="tile soon"><div class="t">현대 문학</div><div class="g">준비 중</div></div>
-    <div class="tile soon"><div class="t">고전 문법</div><div class="g">준비 중</div></div>
-    <div class="tile soon"><div class="t">현대 문법</div><div class="g">준비 중</div></div>
-  </div>
-  <div class="mexx">
-    <div class="mexx-head">한티 MEXX 복습 시험</div>
-    <div class="mexx-grid">
-      <a class="mexx-card" href="mexx-go1d.html"><span class="badge">단과</span><div class="t">고1 단과 복습 시험</div><span class="g">1주차</span></a>
-      <div class="mexx-card soon"><span class="badge">단과</span><div class="t">고2 단과 복습 시험</div><span class="g">준비 중</span></div>
-      <div class="mexx-card soon"><span class="badge">종합</span><div class="t">고1 종합 복습 시험</div><span class="g">준비 중</span></div>
-      <div class="mexx-card soon"><span class="badge">종합</span><div class="t">중3 종합 복습 시험</div><span class="g">준비 중</span></div>
-    </div>
+  <div class="grid4">
+    <a class="crd" href="gomunhak.html"><div class="ic"><span class="ms">history_edu</span></div><div class="t">고전 문학</div><div class="g">8작품</div></a>
+    <div class="crd soon"><div class="ic"><span class="ms">menu_book</span></div><div class="t">현대 문학</div><div class="g">준비 중</div></div>
+    <div class="crd soon"><div class="ic"><span class="ms">translate</span></div><div class="t">고전 문법</div><div class="g">준비 중</div></div>
+    <div class="crd soon"><div class="ic"><span class="ms">draw</span></div><div class="t">현대 문법</div><div class="g">준비 중</div></div>
   </div>
 </div>
 
-<div class="view hidden" id="suneungView">
-  <button class="back" onclick="backToCats()">← 전체 카테고리</button>
-  <div class="sec-k">복습 콘텐츠</div>
+<!-- 한티 MEXX -->
+<div class="view pane hidden" id="mexxView">
+  <div class="mexx-head">한티 MEXX 복습 시험</div>
+  <div class="grid2">
+    <a class="crd" href="mexx-go1d.html"><div class="ic"><span class="ms">quiz</span></div><span class="badge">단과</span><div class="t">고1 단과 복습 시험</div><span class="g">1주차</span></a>
+    <div class="crd soon"><div class="ic"><span class="ms">quiz</span></div><span class="badge">단과</span><div class="t">고2 단과 복습 시험</div><span class="g">준비 중</span></div>
+    <div class="crd soon"><div class="ic"><span class="ms">workspace_premium</span></div><span class="badge">종합</span><div class="t">고1 종합 복습 시험</div><span class="g">준비 중</span></div>
+    <div class="crd soon"><div class="ic"><span class="ms">workspace_premium</span></div><span class="badge">종합</span><div class="t">중3 종합 복습 시험</div><span class="g">준비 중</span></div>
+  </div>
+</div>
+
+<!-- 드릴다운: 2026 수능특강 문학 -->
+<div class="view pane hidden" id="suneungView">
+  <button class="back" onclick="backToContent()"><span class="ms" style="font-size:18px">chevron_left</span> 전체 카테고리</button>
+  <div class="sec-k">본문 해석</div>
   <div class="sec-title"><span class="num">2026</span> 수능특강 문학</div>
   <div class="sec-info">2026학년도 1차고사 대비 · 수능특강(문학) · 본문 해석</div>
-  <div class="cards">
-    <a class="card" href="gojeon.html"><div class="t">고전시가</div><div class="d">향가 · 고려가요 · 시조 · 가사</div><span class="g">21작품</span></a>
-    <a class="card" href="hyundaesi.html"><div class="t">현대시</div><div class="d">저항시 · 모더니즘 · 서정시</div><span class="g">21작품</span></a>
-    <a class="card" href="gojeon-sosel.html"><div class="t">고전산문</div><div class="d">고전소설 · 몽유록 · 전(傳)</div><span class="g">11작품</span></a>
-    <a class="card" href="hyundae-sosel.html"><div class="t">현대소설</div><div class="d">세태소설 · 리얼리즘 · 전후소설</div><span class="g">11작품</span></a>
-    <a class="card" href="gallae.html"><div class="t">갈래복합</div><div class="d">시+수필 · 가사+산문 복합 세트</div><span class="g">23작품</span></a>
-    <a class="card" href="gyogwaseo.html"><div class="t">교과서개념학습</div><div class="d">교과서 수록 핵심 작품</div><span class="g">6작품</span></a>
+  <div class="grid3">
+    <a class="crd" href="gojeon.html"><div class="ic"><span class="ms">history_edu</span></div><div class="t">고전시가</div><div class="d">향가 · 고려가요 · 시조 · 가사</div><span class="g">21작품</span></a>
+    <a class="crd" href="hyundaesi.html"><div class="ic"><span class="ms">book</span></div><div class="t">현대시</div><div class="d">저항시 · 모더니즘 · 서정시</div><span class="g">21작품</span></a>
+    <a class="crd" href="gojeon-sosel.html"><div class="ic"><span class="ms">article</span></div><div class="t">고전산문</div><div class="d">고전소설 · 몽유록 · 전(傳)</div><span class="g">11작품</span></a>
+    <a class="crd" href="hyundae-sosel.html"><div class="ic"><span class="ms">menu_book</span></div><div class="t">현대소설</div><div class="d">세태소설 · 리얼리즘 · 전후소설</div><span class="g">11작품</span></a>
+    <a class="crd" href="gallae.html"><div class="ic"><span class="ms">hub</span></div><div class="t">갈래복합</div><div class="d">시+수필 · 가사+산문 복합 세트</div><span class="g">23작품</span></a>
+    <a class="crd" href="gyogwaseo.html"><div class="ic"><span class="ms">school</span></div><div class="t">교과서개념학습</div><div class="d">교과서 수록 핵심 작품</div><span class="g">6작품</span></a>
   </div>
 </div>
 
@@ -168,10 +164,20 @@ body{
 </div>
 
 <script>
-var catV=document.getElementById('catView'), sunV=document.getElementById('suneungView');
-function openSuneung(){catV.classList.add('hidden');catV.classList.remove('show');sunV.classList.remove('hidden');sunV.classList.add('show');window.scrollTo(0,0);}
-function backToCats(){sunV.classList.add('hidden');sunV.classList.remove('show');catV.classList.remove('hidden');catV.classList.add('show');window.scrollTo(0,0);}
-document.querySelectorAll('a[href$=".html"]').forEach(function(a){
+var views={content:document.getElementById('contentView'),mexx:document.getElementById('mexxView')};
+var sunV=document.getElementById('suneungView');
+function switchTab(t){
+  document.getElementById('tab-content').classList.toggle('on',t==='content');
+  document.getElementById('tab-mexx').classList.toggle('on',t==='mexx');
+  sunV.classList.add('hidden');
+  views.content.classList.toggle('hidden',t!=='content');
+  views.mexx.classList.toggle('hidden',t!=='mexx');
+  var v=views[t]; v.classList.remove('pane');void v.offsetWidth;v.classList.add('pane');
+  window.scrollTo(0,0);
+}
+function openSuneung(){views.content.classList.add('hidden');sunV.classList.remove('hidden');sunV.classList.remove('pane');void sunV.offsetWidth;sunV.classList.add('pane');window.scrollTo(0,0);}
+function backToContent(){sunV.classList.add('hidden');views.content.classList.remove('hidden');window.scrollTo(0,0);}
+document.querySelectorAll('a.crd[href$=".html"]').forEach(function(a){
   a.addEventListener('click',function(e){
     e.preventDefault();
     var href=a.getAttribute('href');
