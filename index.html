@@ -13,24 +13,38 @@
 <style>
 :root{--bg-deep:#0a0e0a;--bg-card:#111a11;--border-outer:rgba(255,255,255,.35);--green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--gold:#c9a84c;--gold-dim:#a08838;--text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px;-webkit-tap-highlight-color:transparent}
 .logo{font-family:'Noto Serif KR',serif;font-size:34px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px;letter-spacing:1px}
-.subtitle{font-size:15px;color:var(--green-light);text-align:center;letter-spacing:2px;margin-bottom:26px}
+.subtitle{font-size:15px;color:var(--green-light);text-align:center;letter-spacing:2px;margin-bottom:34px}
 
-/* 상위 카테고리 탭 */
-.cats{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;max-width:900px;width:100%;margin-bottom:8px}
-.cat{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:var(--text-secondary);background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:11px 18px;cursor:pointer;transition:all .2s;white-space:nowrap;position:relative}
-.cat:hover{border-color:var(--green-accent);color:var(--text-primary)}
-.cat.active{color:var(--gold);border-color:var(--gold-dim);background:linear-gradient(145deg,#1a2416,#131c10);box-shadow:0 4px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(201,168,76,.12)}
-.cat .soon{display:inline-block;margin-left:6px;font-family:'Noto Sans KR';font-size:9px;font-weight:500;color:var(--text-muted);letter-spacing:.5px;vertical-align:middle}
-.cat.active .soon{color:var(--gold-dim)}
+.view{width:100%;max-width:960px}
+.view.hidden{display:none}
+.view.show{animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* 패널 */
-.panel{display:none;width:100%;max-width:960px;margin-top:22px}
-.panel.active{display:block;animation:fade .3s ease}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.panel-info{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:22px}
+/* ── 1단계: 카테고리 선택 ── */
+.hero{display:flex;align-items:center;gap:24px;background:linear-gradient(145deg,#1a2416,#0e160e);border:1px solid var(--gold-dim);border-radius:18px;padding:30px 32px;cursor:pointer;transition:all .25s;box-shadow:0 8px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(201,168,76,.12);position:relative;overflow:hidden;margin-bottom:22px}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.09),transparent 55%);opacity:0;transition:.25s}
+.hero:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 14px 44px rgba(0,0,0,.55)}
+.hero:hover::before{opacity:1}
+.hero-icon{font-size:52px;line-height:1;position:relative;flex-shrink:0}
+.hero-body{position:relative;flex:1;min-width:0}
+.hero-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.hero-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px}
+.hero-meta{font-size:11px;color:var(--green-light);letter-spacing:.5px}
+.hero-cta{position:relative;flex-shrink:0;font-size:14px;font-weight:700;color:var(--gold);white-space:nowrap}
 
+.soon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.soon{background:linear-gradient(145deg,rgba(20,30,20,.5),rgba(14,22,14,.5));border:1px dashed rgba(255,255,255,.15);border-radius:14px;padding:24px 16px;text-align:center;opacity:.62;cursor:not-allowed}
+.soon-icon{font-size:30px;margin-bottom:10px;display:block;filter:grayscale(.3)}
+.soon-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
+.soon-tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:9.5px;letter-spacing:1px;color:var(--text-muted);border:1px solid rgba(255,255,255,.14)}
+
+/* ── 2단계: 세부 영역 ── */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green-light);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:14px;font-family:'Noto Sans KR'}
+.back:hover{color:var(--gold)}
+.sec-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:5px}
+.sec-info{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:24px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .card{background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);position:relative;overflow:hidden;display:block}
 .card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(106,143,94,.08),transparent 60%);opacity:0;transition:.25s}
@@ -44,15 +58,9 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .tag-h{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
 .tag-m{background:rgba(138,173,122,.1);color:var(--green-light);border:1px solid rgba(138,173,122,.2)}
 
-/* 준비 중 */
-.empty{border:1px dashed rgba(255,255,255,.16);border-radius:16px;padding:64px 24px;text-align:center;background:linear-gradient(145deg,rgba(20,30,20,.4),rgba(14,22,14,.4))}
-.empty-icon{font-size:44px;margin-bottom:14px;opacity:.55}
-.empty-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
-.empty-sub{font-size:12.5px;color:var(--text-muted);line-height:1.6}
-
-.footer{margin-top:auto;padding-top:40px;text-align:center;font-size:11px;color:var(--text-muted);line-height:1.7;opacity:.75}
+.footer{margin-top:auto;padding-top:44px;text-align:center;font-size:11px;color:var(--text-muted);line-height:1.7;opacity:.75}
 .footer span{color:var(--gold-dim);font-weight:500}
-@media(max-width:768px){.cards{grid-template-columns:1fr 1fr;gap:12px}.logo{font-size:26px}.cats{gap:7px}.cat{font-size:12.5px;padding:9px 13px}}
+@media(max-width:768px){.logo{font-size:26px}.hero{flex-direction:column;text-align:center;gap:14px;padding:26px 22px}.soon-grid{grid-template-columns:1fr 1fr;gap:11px}.cards{grid-template-columns:1fr 1fr;gap:12px}}
 @media(max-width:480px){.cards{grid-template-columns:1fr}.card{padding:20px 16px}}
 </style>
 </head>
@@ -60,17 +68,30 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 <div class="logo">김가경 국어 연구소</div>
 <div class="subtitle">복습 시험 시스템</div>
 
-<div class="cats" id="cats">
-  <button class="cat active" data-panel="p-suneung">2026 수능특강 문학</button>
-  <button class="cat" data-panel="p-gojeon-mh">고전 문학<span class="soon">준비 중</span></button>
-  <button class="cat" data-panel="p-hyundae-mh">현대 문학<span class="soon">준비 중</span></button>
-  <button class="cat" data-panel="p-gojeon-mb">고전 문법<span class="soon">준비 중</span></button>
-  <button class="cat" data-panel="p-hyundae-mb">현대 문법<span class="soon">준비 중</span></button>
+<!-- 1단계: 카테고리 선택 -->
+<div class="view show" id="catView">
+  <div class="hero" onclick="openSuneung()">
+    <div class="hero-icon">🏆</div>
+    <div class="hero-body">
+      <div class="hero-title">2026 수능특강 문학</div>
+      <div class="hero-desc">고전시가 · 현대시 · 고전산문 · 현대소설 · 갈래복합 · 교과서개념학습</div>
+      <div class="hero-meta">6개 영역 · 93작품 · 본문 해석 복습</div>
+    </div>
+    <div class="hero-cta">들어가기 →</div>
+  </div>
+  <div class="soon-grid">
+    <div class="soon"><span class="soon-icon">🏯</span><div class="soon-title">고전 문학</div><span class="soon-tag">준비 중</span></div>
+    <div class="soon"><span class="soon-icon">✒️</span><div class="soon-title">현대 문학</div><span class="soon-tag">준비 중</span></div>
+    <div class="soon"><span class="soon-icon">📝</span><div class="soon-title">고전 문법</div><span class="soon-tag">준비 중</span></div>
+    <div class="soon"><span class="soon-icon">✏️</span><div class="soon-title">현대 문법</div><span class="soon-tag">준비 중</span></div>
+  </div>
 </div>
 
-<!-- 2026 수능특강 문학 -->
-<div class="panel active" id="p-suneung">
-  <div class="panel-info">2026학년도 1차고사 대비 · 수능특강(문학) · 본문 해석</div>
+<!-- 2단계: 2026 수능특강 문학 세부 -->
+<div class="view hidden" id="suneungView">
+  <button class="back" onclick="backToCats()">← 전체 카테고리</button>
+  <div class="sec-title">2026 수능특강 문학</div>
+  <div class="sec-info">2026학년도 1차고사 대비 · 수능특강(문학) · 본문 해석</div>
   <div class="cards">
     <a class="card" href="gojeon.html">
       <span class="card-icon">🏛️</span>
@@ -111,27 +132,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
   </div>
 </div>
 
-<!-- 준비 중 카테고리 -->
-<div class="panel" id="p-gojeon-mh"><div class="empty"><div class="empty-icon">🏯</div><div class="empty-title">고전 문학</div><div class="empty-sub">콘텐츠를 준비하고 있습니다.<br>곧 복습 시험이 추가됩니다.</div></div></div>
-<div class="panel" id="p-hyundae-mh"><div class="empty"><div class="empty-icon">✒️</div><div class="empty-title">현대 문학</div><div class="empty-sub">콘텐츠를 준비하고 있습니다.<br>곧 복습 시험이 추가됩니다.</div></div></div>
-<div class="panel" id="p-gojeon-mb"><div class="empty"><div class="empty-icon">📖</div><div class="empty-title">고전 문법</div><div class="empty-sub">콘텐츠를 준비하고 있습니다.<br>곧 복습 시험이 추가됩니다.</div></div></div>
-<div class="panel" id="p-hyundae-mb"><div class="empty"><div class="empty-icon">✏️</div><div class="empty-title">현대 문법</div><div class="empty-sub">콘텐츠를 준비하고 있습니다.<br>곧 복습 시험이 추가됩니다.</div></div></div>
-
 <div class="footer">
   방법의 옳음, 선택의 옳음<br>
   <span>김가경 국어 연구소</span>
 </div>
 
 <script>
-// 카테고리 탭 전환
-document.getElementById('cats').addEventListener('click',function(e){
-  var btn=e.target.closest('.cat'); if(!btn) return;
-  document.querySelectorAll('.cat').forEach(function(c){c.classList.remove('active')});
-  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
-  btn.classList.add('active');
-  var pan=document.getElementById(btn.getAttribute('data-panel'));
-  if(pan) pan.classList.add('active');
-});
+var catV=document.getElementById('catView'), sunV=document.getElementById('suneungView');
+function openSuneung(){catV.classList.add('hidden');catV.classList.remove('show');sunV.classList.remove('hidden');sunV.classList.add('show');window.scrollTo(0,0);}
+function backToCats(){sunV.classList.add('hidden');sunV.classList.remove('show');catV.classList.remove('hidden');catV.classList.add('show');window.scrollTo(0,0);}
 // 캐시버스팅: 카드 클릭 시 최신본 강제 로드
 document.querySelectorAll('a.card[href$=".html"]').forEach(function(a){
   a.addEventListener('click',function(e){
