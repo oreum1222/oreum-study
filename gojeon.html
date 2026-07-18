@@ -327,9 +327,12 @@ function handleKey(e,el) {
 
 function onInput(el) {
   const uid=el.id, pi=parseInt(el.dataset.poem);
+  clearTimeout(_subTimer);
+  el.classList.remove('correct','wrong');
   if(!state[pi]) state[pi]={};
   state[pi][uid]={value:el.value,graded:false,correct:false};
   const hb=el.nextElementSibling; if(hb) hb.disabled=!el.value.trim();
+  scheduleAutoGrade(pi);
 }
 
 function gradeOne(el) {
@@ -337,10 +340,10 @@ function gradeOne(el) {
   if(!val) return;
   const ok=ans.split('|').some(function(a){return normalize(val)===normalize(a);});
   el.classList.remove('correct','wrong'); el.classList.add(ok?'correct':'wrong');
-  el.readOnly=true;
+  el.readOnly=ok;
   if(!state[pi]) state[pi]={};
   state[pi][uid]={value:val,graded:true,correct:ok};
-  updateProgress();
+  updateProgress(); maybeAutoSubmit();
 }
 
 function showHint(uid) {
@@ -392,6 +395,15 @@ function updateProgress() {
   document.getElementById('progText').textContent=pct+'%';
   document.getElementById('progPath').setAttribute('stroke-dasharray',pct+',100');
 }
+
+// === 자동 채점/제출 ===
+var _agTimer=null,_subTimer=null,autoSubmitted=false,pendingSubmit=false;
+function allFilledWork(pi){var bs=[].slice.call(document.querySelectorAll('.blank-input[data-poem="'+pi+'"]'));return bs.length>0&&bs.every(function(el){return el.value.trim().length>0;});}
+function autoGradeWork(pi){document.querySelectorAll('.blank-input[data-poem="'+pi+'"]').forEach(function(el){if(!el.readOnly&&el.value.trim())gradeOne(el);});}
+function scheduleAutoGrade(pi){clearTimeout(_agTimer);_agTimer=setTimeout(function(){if(allFilledWork(pi))autoGradeWork(pi);},700);}
+function allGraded(){if(!activeData.length)return false;for(var k=0;k<activeData.length;k++){var di=activeData[k],need=countBlanks(di),got=0;if(state[di])Object.values(state[di]).forEach(function(s){if(s.graded)got++;});if(got<need)return false;}return true;}
+function maybeAutoSubmit(){if(autoSubmitted)return;clearTimeout(_subTimer);if(!allGraded())return;_subTimer=setTimeout(function(){if(autoSubmitted||!allGraded())return;var nm=document.getElementById('studentName').value.trim();if(!nm){pendingSubmit=true;showToast('✅ 모두 채점됐어요! 이름을 입력하면 자동 제출됩니다.');return;}autoSubmitted=true;pendingSubmit=false;submitResults();},2500);}
+document.getElementById('studentName').addEventListener('input',function(){if(pendingSubmit)maybeAutoSubmit();});
 
 // === SUBMISSION ===
 function getResultData() {
