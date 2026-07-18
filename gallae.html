@@ -318,10 +318,11 @@ function switchTab(i) { currentTab=i; buildTabs(); buildContent(); window.scroll
 
 function handleKey(e,el) {
   if(e.key==='Enter') {
-    e.preventDefault(); gradeOne(el);
-    const all=[...document.querySelectorAll('.blank-input:not([readonly])')];
+    e.preventDefault();
+    const all=[...document.querySelectorAll('.blank-input')];
     const idx=all.indexOf(el);
-    if(idx>=0&&idx<all.length-1) all[idx+1].focus();
+    gradeOne(el);
+    for(var j=idx+1;j<all.length;j++){if(!all[j].readOnly){all[j].focus();break;}}
   }
 }
 
