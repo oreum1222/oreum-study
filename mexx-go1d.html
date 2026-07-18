@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>(function(){try{var u=new URL(location.href);if(!u.searchParams.has('v')){u.searchParams.set('v',Date.now());location.replace(u.toString());}}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0e0a">
+<title>한티 MEXX 고1 단과 복습 시험</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep:#0a0e0a;--bg-card:#111a11;--bg-input:#101a10;
+  --border-row:rgba(255,255,255,.35);--border-div:rgba(255,255,255,.40);--border-outer:rgba(255,255,255,.35);
+  --green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--green-bright:#4ade80;
+  --gold:#c9a84c;--gold-dim:#a08838;
+  --text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82;--text-dim:#7a7568;
+  --correct:#22c55e;--wrong:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;font-size:15px;line-height:1.7;-webkit-tap-highlight-color:transparent}
+
+/* === SELECTION SCREEN === */
+.sel-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.sel-logo{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px}
+.sel-sub{font-size:16px;color:var(--green-light);text-align:center;margin-bottom:6px}
+.sel-desc{font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:24px}
+.sel-card{background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:24px;width:100%;max-width:600px;box-shadow:0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.sel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.sel-toggle{background:none;border:1px solid var(--green-accent);color:var(--green-light);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.sel-toggle:hover{background:var(--green-brand)}
+.sel-count{font-size:13px;color:var(--text-muted)}
+.sel-count b{color:var(--gold);font-size:16px}
+.sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.sel-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:.15s;border:1px solid rgba(255,255,255,.06)}
+.sel-item:hover{background:rgba(255,255,255,.04)}
+.sel-item .cb{width:20px;height:20px;border-radius:5px;border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;font-size:13px;color:transparent}
+.sel-item.checked .cb{background:var(--green-brand);border-color:var(--green-accent);color:var(--green-light)}
+.sel-item .lbl{font-size:13px;color:var(--text-secondary);line-height:1.4}
+.sel-item .lbl small{color:var(--text-muted);font-size:11px;display:block}
+.sel-start{width:100%;padding:14px;background:linear-gradient(135deg,var(--green-brand),var(--green-accent));color:var(--text-primary);border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+.sel-start:hover{filter:brightness(1.1)}
+.sel-start:disabled{opacity:.4;cursor:not-allowed}
+
+/* === HEADER === */
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0d130d,#1a2a1a);border-bottom:1px solid var(--border-outer);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.btn-back{background:none;border:1px solid var(--text-muted);color:var(--text-muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.btn-back:hover{color:var(--text-primary);border-color:var(--text-primary)}
+.logo{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:var(--gold)}
+.logo span{color:var(--green-light);font-size:13px;font-weight:400;margin-left:6px}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.progress-wrap{display:flex;align-items:center;gap:5px}
+.progress-ring{width:34px;height:34px}
+.progress-text{font-size:12px;color:var(--text-secondary)}
+.btn-sm{background:var(--green-brand);color:var(--text-primary);border:1px solid var(--green-accent);padding:4px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;transition:.2s;white-space:nowrap}
+.btn-sm:hover{background:var(--green-accent)}
+.btn-sm:disabled{opacity:.4;cursor:not-allowed}
+
+/* === SUBMIT BAR === */
+.submit-bar{background:var(--bg-card);border-bottom:1px solid var(--border-outer);padding:8px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.submit-bar input{background:var(--bg-input);border:1px solid var(--border-row);border-radius:6px;padding:6px 12px;color:var(--text-primary);font-size:16px;font-family:inherit;flex:1;min-width:120px;max-width:200px}
+.submit-bar input:focus{outline:none;border-color:var(--gold)}
+.btn-submit{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#1a1a0a;border:none;padding:7px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed}
+
+/* === TABS === */
+.tabs{display:flex;overflow-x:auto;background:var(--bg-card);border-bottom:1px solid var(--border-outer);padding:0 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.tab{padding:9px 14px;cursor:pointer;font-size:12px;color:var(--text-muted);border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;flex-shrink:0}
+.tab:hover{color:var(--text-secondary)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:500}
+
+/* === CONTENT === */
+.content{max-width:1100px;margin:0 auto;padding:16px}
+.poem-header{text-align:center;margin-bottom:14px}
+.poem-author{font-size:12px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+.poem-title{font-family:'Noto Serif KR',serif;font-size:21px;color:var(--gold);font-weight:700}
+.poem-genre{font-size:11px;color:var(--green-light);margin-top:3px}
+.dual-card{border:1px solid var(--border-outer);border-radius:10px;overflow:hidden;margin-bottom:18px;background:var(--bg-card)}
+.dual-header{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border-row)}
+.dual-header div{padding:7px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green-light);font-weight:500}
+.dual-header div:first-child{border-right:1px solid var(--border-div)}
+.dual-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(255,255,255,.12)}
+.dual-row:last-child{border-bottom:none}
+.dual-row .left{padding:7px 14px;border-right:1px solid var(--border-div);font-size:15px;color:var(--text-primary);line-height:1.8}
+.dual-row .right{padding:7px 14px;font-size:14.5px;color:var(--text-secondary);line-height:1.8}
+.dual-row .left .ln{color:var(--text-muted);font-size:11px;margin-right:5px}
+.note-line{margin-bottom:3px}.note-line:last-child{margin-bottom:0}
+.summary-note{background:rgba(74,90,58,.15);padding:5px 10px;border-radius:6px;font-size:13px;color:var(--green-light);font-weight:500;margin:3px 0}
+.blank-input{background:var(--bg-input);border:1px solid var(--border-row);border-radius:4px;padding:2px 6px;font-size:16px;color:var(--text-primary);font-family:inherit;min-width:60px;max-width:160px;outline:none;transition:.2s}
+.blank-input:focus{border-color:var(--gold)}
+.blank-input.correct{border-color:var(--correct);background:rgba(34,197,94,.1);color:var(--correct)}
+.blank-input.wrong{border-color:var(--wrong);background:rgba(239,68,68,.1);color:var(--wrong)}
+.hint-btn{background:none;border:1px solid var(--text-muted);color:var(--text-muted);width:20px;height:20px;border-radius:50%;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:2px;transition:.2s;vertical-align:middle}
+.hint-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.hint-btn:disabled{opacity:.3;cursor:not-allowed}
+.analysis-card{border:1px solid var(--border-outer);border-radius:10px;overflow:hidden;margin-bottom:18px;background:var(--bg-card)}
+.analysis-header{padding:7px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green-light);font-weight:500;border-bottom:1px solid var(--border-row)}
+.analysis-body{padding:12px 14px;font-size:14.5px;color:var(--text-secondary);line-height:1.9}
+.controls{display:flex;gap:10px;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.dash{color:var(--text-muted)}
+.warning{max-width:700px;margin:40px auto 20px;padding:16px 20px;border:1px solid rgba(239,68,68,.3);border-radius:8px;background:rgba(239,68,68,.05);font-size:12px;color:#d4a0a0;line-height:1.8;text-align:center}
+.warning strong{color:#ef4444}
+
+/* === TOAST === */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--green-brand);color:var(--text-primary);padding:12px 24px;border-radius:10px;font-size:14px;z-index:999;transition:.4s;opacity:0;border:1px solid var(--green-accent)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* === CELEBRATION === */
+.celebration{position:fixed;inset:0;z-index:998;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,14,10,.92);opacity:0;pointer-events:none;transition:.5s}
+.celebration.show{opacity:1;pointer-events:auto}
+.cele-emoji{font-size:64px;animation:bounce 1s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.cele-title{font-family:'Noto Serif KR',serif;font-size:32px;color:var(--gold);font-weight:700;margin:16px 0 8px}
+.cele-msg{font-size:15px;color:var(--text-secondary);margin-bottom:24px;text-align:center;padding:0 20px}
+.cele-close{background:var(--green-brand);color:var(--text-primary);border:1px solid var(--green-accent);padding:10px 28px;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
+.confetti{position:fixed;top:-10px;width:10px;height:10px;border-radius:2px;z-index:999;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{top:110vh;transform:rotate(720deg)}}
+
+/* === HIDDEN === */
+.hidden{display:none!important}
+@media(max-width:768px){
+  .dual-row,.dual-header{grid-template-columns:1fr}
+  .dual-header div:first-child,.dual-row .left{border-right:none;border-bottom:1px solid rgba(255,255,255,.12)}
+  .sel-grid{grid-template-columns:1fr}
+  .submit-bar{flex-direction:column;align-items:stretch}
+  .submit-bar input{max-width:100%}
+  .header{padding:8px 10px}
+  .content{padding:10px}
+}
+
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:640px;margin:0 auto;width:100%}
+.week-card{background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+.week-card:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 34px rgba(0,0,0,.5)}
+.week-card .wk-num{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.week-card .wk-topic{font-size:12.5px;color:var(--text-secondary);line-height:1.5;margin-bottom:10px}
+.week-card .wk-cnt{display:inline-block;padding:3px 12px;border-radius:14px;font-size:10px;letter-spacing:1px;color:var(--green-light);background:rgba(106,143,94,.12);border:1px solid rgba(106,143,94,.3)}
+.week-card.soon{opacity:.5;cursor:not-allowed;border-style:dashed}
+.week-card.soon .wk-num,.week-card.soon .wk-topic{color:var(--text-muted)}
+.wk-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green-light);background:none;border:none;cursor:pointer;font-family:inherit;margin-bottom:14px}
+.wk-back:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- WEEK SELECTION -->
+<div id="weekScreen" class="sel-screen">
+  <div class="sel-logo">한티 MEXX 고1 단과</div>
+  <div class="sel-sub">복습 시험</div>
+  <div class="sel-desc">주차를 선택하세요.</div>
+  <div class="week-grid" id="weekGrid"></div>
+</div>
+
+<!-- SELECTION SCREEN -->
+<div id="selScreen" class="sel-screen hidden">
+  <button class="wk-back" onclick="backToWeeks()">← 주차 선택</button>
+  <div class="sel-logo">한티 MEXX 고1 단과</div>
+  <div class="sel-sub" id="weekLabel">1주차 복습 시험</div>
+  <div class="sel-desc">공부할 작품을 선택하세요.</div>
+  <div class="sel-card">
+    <div class="sel-top">
+      <button class="sel-toggle" onclick="toggleAll()">전체 선택/해제</button>
+      <div class="sel-count"><b id="selCnt">0</b>개 작품 선택됨</div>
+    </div>
+    <div class="sel-grid" id="selGrid"></div>
+    <button class="sel-start" id="selStart" disabled onclick="startStudy()">시작하기 →</button>
+  </div>
+</div>
+
+<!-- STUDY SCREEN -->
+<div id="studyScreen" class="hidden">
+  <div class="header">
+    <div class="hdr-left">
+      <button class="btn-back" onclick="goBack()">← 작품 선택</button>
+      <div class="logo">한티 MEXX 고1 단과<span>복습 시험</span></div>
+    </div>
+    <div class="hdr-right">
+      <div class="progress-wrap">
+        <svg class="progress-ring" viewBox="0 0 36 36">
+          <path d="M18 2.0845a15.9155 15.9155 0 010 31.831 15.9155 15.9155 0 010-31.831" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3"/>
+          <path id="progPath" d="M18 2.0845a15.9155 15.9155 0 010 31.831 15.9155 15.9155 0 010-31.831" fill="none" stroke="var(--green-bright)" stroke-width="3" stroke-dasharray="0,100" stroke-linecap="round"/>
+        </svg>
+        <span class="progress-text" id="progText">0%</span>
+      </div>
+      <button class="btn-sm" onclick="revealAll()">전체 정답</button>
+      <button class="btn-sm" onclick="resetAll()">초기화</button>
+    </div>
+  </div>
+  <div class="submit-bar">
+    <input type="text" id="studentName" placeholder="이름을 입력하세요">
+    <button class="btn-submit" id="btnSubmit" onclick="submitResults()">결과 제출</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="content" id="content"></div>
+  <div class="warning">
+    본 자료는 오직 <strong>[오름] 국어</strong> 학원 수강생들의 성적 향상을 위해 제작된 비매품입니다.<br>
+    본 자료를 외부로 유출하거나 무단 배포하는 행위는 학원과 동료 수강생들에게 심각한 피해를 주는 범죄 행위입니다.<br>
+    무단 배포 적발 시, 즉각적인 퇴원 조치는 물론, 유출로 인한 경영상 손실에 대해 <strong>강력한 법적 조치</strong>를 취할 예정입니다.
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- CELEBRATION -->
+<div class="celebration" id="celebration">
+  <div class="cele-emoji">🎉</div>
+  <div class="cele-title">완벽해!</div>
+  <div class="cele-msg">이대로면 시험도 100점이지. 조금 더 파이팅!</div>
+  <button class="cele-close" onclick="closeCelebration()">닫기</button>
+</div>
+
+<!-- HIDDEN FORM FOR GOOGLE SHEETS -->
+<iframe name="submitFrame" style="display:none"></iframe>
+<form id="submitForm" method="POST" target="submitFrame" style="display:none">
+  <input type="hidden" name="data" id="submitData">
+</form>
+
+<script>
+const WEEKS = [{"num": 1, "label": "1주차", "topic": "고전시가 · 고대 가요", "works": [{"author": "백수광부의 아내", "work": "공무도하가", "genre": "고대 가요", "lines": [{"orig": "임아, 그 물을 건너지 마오.", "notes": ["이 작품에서 ‘임’은 {백수광부}을 뜻함. 즉 화자의 {남편}임을 알 수 있음", "1구체의 ‘물’은 ‘임’을 만류하는 화자의 {사랑}을 상징적으로 드러냄"]}, {"orig": "임은 끝내 그 물을 건너셨네.", "notes": ["‘임’은 화자의 만류에도 불구하고 결국 물을 건넜으므로 2구체에서의 ‘물’은 {이별}을 상징함"]}, {"orig": "물에 빠져 돌아가시니", "notes": ["‘임’이 물에 빠져 돌아가시게 되었으므로 3구체에서의 ‘물’은 {죽음}을 상징함"]}, {"orig": "가신 임을 어찌할꼬.", "notes": ["마지막 구체에서는 어찌할 수 없이 ‘임’의 {죽음}을 받아들이는 화자의 {체념}적 어조가 드러남", "또한 화자의 절박한 심정이 {직접}적으로 드러나고 있음을 알 수 있음"]}], "analysis": "이 작품은 {고대 가요}로, 처음에 사람들 입에서 입으로 {구전}되다가 후에 한문으로 번역(한역)되었다고 전해진다. 임을 여읜 슬픔을 주제로 하여, 개인적이고 서정적이며, {애상}적 성격을 지닌 작품으로 평가된다. 임의 죽음에서 오는 슬픔을 {체념}적 어조로 노래하고 있으며, 문헌상 가장 오래된 {서정}시가라고 불린다. 또한 서사시에서 개인적 서정시로 넘어가는 {과도기}에 있는 작품으로, 이별의 한을 노래하여 이후 정읍사, 가시리, 서경별곡, 송인, 진달래꽃 등의 작품에 영향을 주었을 것으로 본다. 예술에서의 ‘물’은 이승과 저승을 가르는 경계, 즉 삶과 {죽음}, 정화 혹은 정화를 통한 재생, 생명과 삶의 원천, 충만한 사랑 등 다양한 의미를 지닌 원형 상징으로 활용된다. 이 작품에서 임은 물에 빠져 죽게 되는 과정을 통해 화자와 이별하게 된다. 따라서 ‘물’은 ‘삶과 {죽음}의 경계’, ‘화자와 임의 단절’, ‘이별’, ‘슬픔’ 등의 의미를 지닌다. 또한 1행의 ‘물’은 그것을 건너지 않기를 바라는 화자의 ‘바람’과 {사랑} 등이 담겨 있다고 보기도 한다. 이 시의 시적 화자는 사랑하는 임, 즉 {백수광부}가 물에 빠지는 모습을 보게 된 {아내}이며, 시적 대상은 스스로 물에 빠지는 남편, 즉 {백수광부}이다. 이러한 상황을 지켜본 {사공} 곽리자고가 집에 돌아와 아내인 여옥에게 이 이야기를 들려주어 이 작품이 전해지게 되었다고 본다. 특히 마지막 행은 화자의 심리가 {직접}적으로 제시되어 있는 구절로, 화자의 만류에도 불구하고 물에 빠져 죽은 임에 대한 비통하고 애절한 슬픔을 ‘어이할꼬’라는 {영탄}적 말투를 통해 표현하였다."}, {"author": "유리왕", "work": "황조가", "genre": "고대 가요", "lines": [{"orig": "펄펄 나는 저 꾀꼬리", "notes": ["화자의 외롭고 슬픈 심정을 부각시키고 고조시키는 {객관적 상관물}", "단, 화자의 감정이 {이입}된 것은 아님"]}, {"orig": "암수 서로 정답구나.", "notes": []}, {"orig": "외로워라 이내 몸은", "notes": ["화자의 감정을 {직접}적으로 표현하고 있음 → 개인적 {서정시}로서 시가 문학이 분화, 변모되었음을 알 수 있음"]}, {"orig": "뉘와 함께 돌아갈꼬.", "notes": []}], "analysis": "이 작품은 작자가 명확하게 밝혀진 {고대 가요}로서, 집단적 서사시에서 개인적 {서정}시로의 변모 과정을 보여주는 작품이라고 할 수 있다. 유리왕의 두 부인 중 치희가 집을 나간 후 그를 그리워하며 쓴 시로 알려져 있으며, 앞 두 행은 화자의 눈에 비친 경치를 묘사하고, 뒤의 두 행은 화자의 정서, 즉 {내면} 세계를 형상화했기에 이 작품의 시상 전개 방식은 {선경후정}의 구조라 할 수 있다. 이때 화자의 치희에 대한 그리움의 정서를 심화시키는 암수 꾀꼬리 한 쌍은 화자의 감정에 영향을 미치는 소재로, {객관적 상관물}이라고 할 수 있다. 이때 화자의 감정을 {이입}한 것은 아니므로, 이는 감정 이입의 대상이라고는 볼 수 없다. 즉 이 작품은 꾀꼬리를 묘사함으로써 화자의 감정을 {간접}적으로 제시하고 있다."}, {"author": "작자 미상", "work": "구지가", "genre": "고대 가요", "lines": [{"orig": "거북아, 거북아.", "notes": ["‘거북’이를 {호명}하고 있음", "→ {돈호}법. {반복}, 구체적 청자를 설정하고 있음"]}, {"orig": "머리를 내어라", "notes": ["‘거북이’에게 머리를 줄 것을 {명령}하고 있음"]}, {"orig": "내놓지 않으면", "notes": ["상황에 대한 {가정}"]}, {"orig": "구워서 먹으리", "notes": ["‘거북이’에게 원하는 것을 얻고자 하는 일종의 {주술}에 해당함"]}], "analysis": "<구지가>는 고전시가 중 {고대 가요}로서, 주술성을 지닌 집단 서사시로 추정된다. 김해의 구지봉에 올라가서 집단이 원하는 것을 얻고자 불렀을 것으로 추정되는 이 노래는 다른 {고대 가요}와 마찬가지로 배경 설화를 지니며, 우리 시가 문학 초기의 형태를 띠고 있다."}, {"author": "작자 미상", "work": "정읍사", "genre": "고대 가요 (백제)", "lines": [{"orig": "ᄃᆞᆯ하 노피곰 도ᄃᆞ샤", "notes": ["‘ᄃᆞᆯ하’의 ‘-하’는 {높임}의 호격 조사로, 지금 화자는 달을 {우러러}보며 바라보고 있는 상황임", "‘ᄃᆞᆯ하’라고 ‘ᄃᆞᆯ’을 부르고 있다는 점에서 {돈호}법에 해당함", "‘노피곰’의 ‘-곰’은 강조의 접미사로, 앞에 있는 말을 {강조}하여 해석하면 됨. 즉 ‘노피곰’은 {높이높이}라고 해석할 수 있음", "‘도ᄃᆞ샤’는 {돋으시어}라는 말로, 현재 화자는 ‘달’을 바라보며 {소원}을 빌고 있는 상황임", "‘어긔야’는 {여음구}로, 전체 내용과 무관한 구절임"]}, {"orig": "어긔야 머리곰 비취오시라", "notes": ["‘머리곰’은 ‘노피곰’과 마찬가지로, ‘머리 위를’이라는 말이 아니라 {멀리멀리}라는 뜻으로 해석해야 함", "‘비취오시라’라고 표현하는 점에서 {돈호}법이 쓰였다고 볼 수 있음"]}, {"orig": "어긔야 어강됴리", "notes": ["‘어긔야 어강됴리 / 아으 다롱디리’는 전체 내용과 무관한 {여음구}로, 운율을 형성하고 {흥}을 돋는 구절", "여음구는 고대가요의 전형적 특징이다. ( {O} / X )"]}, {"orig": "아으 다롱디리", "notes": []}, {"orig": "져재 녀러 신고요", "notes": ["‘져재’는 ‘저자’의 옛말로, 현대어로는 {시장}이라는 뜻임", "즉 화자의 {남편}은 돌아다니며 장사를 하는 {행상인}이라고 볼 수 있음"]}, {"orig": "어긔야 즌 ᄃᆡᄅᆞᆯ 드ᄃᆡ욜셰라", "notes": ["‘즌 ᄃᆡ’는 ‘진 데’로, 이 작품에서는 {위험}한 데로 해석할 수 있음", "즉 화자는 {남편}이 일을 하다가 {위험}에 빠질 것을 염려하고 있음", "‘드욜셰라’의 ‘-ㄹ셰라’는 현대어로 {~할까 두렵다}라는 뜻으로 해석됨"]}, {"orig": "어긔야 어강됴리", "notes": []}, {"orig": "어느이다 노코시라", "notes": ["‘어느이다 노코시라’는 화자가 {남편}이 위험에 처할 바에야 차라리 어느 곳이든 짐을 다 놓고 돌아왔으면 하는 화자의 {소망}이 드러남"]}, {"orig": "어긔야 내 가논 ᄃᆡ 졈그ᄅᆞᆯ셰라", "notes": ["‘내’는 여기서 {화자}가 아니라 {남편}을 가리키는 말로, 가는 곳이 저물까 봐 걱정하고 있음"]}, {"orig": "어긔야 어강됴리", "notes": []}, {"orig": "아으 다롱디리", "notes": []}], "analysis": "<정읍사>는 {백제} 시대의 고대 가요로, 이 시대에 창작되어 통일 신라를 거쳐 고려 궁중에서 주로 향유되다가 조선 성종 때에 이르러 {악학궤범}에 한글로 정착된 작품이다. 형식적인 측면에서 {후렴구}를 제외하면 평시조의 3장 6구와 유사한 형식을 보여 {시조}의 기원이 되는 작품으로 보기도 한다. ‘달’은 우리 민족에게 전통적으로 소망과 {기원}의 대상으로 여겨졌다. <정읍사>에서도 ‘달’은 온갖 부정적인 것들, 특히 어둡고 위험한 것들로부터 소중한 것을 지키는 존재로 그려져 있으며, 시적 화자의 소원을 {기원}하는 대상으로서 나타나 있다. 또한 {남편}의 길을 환히 비춰 준다는 점에서 삶의 방향을 밝혀 주는 의미도 지닌다고 볼 수 있다. 한편 이 작품에서 ‘즌 ᄃᆡ(진 데)’는 남편의 생명이 위협되는 {위험}한 곳으로 해석하기도 하고, 남편이 다른 여자와 사랑에 빠질까 염려한다는 점에서의 {위험}으로 해석되기도 한다."}]}];
+let DATA = [];
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec'; // Apps Script 웹 앱 URL 입력
+
+let selected = new Set();
+let currentTab = 0;
+let activeData = [];
+const state = {};
+
+// === SELECTION SCREEN ===
+function buildSelection() {
+  const grid = document.getElementById('selGrid');
+  grid.innerHTML = DATA.map((d,i) => `
+    <div class="sel-item ${selected.has(i)?'checked':''}" onclick="toggleItem(${i})">
+      <div class="cb">✓</div>
+      <div class="lbl">${d.work}<small>${d.author} · ${d.genre}</small></div>
+    </div>
+  `).join('');
+  document.getElementById('selCnt').textContent = selected.size;
+  document.getElementById('selStart').disabled = selected.size === 0;
+}
+
+function toggleItem(i) {
+  selected.has(i) ? selected.delete(i) : selected.add(i);
+  buildSelection();
+}
+
+function toggleAll() {
+  if (selected.size === DATA.length) selected.clear();
+  else DATA.forEach((_,i) => selected.add(i));
+  buildSelection();
+}
+
+function startStudy() {
+  if (selected.size === 0) return;
+  activeData = [...selected].sort((a,b)=>a-b);
+  currentTab = 0;
+  document.getElementById('selScreen').classList.add('hidden');
+  document.getElementById('studyScreen').classList.remove('hidden');
+  buildTabs();
+  buildContent();
+}
+
+function goBack() {
+  document.getElementById('studyScreen').classList.add('hidden');
+  document.getElementById('selScreen').classList.remove('hidden');
+}
+
+// === STUDY SCREEN ===
+const nums=['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩','⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳','㉑','㉒','㉓','㉔','㉕','㉖','㉗','㉘','㉙','㉚'];
+
+function normalize(s) { return s.replace(/\s+/g,'').toLowerCase().replace(/[.,!?;:~'"\u201C\u201D\u2018\u2019\u2500\-\u2013\u2014]/g,''); }
+
+function parseTemplate(text) {
+  const parts=[]; let idx=0;
+  const rx=/\{([^}]+)\}/g; let m, last=0;
+  while((m=rx.exec(text))!==null) {
+    if(m.index>last) parts.push({type:'text',value:text.slice(last,m.index)});
+    parts.push({type:'blank',answer:m[1],id:idx++});
+    last=m.index+m[0].length;
+  }
+  if(last<text.length) parts.push({type:'text',value:text.slice(last)});
+  return parts;
+}
+
+function renderParts(parts,pi,section) {
+  return parts.map(p => {
+    if(p.type==='text') return p.value;
+    const uid=`${pi}-${section}-${p.id}`;
+    const w=Math.max(60,Math.min(160,p.answer.length*16+20));
+    const st=state[pi]?.[uid];
+    const cls=st?.graded?(st.correct?'correct':'wrong'):'';
+    const val=st?.value||'';
+    return `<input class="blank-input ${cls}" id="${uid}" data-answer="${p.answer.replace(/"/g,'&quot;')}" data-poem="${pi}" style="width:${w}px" value="${val}" ${st?.graded?'readonly':''} onkeydown="handleKey(event,this)" oninput="onInput(this)"><button class="hint-btn" onclick="showHint('${uid}')" ${!val&&!st?.graded?'disabled':''}>?</button>`;
+  }).join('');
+}
+
+function buildTabs() {
+  document.getElementById('tabs').innerHTML = activeData.map((di,i) => {
+    const d=DATA[di];
+    return `<div class="tab ${i===currentTab?'active':''}" onclick="switchTab(${i})">${d.author} · ${d.work}</div>`;
+  }).join('');
+}
+
+function buildContent() {
+  const di=activeData[currentTab];
+  const d=DATA[di]; const pi=di;
+  if(!state[pi]) state[pi]={};
+  let html=`<div class="poem-header"><div class="poem-author">${d.author}</div><div class="poem-title">${d.work}</div><div class="poem-genre">${d.genre}</div></div>`;
+  html+=`<div class="dual-card"><div class="dual-header"><div>원 문</div><div>줄별 해석 메모 · 빈칸</div></div>`;
+  let ln=0;
+  d.lines.forEach((line,li) => {
+    const isO=line.orig.trim().length>0;
+    if(isO) ln++;
+    const left=isO?`<span class="ln">${nums[ln-1]||ln}</span>${line.orig}`:'';
+    let right='';
+    if(line.notes.length===0) right='<span class="dash">—</span>';
+    else right=line.notes.map((n,ni) => {
+      const isS=n.startsWith('▶');
+      const r=renderParts(parseTemplate(n),pi,`n${li}_${ni}`);
+      return isS?`<div class="summary-note">${r}</div>`:`<div class="note-line">${r}</div>`;
+    }).join('');
+    html+=`<div class="dual-row"><div class="left">${left}</div><div class="right">${right}</div></div>`;
+  });
+  html+=`</div>`;
+  if(d.analysis) {
+    const r=renderParts(parseTemplate(d.analysis),pi,'analysis');
+    html+=`<div class="analysis-card"><div class="analysis-header">작품 해설 · 빈칸 채우기</div><div class="analysis-body">${r}</div></div>`;
+  }
+  html+=`<div class="controls"><button class="btn-sm" onclick="gradeSection(${pi})">이 섹션 채점</button><button class="btn-sm" onclick="revealSection(${pi})">이 섹션 정답</button></div>`;
+  document.getElementById('content').innerHTML=html;
+  updateProgress();
+}
+
+function switchTab(i) { currentTab=i; buildTabs(); buildContent(); window.scrollTo(0,0); }
+
+function handleKey(e,el) {
+  if(e.key==='Enter') {
+    e.preventDefault();
+    const all=[...document.querySelectorAll('.blank-input')];
+    const idx=all.indexOf(el);
+    gradeOne(el);
+    for(var j=idx+1;j<all.length;j++){if(!all[j].readOnly){all[j].focus();break;}}
+  }
+}
+
+function onInput(el) {
+  const uid=el.id, pi=parseInt(el.dataset.poem);
+  if(!state[pi]) state[pi]={};
+  state[pi][uid]={value:el.value,graded:false,correct:false};
+  const hb=el.nextElementSibling; if(hb) hb.disabled=!el.value.trim();
+}
+
+function gradeOne(el) {
+  const uid=el.id, ans=el.dataset.answer, pi=parseInt(el.dataset.poem), val=el.value.trim();
+  if(!val) return;
+  const ok=normalize(val)===normalize(ans);
+  el.classList.remove('correct','wrong'); el.classList.add(ok?'correct':'wrong');
+  el.readOnly=true;
+  if(!state[pi]) state[pi]={};
+  state[pi][uid]={value:val,graded:true,correct:ok};
+  updateProgress();
+}
+
+function showHint(uid) {
+  const el=document.getElementById(uid); if(!el) return;
+  el.value=el.dataset.answer; el.classList.remove('wrong'); el.classList.add('correct'); el.readOnly=true;
+  const pi=parseInt(el.dataset.poem);
+  if(!state[pi]) state[pi]={};
+  state[pi][uid]={value:el.dataset.answer,graded:true,correct:true};
+  updateProgress();
+}
+
+function gradeSection(pi) {
+  const blanks=[...document.querySelectorAll(`.blank-input[data-poem="${pi}"]`)];
+  const unfilled=blanks.filter(el=>!el.readOnly&&!el.value.trim());
+  if(unfilled.length>0){showToast(`⚠️ 빈칸 ${unfilled.length}개를 먼저 채워 주세요.`);unfilled[0].focus();return;}
+  blanks.forEach(el=>{if(!el.readOnly&&el.value.trim()) gradeOne(el);});
+}
+function revealSection(pi) {
+  const blanks=[...document.querySelectorAll(`.blank-input[data-poem="${pi}"]`)];
+  const unfilled=blanks.filter(el=>!el.readOnly&&!el.value.trim());
+  if(unfilled.length>0){showToast(`⚠️ 빈칸 ${unfilled.length}개를 먼저 채워 주세요.`);unfilled[0].focus();return;}
+  blanks.forEach(el=>{if(!el.readOnly) showHint(el.id);});
+}
+function revealAll() {
+  let totalUnfilled=0;
+  activeData.forEach(di=>{
+    const blanks=[...document.querySelectorAll(`.blank-input[data-poem="${di}"]`)];
+    totalUnfilled+=blanks.filter(el=>!el.readOnly&&!el.value.trim()).length;
+  });
+  if(totalUnfilled>0){showToast(`⚠️ 전체 빈칸 ${totalUnfilled}개를 먼저 채워 주세요.`);return;}
+  activeData.forEach(di=>revealSection(di));
+}
+function resetAll() { activeData.forEach(di => { delete state[di]; }); buildContent(); }
+
+function countBlanks(di) {
+  const d=DATA[di]; let t=0;
+  d.lines.forEach(l => l.notes.forEach(n => { const m=n.match(/\{[^}]+\}/g); if(m) t+=m.length; }));
+  if(d.analysis) { const m=d.analysis.match(/\{[^}]+\}/g); if(m) t+=m.length; }
+  return t;
+}
+
+function updateProgress() {
+  let total=0, correct=0;
+  activeData.forEach(di => {
+    total+=countBlanks(di);
+    if(state[di]) Object.values(state[di]).forEach(s => { if(s.graded&&s.correct) correct++; });
+  });
+  const pct=total>0?Math.round(correct/total*100):0;
+  document.getElementById('progText').textContent=pct+'%';
+  document.getElementById('progPath').setAttribute('stroke-dasharray',pct+',100');
+}
+
+// === SUBMISSION ===
+function getResultData() {
+  const name=document.getElementById('studentName').value.trim();
+  let totalB=0, totalC=0; const sections=[];
+  activeData.forEach(di => {
+    const d=DATA[di], tb=countBlanks(di);
+    let sc=0; const wrongs=[];
+    if(state[di]) Object.entries(state[di]).forEach(([uid,s]) => {
+      if(s.graded) { if(s.correct) sc++; else wrongs.push(s.value+'→'+document.getElementById(uid)?.dataset.answer); }
+    });
+    totalB+=tb; totalC+=sc;
+    sections.push({work:d.author+' - '+d.work, total:tb, correct:sc, rate:tb>0?Math.round(sc/tb*100):0, wrongs:wrongs.slice(0,10)});
+  });
+  return {studentName:name, sections, totalBlanks:totalB, totalCorrect:totalC, totalRate:totalB>0?Math.round(totalC/totalB*100):0};
+}
+
+function submitResults() {
+  const name=document.getElementById('studentName').value.trim();
+  if(!name) { showToast('⚠️ 이름을 입력해 주세요.'); return; }
+  const data=getResultData();
+  if(SCRIPT_URL) {
+    const form=document.getElementById('submitForm');
+    form.action=SCRIPT_URL;
+    document.getElementById('submitData').value=JSON.stringify(data);
+    form.submit();
+  }
+  if(data.totalRate===100) { showCelebration(); }
+  else { showToast('✅ 결과가 제출되었습니다!'); }
+}
+
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// === CELEBRATION ===
+function showCelebration() {
+  document.getElementById('celebration').classList.add('show');
+  for(let i=0;i<60;i++) {
+    const c=document.createElement('div'); c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=['var(--gold)','var(--green-bright)','var(--green-light)','#fff','var(--gold-dim)'][Math.floor(Math.random()*5)];
+    c.style.width=(6+Math.random()*8)+'px'; c.style.height=(6+Math.random()*8)+'px';
+    c.style.animationDuration=(2+Math.random()*3)+'s';
+    c.style.animationDelay=(Math.random()*2)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),6000);
+  }
+}
+function closeCelebration() { document.getElementById('celebration').classList.remove('show'); }
+
+// INIT
+function buildWeeks(){
+  var g=document.getElementById('weekGrid');
+  var html=WEEKS.map(function(w,i){
+    return '<div class="week-card" onclick="openWeek('+i+')"><div class="wk-num">'+w.label+'</div><div class="wk-topic">'+w.topic+'</div><div class="wk-cnt">'+w.works.length+'작품</div></div>';
+  }).join('');
+  html+='<div class="week-card soon"><div class="wk-num">2주차</div><div class="wk-topic">준비 중</div></div>';
+  g.innerHTML=html;
+}
+function openWeek(i){
+  DATA=WEEKS[i].works; selected.clear();
+  document.getElementById('weekLabel').textContent=WEEKS[i].label+' 복습 시험';
+  buildSelection();
+  document.getElementById('weekScreen').classList.add('hidden');
+  document.getElementById('selScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+function backToWeeks(){
+  document.getElementById('selScreen').classList.add('hidden');
+  document.getElementById('weekScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+buildWeeks();
+</script>
+</body>
+</html>

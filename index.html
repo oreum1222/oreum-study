@@ -65,6 +65,20 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 
 .footer{margin-top:auto;padding-top:44px;text-align:center;font-size:11px;color:var(--text-muted);line-height:1.7;opacity:.75}
 .footer span{color:var(--gold-dim);font-weight:500}
+.mexx-sec{margin-top:40px}
+.mexx-head{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--green-light);text-align:center;letter-spacing:1px;margin-bottom:18px;position:relative}
+.mexx-head::before,.mexx-head::after{content:'';position:absolute;top:50%;width:20%;height:1px;background:rgba(255,255,255,.12)}
+.mexx-head::before{left:4%}.mexx-head::after{right:4%}
+.mexx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.mexx-card{display:block;text-decoration:none;background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:22px 20px;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+.mexx-card:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 34px rgba(0,0,0,.5)}
+.mexx-badge{display:inline-block;font-size:9.5px;letter-spacing:1px;color:var(--gold-dim);border:1px solid var(--gold-dim);border-radius:10px;padding:1px 9px;margin-bottom:9px}
+.mexx-title{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:9px}
+.mexx-tag{display:inline-block;padding:2px 11px;border-radius:12px;font-size:10px;letter-spacing:.5px;color:var(--green-light);background:rgba(106,143,94,.12);border:1px solid rgba(106,143,94,.3)}
+.mexx-card.soon{opacity:.55;cursor:not-allowed;border-style:dashed}
+.mexx-card.soon .mexx-title{color:var(--text-secondary)}
+.mexx-card.soon .mexx-tag{color:var(--text-muted);background:none;border-color:rgba(255,255,255,.14)}
+.mexx-card.soon .mexx-badge{color:var(--text-muted);border-color:rgba(255,255,255,.14)}
 @media(max-width:768px){.logo{font-size:26px}.hero{flex-direction:column;text-align:center;gap:14px;padding:26px 22px}.soon-grid{grid-template-columns:1fr 1fr;gap:11px}.cards{grid-template-columns:1fr 1fr;gap:12px}}
 @media(max-width:480px){.cards{grid-template-columns:1fr}.card{padding:20px 16px}}
 </style>
@@ -89,6 +103,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
     <div class="soon"><span class="soon-icon">📖</span><div class="soon-title">현대 문학</div><span class="soon-tag">준비 중</span></div>
     <div class="soon"><span class="soon-icon">🖌️</span><div class="soon-title">고전 문법</div><span class="soon-tag">준비 중</span></div>
     <div class="soon"><span class="soon-icon">🖊️</span><div class="soon-title">현대 문법</div><span class="soon-tag">준비 중</span></div>
+  </div>
+  <div class="mexx-sec">
+    <div class="mexx-head">한티 MEXX 복습 시험</div>
+    <div class="mexx-grid">
+      <a class="mexx-card" href="mexx-go1d.html"><span class="mexx-badge">단과</span><div class="mexx-title">고1 단과 복습 시험</div><span class="mexx-tag">1주차</span></a>
+      <div class="mexx-card soon"><span class="mexx-badge">단과</span><div class="mexx-title">고2 단과 복습 시험</div><span class="mexx-tag">준비 중</span></div>
+      <div class="mexx-card soon"><span class="mexx-badge">종합</span><div class="mexx-title">고1 종합 복습 시험</div><span class="mexx-tag">준비 중</span></div>
+      <div class="mexx-card soon"><span class="mexx-badge">종합</span><div class="mexx-title">중3 종합 복습 시험</div><span class="mexx-tag">준비 중</span></div>
+    </div>
   </div>
 </div>
 
