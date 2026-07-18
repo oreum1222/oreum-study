@@ -56,6 +56,12 @@ tr:last-child td{border-bottom:none}
 .missing-grid{display:flex;flex-wrap:wrap;gap:8px}
 .missing-tag{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:6px 12px;font-size:13px}
 .missing-tag .sch{font-size:11px;color:var(--text4);margin-left:4px}
+.class-bar{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.cls-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border);color:var(--text2);font-size:14px;font-weight:600;font-family:'Noto Sans KR',sans-serif;padding:9px 16px;border-radius:10px;cursor:pointer;transition:all .18s}
+.cls-btn:hover{border-color:var(--border-h);color:var(--text)}
+.cls-btn.on{background:var(--green-a);border-color:var(--green-a);color:#06251f}
+.cls-btn.on .cls-cnt{background:rgba(6,37,31,.18);color:#06251f}
+.cls-cnt{font-size:12px;font-weight:700;background:var(--bg-card2);color:var(--text3);padding:2px 8px;border-radius:20px}
 .tab-row{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);overflow-x:auto}
 .tab{padding:10px 18px;font-size:13px;color:var(--text4);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
 .tab:hover{color:var(--text2)}.tab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:600}
@@ -98,15 +104,8 @@ tr:last-child td{border-bottom:none}
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="mc"></div></div>
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
-const ROSTER=[
-  {name:'공두영',school:'산본고'},{name:'김민주',school:'군포고'},{name:'김보민',school:'군포고'},
-  {name:'김수진',school:'산본고'},{name:'김영재',school:'흥진고'},{name:'김주아',school:'수리고'},
-  {name:'문수영',school:'용호고'},{name:'박상범',school:'산본고'},{name:'박서희',school:'용호고'},
-  {name:'박채원',school:'군포고'},{name:'방승윤',school:'용호고'},{name:'배진우',school:'산본고'},
-  {name:'신지환',school:'산본고'},{name:'윤영채',school:'수리고'},{name:'윤하진',school:'산본고'},
-  {name:'이연우',school:'군포고'},{name:'이윤서',school:'용호고'},{name:'이지수',school:'용호고'},
-  {name:'임수아',school:'군포고'}
-];
+let ROSTERS={};       // {반이름:[{name,school}]} — 시트 명단 마커 행에서 로드(공개 저장소엔 개인정보 미포함)
+let currentClass='';  // '' = 전체 반
 let rawData=[],students={},workStats={};
 
 async function loadData(){
@@ -115,9 +114,19 @@ async function loadData(){
 }
 
 function processData(){
-  students={};workStats={};
+  students={};workStats={};ROSTERS={};
+  const rmk={};
   rawData.forEach(row=>{
-    const n=row.name.trim();if(!n)return;
+    const w=String(row.work||'');
+    if(w.indexOf('【명단】')===0){
+      const cls=w.replace('【명단】','').trim();
+      const list=String(row.wrongs||'').split(',').map(s=>s.trim()).filter(s=>s.indexOf('|')>=0).map(s=>{const p=s.split('|');return{name:p[0].trim(),school:(p[1]||'').trim()};});
+      if(list.length&&(!rmk[cls]||row.time>rmk[cls].time))rmk[cls]={time:row.time,list};
+    }
+  });
+  Object.keys(rmk).forEach(c=>ROSTERS[c]=rmk[c].list);
+  rawData.forEach(row=>{
+    const n=String(row.name||'').trim();if(!n||n.indexOf('【')===0)return;
     if(!students[n])students[n]={latest:'',subs:[]};
     if(row.time>students[n].latest)students[n].latest=row.time;
     students[n].subs.push(row);
@@ -153,12 +162,25 @@ function processData(){
 }
 
 function renderAll(){
-  const names=Object.keys(students);
-  const missing=ROSTER.filter(r=>!names.includes(r.name));
+  const clsList=Object.keys(ROSTERS);
+  if(currentClass&&clsList.indexOf(currentClass)<0)currentClass='';
+  const allNames=Object.keys(students);
+  const roster=currentClass?(ROSTERS[currentClass]||[]):Object.values(ROSTERS).flat();
+  const rosterNames=new Set(roster.map(r=>r.name));
+  const names=currentClass?allNames.filter(n=>rosterNames.has(n)):allNames;
+  const missing=roster.filter(r=>!allNames.includes(r.name));
+  // 선택 반 기준으로 작품 통계 재계산
+  const wStats={};
+  names.forEach(n=>{(students[n].works||[]).forEach(w=>{
+    if(String(w.work).indexOf('【명단】')===0)return;
+    if(!wStats[w.work])wStats[w.work]={sumRate:0,count:0,wrongMap:{}};
+    const ws=wStats[w.work];ws.count++;ws.sumRate+=Number(w.rate)||0;
+    if(w.wrongs)String(w.wrongs).split(',').map(s=>s.trim()).filter(Boolean).forEach(wr=>{ws.wrongMap[wr]=(ws.wrongMap[wr]||0)+1;});
+  });});
   let sumR=0,rc=0;names.forEach(n=>{if(students[n].summary){sumR+=students[n].summary.rate;rc++;}});
   const avgR=rc?Math.round(sumR/rc):0;
   let a80=0;names.forEach(n=>{if(students[n].summary&&students[n].summary.rate>=80)a80++;});
-  let hw='-',hr=100;Object.entries(workStats).forEach(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;if(a<hr){hr=a;hw=w;}});
+  let hw='-',hr=100;Object.entries(wStats).forEach(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;if(a<hr){hr=a;hw=w;}});
   const ranked=names.map(n=>({name:n,...students[n].summary,wc:students[n].works.length,time:students[n].latest})).sort((a,b)=>b.rate-a.rate||b.correct-a.correct);
 
   // 응시 시간대
@@ -172,15 +194,17 @@ function renderAll(){
   let peakH=0,peakC=0;Object.entries(th).forEach(([h,c])=>{if(c>peakC){peakC=c;peakH=h;}});
 
   // 빈출 오답 TOP 15
-  const gw={};Object.values(workStats).forEach(ws=>{Object.entries(ws.wrongMap).forEach(([w,c])=>{gw[w]=(gw[w]||0)+c;});});
+  const gw={};Object.values(wStats).forEach(ws=>{Object.entries(ws.wrongMap).forEach(([w,c])=>{gw[w]=(gw[w]||0)+c;});});
   const topW=Object.entries(gw).sort((a,b)=>b[1]-a[1]).slice(0,15);
   const maxWC=topW.length?topW[0][1]:1;
 
   document.getElementById('app').innerHTML=`
-  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">고전시가 본문해석 · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
+  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'} · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
+
+  <div class="class-bar">${['',...clsList].map(c=>{const cn=c?allNames.filter(n=>ROSTERS[c].some(s=>s.name===n)).length:allNames.length;const tt=c?ROSTERS[c].length:Object.values(ROSTERS).flat().length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">${c?'groups':'apps'}</span>${c||'전체'}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
 
   <div class="summary-row">
-    <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${ROSTER.length}명</span></div></div>
+    <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${roster.length}명</span></div></div>
     <div class="summary-card c2"><div class="summary-label">평균 정답률</div><div class="summary-value" style="color:${avgR>=80?'var(--green-b)':avgR>=60?'var(--orange)':'var(--red)'}">${avgR}%</div></div>
     <div class="summary-card c3"><div class="summary-label">80% 이상</div><div class="summary-value">${rc?Math.round(a80/rc*100):0}%</div><div class="summary-sub">${a80} / ${rc}명</div></div>
     <div class="summary-card c4"><div class="summary-label">가장 어려운 작품</div><div class="summary-value" style="font-size:15px;line-height:1.3">${hw.length>14?hw.slice(0,14)+'…':hw}</div><div class="summary-sub">평균 ${hr}%</div></div>
@@ -202,7 +226,7 @@ function renderAll(){
   </tbody></table></div></div>
 
   <div class="tab-content" id="t1"><div class="work-grid">
-  ${Object.entries(workStats).sort((a,b)=>{const aa=a[1].count?a[1].sumRate/a[1].count:0;const bb=b[1].count?b[1].sumRate/b[1].count:0;return aa-bb;}).map(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;const c=a>=80?'var(--green-b)':a>=60?'var(--orange)':'var(--red)';const tw2=Object.entries(s.wrongMap).sort((x,y)=>y[1]-x[1]).slice(0,3).map(e=>e[0]);return `<div class="work-card"><div class="work-name">${w}</div><div class="work-bar-bg"><div class="work-bar-fill" style="width:${a}%;background:${c}"></div></div><div class="work-stats"><span>응시 ${s.count}명</span><span class="rate" style="color:${c}">${a}%</span></div>${tw2.length?`<div style="margin-top:8px;font-size:11px;color:var(--text4)">빈출 오답: <span style="color:var(--red)">${tw2.join(', ')}</span></div>`:''}</div>`;}).join('')}
+  ${Object.entries(wStats).sort((a,b)=>{const aa=a[1].count?a[1].sumRate/a[1].count:0;const bb=b[1].count?b[1].sumRate/b[1].count:0;return aa-bb;}).map(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;const c=a>=80?'var(--green-b)':a>=60?'var(--orange)':'var(--red)';const tw2=Object.entries(s.wrongMap).sort((x,y)=>y[1]-x[1]).slice(0,3).map(e=>e[0]);return `<div class="work-card"><div class="work-name">${w}</div><div class="work-bar-bg"><div class="work-bar-fill" style="width:${a}%;background:${c}"></div></div><div class="work-stats"><span>응시 ${s.count}명</span><span class="rate" style="color:${c}">${a}%</span></div>${tw2.length?`<div style="margin-top:8px;font-size:11px;color:var(--text4)">빈출 오답: <span style="color:var(--red)">${tw2.join(', ')}</span></div>`:''}</div>`;}).join('')}
   </div></div>
 
   <div class="tab-content" id="t2"><div class="table-wrap"><table><thead><tr><th>#</th><th>오답 키워드</th><th>틀린 횟수</th><th>비율</th></tr></thead><tbody>
@@ -227,6 +251,7 @@ function renderAll(){
 }
 
 function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));document.querySelectorAll('.tab-content').forEach((t,j)=>t.classList.toggle('active',j===i));}
+function setClass(c){currentClass=c;renderAll();}
 
 function showSt(name){
   const st=students[name];if(!st)return;
