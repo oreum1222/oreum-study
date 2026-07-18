@@ -39,6 +39,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .soon-icon{font-size:30px;margin-bottom:10px;display:block;filter:grayscale(.3)}
 .soon-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
 .soon-tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:9.5px;letter-spacing:1px;color:var(--text-muted);border:1px solid rgba(255,255,255,.14)}
+.catcard{display:block;text-decoration:none;background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+.catcard:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 34px rgba(0,0,0,.5)}
+.catcard .soon-icon{filter:none}
+.catcard .soon-title{color:var(--gold)}
+.catcard .soon-tag{color:var(--green-light);border-color:rgba(106,143,94,.3);background:rgba(106,143,94,.12)}
 
 /* ── 2단계: 세부 영역 ── */
 .back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green-light);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:14px;font-family:'Noto Sans KR'}
@@ -80,7 +85,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
     <div class="hero-cta">들어가기 →</div>
   </div>
   <div class="soon-grid">
-    <div class="soon"><span class="soon-icon">🏯</span><div class="soon-title">고전 문학</div><span class="soon-tag">준비 중</span></div>
+    <a class="catcard" href="gomunhak.html"><span class="soon-icon">🏯</span><div class="soon-title">고전 문학</div><span class="soon-tag">8작품</span></a>
     <div class="soon"><span class="soon-icon">✒️</span><div class="soon-title">현대 문학</div><span class="soon-tag">준비 중</span></div>
     <div class="soon"><span class="soon-icon">📝</span><div class="soon-title">고전 문법</div><span class="soon-tag">준비 중</span></div>
     <div class="soon"><span class="soon-icon">✏️</span><div class="soon-title">현대 문법</div><span class="soon-tag">준비 중</span></div>
