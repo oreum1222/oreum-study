@@ -8,27 +8,27 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0a0e0a">
+<meta name="theme-color" content="#070b14">
 <title>[오름] 국어 - 수능특강 고전산문 본문해석</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-deep:#0a0e0a;--bg-card:#111a11;--bg-input:#101a10;
-  --border-row:rgba(255,255,255,.35);--border-div:rgba(255,255,255,.40);--border-outer:rgba(255,255,255,.35);
-  --green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--green-bright:#4ade80;
-  --gold:#c9a84c;--gold-dim:#a08838;
-  --text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82;--text-dim:#7a7568;
-  --correct:#22c55e;--wrong:#ef4444;
+  --bg-deep:#070b14;--bg-card:#0f1626;--bg-input:#101a2c;
+  --border-row:rgba(168,184,214,.22);--border-div:rgba(168,184,214,.28);--border-outer:rgba(168,184,214,.22);
+  --green-brand:#243352;--green-accent:#5f76a0;--green-light:#a7b1c5;--green-bright:#9fb3d1;
+  --gold:#c8d4e6;--gold-dim:#8194b4;
+  --text-primary:#e6ebf3;--text-secondary:#a7b1c5;--text-muted:#6a7488;--text-dim:#525c72;
+  --correct:#5ec97e;--wrong:#e06a6a;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;font-size:15px;line-height:1.7;-webkit-tap-highlight-color:transparent}
 
 /* === SELECTION SCREEN === */
 .sel-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
-.sel-logo{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px}
+.sel-logo{font-family:'Nanum Myeongjo',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px}
 .sel-sub{font-size:16px;color:var(--green-light);text-align:center;margin-bottom:6px}
 .sel-desc{font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:24px}
-.sel-card{background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:24px;width:100%;max-width:600px;box-shadow:0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.sel-card{background:linear-gradient(160deg,#141c2e,#0c1320);border:1px solid var(--border-outer);border-radius:14px;padding:24px;width:100%;max-width:600px;box-shadow:0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
 .sel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .sel-toggle{background:none;border:1px solid var(--green-accent);color:var(--green-light);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
 .sel-toggle:hover{background:var(--green-brand)}
@@ -46,11 +46,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .sel-start:disabled{opacity:.4;cursor:not-allowed}
 
 /* === HEADER === */
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0d130d,#1a2a1a);border-bottom:1px solid var(--border-outer);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0b1220,#141f36);border-bottom:1px solid var(--border-outer);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .hdr-left{display:flex;align-items:center;gap:10px}
 .btn-back{background:none;border:1px solid var(--text-muted);color:var(--text-muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
 .btn-back:hover{color:var(--text-primary);border-color:var(--text-primary)}
-.logo{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:var(--gold)}
+.logo{font-family:'Nanum Myeongjo',serif;font-size:18px;font-weight:700;color:var(--gold)}
 .logo span{color:var(--green-light);font-size:13px;font-weight:400;margin-left:6px}
 .hdr-right{display:flex;align-items:center;gap:10px}
 .progress-wrap{display:flex;align-items:center;gap:5px}
@@ -64,7 +64,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .submit-bar{background:var(--bg-card);border-bottom:1px solid var(--border-outer);padding:8px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .submit-bar input{background:var(--bg-input);border:1px solid var(--border-row);border-radius:6px;padding:6px 12px;color:var(--text-primary);font-size:16px;font-family:inherit;flex:1;min-width:120px;max-width:200px}
 .submit-bar input:focus{outline:none;border-color:var(--gold)}
-.btn-submit{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#1a1a0a;border:none;padding:7px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-submit{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#0a1120;border:none;padding:7px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-submit:disabled{opacity:.4;cursor:not-allowed}
 
 /* === TABS === */
@@ -77,7 +77,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .content{max-width:1100px;margin:0 auto;padding:16px}
 .poem-header{text-align:center;margin-bottom:14px}
 .poem-author{font-size:12px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
-.poem-title{font-family:'Noto Serif KR',serif;font-size:21px;color:var(--gold);font-weight:700}
+.poem-title{font-family:'Nanum Myeongjo',serif;font-size:21px;color:var(--gold);font-weight:700}
 .poem-genre{font-size:11px;color:var(--green-light);margin-top:3px}
 .dual-card{border:1px solid var(--border-outer);border-radius:10px;overflow:hidden;margin-bottom:18px;background:var(--bg-card)}
 .dual-header{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border-row)}
@@ -89,7 +89,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .dual-row .right{padding:7px 14px;font-size:14.5px;color:var(--text-secondary);line-height:1.8}
 .dual-row .left .ln{color:var(--text-muted);font-size:11px;margin-right:5px}
 .note-line{margin-bottom:3px}.note-line:last-child{margin-bottom:0}
-.summary-note{background:rgba(74,90,58,.15);padding:5px 10px;border-radius:6px;font-size:13px;color:var(--green-light);font-weight:500;margin:3px 0}
+.summary-note{background:rgba(120,140,180,.15);padding:5px 10px;border-radius:6px;font-size:13px;color:var(--green-light);font-weight:500;margin:3px 0}
 .blank-input{background:var(--bg-input);border:1px solid var(--border-row);border-radius:4px;padding:2px 6px;font-size:16px;color:var(--text-primary);font-family:inherit;min-width:60px;max-width:160px;outline:none;transition:.2s}
 .blank-input:focus{border-color:var(--gold)}
 .blank-input.correct{border-color:var(--correct);background:rgba(34,197,94,.1);color:var(--correct)}
@@ -110,11 +110,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans 
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
 /* === CELEBRATION === */
-.celebration{position:fixed;inset:0;z-index:998;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,14,10,.92);opacity:0;pointer-events:none;transition:.5s}
+.celebration{position:fixed;inset:0;z-index:998;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(7,11,20,.94);opacity:0;pointer-events:none;transition:.5s}
 .celebration.show{opacity:1;pointer-events:auto}
 .cele-emoji{font-size:64px;animation:bounce 1s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-.cele-title{font-family:'Noto Serif KR',serif;font-size:32px;color:var(--gold);font-weight:700;margin:16px 0 8px}
+.cele-title{font-family:'Nanum Myeongjo',serif;font-size:32px;color:var(--gold);font-weight:700;margin:16px 0 8px}
 .cele-msg{font-size:15px;color:var(--text-secondary);margin-bottom:24px;text-align:center;padding:0 20px}
 .cele-close{background:var(--green-brand);color:var(--text-primary);border:1px solid var(--green-accent);padding:10px 28px;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
 .confetti{position:fixed;top:-10px;width:10px;height:10px;border-radius:2px;z-index:999;animation:fall linear forwards;pointer-events:none}
