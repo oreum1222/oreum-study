@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>가경T 대시보드 · 오름 국어</title>
+<title>가경T 대시보드 · 김가경 국어 연구소</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 :root{--bg:#080c08;--bg-card:#0f1710;--bg-card2:#141e15;--border:rgba(255,255,255,.1);--border-h:rgba(255,255,255,.2);--green:#4a5a3a;--green-a:#6b8f5e;--green-l:#8aad7a;--green-b:#4ade80;--gold:#c9a84c;--text:#ece8e0;--text2:#c4bfb4;--text3:#928d82;--text4:#6a6560;--red:#ef4444;--orange:#f59e0b;--blue:#3b82f6;--radius:12px}
@@ -176,7 +176,7 @@ function renderAll(){
   const maxWC=topW.length?topW[0][1]:1;
 
   document.getElementById('app').innerHTML=`
-  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">[오름] 국어</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">고전시가 본문해석 · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()">↻ 새로고침</button></div>
+  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">고전시가 본문해석 · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()">↻ 새로고침</button></div>
 
   <div class="summary-row">
     <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${ROSTER.length}명</span></div></div>
