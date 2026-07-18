@@ -7,170 +7,172 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0a0e0a">
+<meta name="theme-color" content="#070b14">
 <title>김가경 국어 연구소 · 복습 시험 시스템</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg-deep:#0a0e0a;--bg-card:#111a11;--border-outer:rgba(255,255,255,.35);--green-brand:#4a5a3a;--green-accent:#6b8f5e;--green-light:#8aad7a;--gold:#c9a84c;--gold-dim:#a08838;--text-primary:#ece8e0;--text-secondary:#c4bfb4;--text-muted:#928d82}
+:root{
+  --bg:#070b14;
+  --panel-a:#141c2e; --panel-b:#0c1320;
+  --line:rgba(168,184,214,.15); --line-2:rgba(168,184,214,.34);
+  --silver:#e6ebf3; --silver-2:#a7b1c5; --muted:#616c84;
+  --accent:#c2cee2; --accent-2:#8194b4;
+  --serif:'Nanum Myeongjo',serif; --latin:'Cormorant Garamond',serif;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg-deep);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px;-webkit-tap-highlight-color:transparent}
-.logo{font-family:'Noto Serif KR',serif;font-size:34px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px;letter-spacing:1px}
-.subtitle{font-size:15px;color:var(--green-light);text-align:center;letter-spacing:2px;margin-bottom:34px}
+body{
+  background:radial-gradient(1100px 560px at 50% -12%, #17233c 0%, rgba(23,35,60,0) 62%), linear-gradient(180deg,#0a1120 0%,#070b14 100%);
+  background-attachment:fixed;
+  color:var(--silver);font-family:'Noto Sans KR',sans-serif;word-break:keep-all;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;padding:56px 22px;-webkit-tap-highlight-color:transparent;
+}
+.lat{font-family:var(--latin)}
 
-.view{width:100%;max-width:960px}
+/* 헤더 */
+.brand-k{font-family:var(--latin);font-size:13px;font-weight:500;font-style:italic;letter-spacing:4px;color:var(--accent-2);text-align:center;margin-bottom:9px}
+.logo{font-family:var(--serif);font-size:34px;font-weight:800;letter-spacing:5px;text-align:center;color:#eef2f8;margin-bottom:14px}
+.orn{display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:13px}
+.orn i{display:block;width:46px;height:1px;background:linear-gradient(90deg,transparent,var(--line-2))}
+.orn i:last-child{transform:scaleX(-1)}
+.orn b{width:5px;height:5px;transform:rotate(45deg);background:var(--accent-2);opacity:.8}
+.subtitle{font-size:11px;color:var(--accent-2);text-align:center;letter-spacing:7px;margin-bottom:46px;font-weight:500}
+
+.view{width:100%;max-width:940px}
 .view.hidden{display:none}
 .view.show{animation:fade .3s ease}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* ── 1단계: 카테고리 선택 ── */
-.hero{display:flex;align-items:center;gap:24px;background:linear-gradient(145deg,#1a2416,#0e160e);border:1px solid var(--gold-dim);border-radius:18px;padding:30px 32px;cursor:pointer;transition:all .25s;box-shadow:0 8px 30px rgba(0,0,0,.45),inset 0 1px 0 rgba(201,168,76,.12);position:relative;overflow:hidden;margin-bottom:22px}
-.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.09),transparent 55%);opacity:0;transition:.25s}
-.hero:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 14px 44px rgba(0,0,0,.55)}
-.hero:hover::before{opacity:1}
-.hero-icon{font-size:52px;line-height:1;position:relative;flex-shrink:0}
-.hero-body{position:relative;flex:1;min-width:0}
-.hero-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:700;color:var(--gold);margin-bottom:8px}
-.hero-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px}
-.hero-meta{font-size:11px;color:var(--green-light);letter-spacing:.5px}
-.hero-cta{position:relative;flex-shrink:0;font-size:14px;font-weight:700;color:var(--gold);white-space:nowrap}
+/* 히어로 */
+.hero{display:flex;align-items:center;gap:26px;background:linear-gradient(160deg,rgba(22,32,52,0),#0e1626);
+  border:1px solid var(--line-2);border-radius:18px;padding:34px 36px;cursor:pointer;transition:.28s;
+  box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(190,205,235,.07);position:relative;overflow:hidden;margin-bottom:24px}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(560px 190px at 88% 0%,rgba(160,180,215,.10),transparent 70%);opacity:.7;pointer-events:none}
+.hero:hover{transform:translateY(-3px);border-color:rgba(194,206,226,.5);box-shadow:0 20px 52px rgba(0,0,0,.6)}
+.hero-bar{width:3px;align-self:stretch;border-radius:3px;margin:2px 0;flex-shrink:0;
+  background:linear-gradient(180deg,rgba(224,233,248,.9),rgba(129,148,180,.12))}
+.hero-body{flex:1;min-width:0;position:relative}
+.hero-k{font-family:var(--latin);font-size:14px;font-style:italic;letter-spacing:2px;color:var(--accent-2);margin-bottom:7px}
+.hero-title{font-family:var(--serif);font-size:27px;font-weight:800;letter-spacing:1px;color:var(--silver);margin-bottom:11px;line-height:1.2}
+.hero-title .lat{font-weight:600;letter-spacing:2px}
+.hero-desc{font-size:13px;color:var(--silver-2);line-height:1.7;margin-bottom:12px}
+.hero-meta{font-size:11.5px;color:var(--accent-2);letter-spacing:.6px}
+.hero-cta{flex-shrink:0;font-size:14px;font-weight:700;color:var(--accent);letter-spacing:1px;white-space:nowrap;position:relative}
 
-.soon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.soon{background:linear-gradient(145deg,rgba(20,30,20,.5),rgba(14,22,14,.5));border:1px dashed rgba(255,255,255,.15);border-radius:14px;padding:24px 16px;text-align:center;opacity:.62;cursor:not-allowed}
-.soon-icon{font-size:30px;margin-bottom:10px;display:block;filter:grayscale(.3)}
-.soon-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
-.soon-tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:9.5px;letter-spacing:1px;color:var(--text-muted);border:1px solid rgba(255,255,255,.14)}
-.catcard{display:block;text-decoration:none;background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
-.catcard:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 34px rgba(0,0,0,.5)}
-.catcard .soon-icon{filter:none}
-.catcard .soon-title{color:var(--gold)}
-.catcard .soon-tag{color:var(--green-light);border-color:rgba(106,143,94,.3);background:rgba(106,143,94,.12)}
+/* 카테고리 4열 */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tile{background:linear-gradient(160deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:15px;
+  padding:28px 16px 24px;text-align:center;text-decoration:none;display:block;transition:.25s;
+  box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(190,205,235,.05)}
+.tile:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 16px 40px rgba(0,0,0,.55)}
+.tile .k{font-family:var(--latin);font-size:12px;font-style:italic;letter-spacing:2px;color:var(--accent-2);margin-bottom:12px;display:block}
+.tile .t{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--silver);letter-spacing:1px;margin-bottom:14px}
+.tile .g{display:inline-block;padding:2.5px 12px;border-radius:20px;font-size:10px;letter-spacing:1px;
+  color:var(--accent);background:rgba(194,206,226,.07);border:1px solid var(--line-2)}
+.tile.soon{opacity:.5;cursor:not-allowed;border-style:dashed}
+.tile.soon .t{color:var(--silver-2)}
+.tile.soon .g{color:var(--muted);background:none}
 
-/* ── 2단계: 세부 영역 ── */
-.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green-light);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:14px;font-family:'Noto Sans KR'}
-.back:hover{color:var(--gold)}
-.sec-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:5px}
-.sec-info{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:24px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);position:relative;overflow:hidden;display:block}
-.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(106,143,94,.08),transparent 60%);opacity:0;transition:.25s}
-.card:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 36px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
-.card:hover::before{opacity:1}
-.card-icon{font-size:40px;margin-bottom:12px;display:block;position:relative}
-.card-title{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--gold);margin-bottom:6px;position:relative}
-.card-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;position:relative}
-.card-tag{display:inline-block;margin-top:10px;padding:3px 12px;border-radius:16px;font-size:10px;font-weight:500;letter-spacing:1px;position:relative}
-.tag-g{background:rgba(106,143,94,.15);color:var(--green-light);border:1px solid rgba(106,143,94,.3)}
-.tag-h{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25)}
-.tag-m{background:rgba(138,173,122,.1);color:var(--green-light);border:1px solid rgba(138,173,122,.2)}
-
-.footer{margin-top:auto;padding-top:44px;text-align:center;font-size:11px;color:var(--text-muted);line-height:1.7;opacity:.75}
-.footer span{color:var(--gold-dim);font-weight:500}
-.mexx-sec{margin-top:40px}
-.mexx-head{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--green-light);text-align:center;letter-spacing:1px;margin-bottom:18px;position:relative}
-.mexx-head::before,.mexx-head::after{content:'';position:absolute;top:50%;width:20%;height:1px;background:rgba(255,255,255,.12)}
-.mexx-head::before{left:4%}.mexx-head::after{right:4%}
+/* MEXX */
+.mexx{margin-top:46px}
+.mexx-head{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--accent);text-align:center;letter-spacing:4px;margin-bottom:22px;position:relative}
+.mexx-head::before,.mexx-head::after{content:'';position:absolute;top:50%;width:19%;height:1px;background:linear-gradient(90deg,transparent,var(--line-2))}
+.mexx-head::before{left:3%;transform:scaleX(-1)}.mexx-head::after{right:3%}
 .mexx-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.mexx-card{display:block;text-decoration:none;background:linear-gradient(145deg,#141e14,#0e160e);border:1px solid var(--border-outer);border-radius:14px;padding:22px 20px;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
-.mexx-card:hover{transform:translateY(-3px);border-color:var(--green-accent);box-shadow:0 10px 34px rgba(0,0,0,.5)}
-.mexx-badge{display:inline-block;font-size:9.5px;letter-spacing:1px;color:var(--gold-dim);border:1px solid var(--gold-dim);border-radius:10px;padding:1px 9px;margin-bottom:9px}
-.mexx-title{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:9px}
-.mexx-tag{display:inline-block;padding:2px 11px;border-radius:12px;font-size:10px;letter-spacing:.5px;color:var(--green-light);background:rgba(106,143,94,.12);border:1px solid rgba(106,143,94,.3)}
-.mexx-card.soon{opacity:.55;cursor:not-allowed;border-style:dashed}
-.mexx-card.soon .mexx-title{color:var(--text-secondary)}
-.mexx-card.soon .mexx-tag{color:var(--text-muted);background:none;border-color:rgba(255,255,255,.14)}
-.mexx-card.soon .mexx-badge{color:var(--text-muted);border-color:rgba(255,255,255,.14)}
-@media(max-width:768px){.logo{font-size:26px}.hero{flex-direction:column;text-align:center;gap:14px;padding:26px 22px}.soon-grid{grid-template-columns:1fr 1fr;gap:11px}.cards{grid-template-columns:1fr 1fr;gap:12px}}
-@media(max-width:480px){.cards{grid-template-columns:1fr}.card{padding:20px 16px}}
+.mexx-card{background:linear-gradient(160deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:15px;
+  padding:28px 22px;text-align:center;text-decoration:none;display:block;transition:.25s;
+  box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(190,205,235,.05)}
+.mexx-card:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 16px 40px rgba(0,0,0,.55)}
+.mexx-card .badge{font-family:var(--latin);display:inline-block;font-size:12px;font-style:italic;letter-spacing:2px;color:var(--accent-2);border:1px solid var(--line-2);border-radius:11px;padding:1px 12px;margin-bottom:12px}
+.mexx-card .t{font-family:var(--serif);font-size:17.5px;font-weight:700;color:var(--silver);letter-spacing:1px;margin-bottom:12px}
+.mexx-card .g{display:inline-block;padding:2.5px 13px;border-radius:20px;font-size:10px;letter-spacing:1px;color:var(--accent);background:rgba(194,206,226,.07);border:1px solid var(--line-2)}
+.mexx-card.soon{opacity:.5;cursor:not-allowed;border-style:dashed}
+.mexx-card.soon .t{color:var(--silver-2)}
+.mexx-card.soon .badge,.mexx-card.soon .g{color:var(--muted);background:none}
+
+/* 2단계 세부 */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:16px;font-family:inherit}
+.back:hover{color:var(--silver)}
+.sec-k{font-family:var(--latin);font-size:13px;font-style:italic;letter-spacing:3px;color:var(--accent-2);text-align:center;margin-bottom:7px}
+.sec-title{font-family:var(--serif);font-size:25px;font-weight:800;color:var(--silver);text-align:center;letter-spacing:1px;margin-bottom:7px}
+.sec-title .lat{font-weight:600;letter-spacing:2px}
+.sec-info{font-size:12px;color:var(--muted);text-align:center;letter-spacing:.4px;margin-bottom:28px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{background:linear-gradient(160deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:15px;
+  padding:30px 20px;text-align:center;text-decoration:none;display:block;transition:.25s;
+  box-shadow:0 10px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(190,205,235,.05)}
+.card:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 16px 42px rgba(0,0,0,.55)}
+.card .k{font-family:var(--latin);font-size:11.5px;font-style:italic;letter-spacing:2px;color:var(--accent-2);display:block;margin-bottom:10px}
+.card .t{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--silver);letter-spacing:1px;margin-bottom:9px}
+.card .d{font-size:12px;color:var(--silver-2);line-height:1.55;margin-bottom:14px}
+.card .g{display:inline-block;padding:3px 13px;border-radius:20px;font-size:10px;letter-spacing:1px;color:var(--accent);background:rgba(194,206,226,.07);border:1px solid var(--line-2)}
+
+.footer{margin-top:auto;padding-top:50px;text-align:center;line-height:1.9;letter-spacing:.5px}
+.footer .f1{font-family:var(--serif);font-size:12.5px;color:var(--silver-2)}
+.footer .f2{font-family:var(--latin);font-size:12px;font-style:italic;letter-spacing:2px;color:var(--accent-2);margin-top:2px}
+
+@media(max-width:768px){.logo{font-size:27px;letter-spacing:3px}.hero{flex-direction:column;text-align:center;gap:16px;padding:30px 24px}.hero-bar{width:38px;height:3px;align-self:center}.cat-grid{grid-template-columns:1fr 1fr;gap:11px}.cards{grid-template-columns:1fr 1fr;gap:12px}}
+@media(max-width:480px){.cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div class="brand-k">Kim Ga-kyung Korean Institute</div>
 <div class="logo">김가경 국어 연구소</div>
+<div class="orn"><i></i><b></b><i></i></div>
 <div class="subtitle">복습 시험 시스템</div>
 
-<!-- 1단계: 카테고리 선택 -->
 <div class="view show" id="catView">
   <div class="hero" onclick="openSuneung()">
-    <div class="hero-icon">🏆</div>
+    <div class="hero-bar"></div>
     <div class="hero-body">
-      <div class="hero-title">2026 수능특강 문학</div>
+      <div class="hero-k">Suneung Special · Literature</div>
+      <div class="hero-title"><span class="lat">2026</span> 수능특강 문학</div>
       <div class="hero-desc">고전시가 · 현대시 · 고전산문 · 현대소설 · 갈래복합 · 교과서개념학습</div>
       <div class="hero-meta">6개 영역 · 93작품 · 본문 해석 복습</div>
     </div>
     <div class="hero-cta">들어가기 →</div>
   </div>
-  <div class="soon-grid">
-    <a class="catcard" href="gomunhak.html"><span class="soon-icon">📜</span><div class="soon-title">고전 문학</div><span class="soon-tag">8작품</span></a>
-    <div class="soon"><span class="soon-icon">📖</span><div class="soon-title">현대 문학</div><span class="soon-tag">준비 중</span></div>
-    <div class="soon"><span class="soon-icon">🖌️</span><div class="soon-title">고전 문법</div><span class="soon-tag">준비 중</span></div>
-    <div class="soon"><span class="soon-icon">🖊️</span><div class="soon-title">현대 문법</div><span class="soon-tag">준비 중</span></div>
+  <div class="cat-grid">
+    <a class="tile" href="gomunhak.html"><span class="k">Classical</span><div class="t">고전 문학</div><div class="g">8작품</div></a>
+    <div class="tile soon"><span class="k">Modern</span><div class="t">현대 문학</div><div class="g">준비 중</div></div>
+    <div class="tile soon"><span class="k">Classical</span><div class="t">고전 문법</div><div class="g">준비 중</div></div>
+    <div class="tile soon"><span class="k">Modern</span><div class="t">현대 문법</div><div class="g">준비 중</div></div>
   </div>
-  <div class="mexx-sec">
+  <div class="mexx">
     <div class="mexx-head">한티 MEXX 복습 시험</div>
     <div class="mexx-grid">
-      <a class="mexx-card" href="mexx-go1d.html"><span class="mexx-badge">단과</span><div class="mexx-title">고1 단과 복습 시험</div><span class="mexx-tag">1주차</span></a>
-      <div class="mexx-card soon"><span class="mexx-badge">단과</span><div class="mexx-title">고2 단과 복습 시험</div><span class="mexx-tag">준비 중</span></div>
-      <div class="mexx-card soon"><span class="mexx-badge">종합</span><div class="mexx-title">고1 종합 복습 시험</div><span class="mexx-tag">준비 중</span></div>
-      <div class="mexx-card soon"><span class="mexx-badge">종합</span><div class="mexx-title">중3 종합 복습 시험</div><span class="mexx-tag">준비 중</span></div>
+      <a class="mexx-card" href="mexx-go1d.html"><span class="badge">단과 · G1</span><div class="t">고1 단과 복습 시험</div><span class="g">1주차</span></a>
+      <div class="mexx-card soon"><span class="badge">단과 · G2</span><div class="t">고2 단과 복습 시험</div><span class="g">준비 중</span></div>
+      <div class="mexx-card soon"><span class="badge">종합 · G1</span><div class="t">고1 종합 복습 시험</div><span class="g">준비 중</span></div>
+      <div class="mexx-card soon"><span class="badge">종합 · M3</span><div class="t">중3 종합 복습 시험</div><span class="g">준비 중</span></div>
     </div>
   </div>
 </div>
 
-<!-- 2단계: 2026 수능특강 문학 세부 -->
 <div class="view hidden" id="suneungView">
   <button class="back" onclick="backToCats()">← 전체 카테고리</button>
-  <div class="sec-title">2026 수능특강 문학</div>
+  <div class="sec-k">Suneung Special · Literature</div>
+  <div class="sec-title"><span class="lat">2026</span> 수능특강 문학</div>
   <div class="sec-info">2026학년도 1차고사 대비 · 수능특강(문학) · 본문 해석</div>
   <div class="cards">
-    <a class="card" href="gojeon.html">
-      <span class="card-icon">🏛️</span>
-      <div class="card-title">고전시가</div>
-      <div class="card-desc">향가 · 고려가요 · 시조 · 가사</div>
-      <span class="card-tag tag-g">21작품</span>
-    </a>
-    <a class="card" href="hyundaesi.html">
-      <span class="card-icon">🌿</span>
-      <div class="card-title">현대시</div>
-      <div class="card-desc">저항시 · 모더니즘 · 서정시</div>
-      <span class="card-tag tag-h">21작품</span>
-    </a>
-    <a class="card" href="gojeon-sosel.html">
-      <span class="card-icon">📜</span>
-      <div class="card-title">고전산문</div>
-      <div class="card-desc">고전소설 · 몽유록 · 전(傳)</div>
-      <span class="card-tag tag-g">11작품</span>
-    </a>
-    <a class="card" href="hyundae-sosel.html">
-      <span class="card-icon">📖</span>
-      <div class="card-title">현대소설</div>
-      <div class="card-desc">세태소설 · 리얼리즘 · 전후소설</div>
-      <span class="card-tag tag-h">11작품</span>
-    </a>
-    <a class="card" href="gallae.html">
-      <span class="card-icon">🔗</span>
-      <div class="card-title">갈래복합</div>
-      <div class="card-desc">시+수필 · 가사+산문 복합 세트</div>
-      <span class="card-tag tag-m">23작품</span>
-    </a>
-    <a class="card" href="gyogwaseo.html">
-      <span class="card-icon">📚</span>
-      <div class="card-title">교과서개념학습</div>
-      <div class="card-desc">교과서 수록 핵심 작품</div>
-      <span class="card-tag tag-m">6작품</span>
-    </a>
+    <a class="card" href="gojeon.html"><span class="k">Classical Poetry</span><div class="t">고전시가</div><div class="d">향가 · 고려가요 · 시조 · 가사</div><span class="g">21작품</span></a>
+    <a class="card" href="hyundaesi.html"><span class="k">Modern Poetry</span><div class="t">현대시</div><div class="d">저항시 · 모더니즘 · 서정시</div><span class="g">21작품</span></a>
+    <a class="card" href="gojeon-sosel.html"><span class="k">Classical Prose</span><div class="t">고전산문</div><div class="d">고전소설 · 몽유록 · 전(傳)</div><span class="g">11작품</span></a>
+    <a class="card" href="hyundae-sosel.html"><span class="k">Modern Fiction</span><div class="t">현대소설</div><div class="d">세태소설 · 리얼리즘 · 전후소설</div><span class="g">11작품</span></a>
+    <a class="card" href="gallae.html"><span class="k">Composite</span><div class="t">갈래복합</div><div class="d">시+수필 · 가사+산문 복합 세트</div><span class="g">23작품</span></a>
+    <a class="card" href="gyogwaseo.html"><span class="k">Textbook</span><div class="t">교과서개념학습</div><div class="d">교과서 수록 핵심 작품</div><span class="g">6작품</span></a>
   </div>
 </div>
 
 <div class="footer">
-  방법의 옳음, 선택의 옳음<br>
-  <span>김가경 국어 연구소</span>
+  <div class="f1">방법의 옳음, 선택의 옳음</div>
+  <div class="f2">Kim Ga-kyung Korean Institute</div>
 </div>
 
 <script>
 var catV=document.getElementById('catView'), sunV=document.getElementById('suneungView');
 function openSuneung(){catV.classList.add('hidden');catV.classList.remove('show');sunV.classList.remove('hidden');sunV.classList.add('show');window.scrollTo(0,0);}
 function backToCats(){sunV.classList.add('hidden');sunV.classList.remove('show');catV.classList.remove('hidden');catV.classList.add('show');window.scrollTo(0,0);}
-// 캐시버스팅: 카드 클릭 시 최신본 강제 로드
-document.querySelectorAll('a.card[href$=".html"]').forEach(function(a){
+document.querySelectorAll('a[href$=".html"]').forEach(function(a){
   a.addEventListener('click',function(e){
     e.preventDefault();
     var href=a.getAttribute('href');
