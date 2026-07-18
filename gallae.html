@@ -336,7 +336,7 @@ function onInput(el) {
 function gradeOne(el) {
   const uid=el.id, ans=el.dataset.answer, pi=parseInt(el.dataset.poem), val=el.value.trim();
   if(!val) return;
-  const ok=normalize(val)===normalize(ans);
+  const ok=ans.split('|').some(function(a){return normalize(val)===normalize(a);});
   el.classList.remove('correct','wrong'); el.classList.add(ok?'correct':'wrong');
   el.readOnly=true;
   if(!state[pi]) state[pi]={};
@@ -346,10 +346,10 @@ function gradeOne(el) {
 
 function showHint(uid) {
   const el=document.getElementById(uid); if(!el) return;
-  el.value=el.dataset.answer; el.classList.remove('wrong'); el.classList.add('correct'); el.readOnly=true;
+  el.value=el.dataset.answer.split('|')[0]; el.classList.remove('wrong'); el.classList.add('correct'); el.readOnly=true;
   const pi=parseInt(el.dataset.poem);
   if(!state[pi]) state[pi]={};
-  state[pi][uid]={value:el.dataset.answer,graded:true,correct:true};
+  state[pi][uid]={value:el.dataset.answer.split('|')[0],graded:true,correct:true};
   updateProgress();
 }
 
