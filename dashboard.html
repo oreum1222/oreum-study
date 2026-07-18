@@ -7,7 +7,7 @@
 <title>가경T 대시보드 · 김가경 국어 연구소</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
-:root{--bg:#0a0c10;--bg-card:#0f1626;--bg-card2:#101a2c;--border:rgba(148,163,190,.16);--border-h:rgba(148,163,190,.3);--green:#2f6d5e;--green-a:#3ec4a8;--green-l:#4ae3c0;--green-b:#5ec97e;--gold:#4ae3c0;--text:#e6ebf3;--text2:#a7b1c5;--text3:#6a7488;--text4:#525c72;--red:#e06a6a;--orange:#f2b24a;--blue:#5b8fd6;--radius:12px}
+:root{--bg:#0a0c10;--bg-card:#0f1626;--bg-card2:#101a2c;--border:rgba(148,163,190,.16);--border-h:rgba(148,163,190,.3);--green:#2f6d5e;--green-a:#3ec4a8;--green-l:#4ae3c0;--green-b:#5ec97e;--gold:#4ae3c0;--text:#e6ebf3;--text2:#a7b1c5;--text3:#6a7488;--text4:#525c72;--red:#e06a6a;--orange:#a7b1c5;--blue:#8194b4;--mint:#4ae3c0;--radius:12px}
 .material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:400;font-size:17px;line-height:1;vertical-align:-3px;margin-right:2px}
 *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all;overflow-wrap:break-word}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
@@ -23,7 +23,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
 .summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden}
 .summary-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.summary-card.c1::before{background:var(--green-a)}.summary-card.c2::before{background:var(--gold)}.summary-card.c3::before{background:var(--blue)}.summary-card.c4::before{background:var(--red)}
+.summary-card.c1::before,.summary-card.c2::before,.summary-card.c3::before,.summary-card.c4::before{background:var(--mint);opacity:.7}
 .summary-label{font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500}
 .summary-value{font-size:28px;font-weight:700;letter-spacing:-.5px}
 .summary-sub{font-size:12px;color:var(--text4);margin-top:4px}
@@ -40,9 +40,9 @@ tr:last-child td{border-bottom:none}
 .rank{font-weight:700;color:var(--gold);width:40px;text-align:center}
 .rank.top1{color:var(--mint,#4ae3c0);font-size:16px}.rank.top2{color:#c0c0c0}.rank.top3{color:#cd7f32}
 .name-cell{font-weight:600}
-.rate-cell{font-weight:700}.rate-cell.high{color:var(--green-b)}.rate-cell.mid{color:var(--orange)}.rate-cell.low{color:var(--red)}
+.rate-cell{font-weight:700}.rate-cell.high{color:var(--mint)}.rate-cell.mid{color:var(--text2)}.rate-cell.low{color:var(--red)}
 .grade{display:inline-block;width:28px;height:28px;border-radius:6px;text-align:center;line-height:28px;font-weight:700;font-size:12px}
-.grade-A{background:rgba(34,197,94,.12);color:var(--green-b)}.grade-B{background:rgba(59,130,246,.12);color:var(--blue)}.grade-C{background:rgba(245,158,11,.12);color:var(--orange)}.grade-D{background:rgba(249,115,22,.12);color:#f97316}.grade-F{background:rgba(239,68,68,.12);color:var(--red)}
+.grade-A,.grade-B{background:rgba(74,227,192,.12);color:var(--mint)}.grade-C,.grade-D{background:rgba(167,177,197,.12);color:var(--text2)}.grade-F{background:rgba(224,106,106,.14);color:var(--red)}
 .work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .work-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
 .work-card:hover{border-color:var(--border-h)}
@@ -163,7 +163,7 @@ function processData(){
 
 function renderAll(){
   const clsList=Object.keys(ROSTERS);
-  if(currentClass&&clsList.indexOf(currentClass)<0)currentClass='';
+  if(!currentClass||clsList.indexOf(currentClass)<0)currentClass=clsList[0]||'';
   const allNames=Object.keys(students);
   const roster=currentClass?(ROSTERS[currentClass]||[]):Object.values(ROSTERS).flat();
   const rosterNames=new Set(roster.map(r=>r.name));
@@ -201,7 +201,7 @@ function renderAll(){
   document.getElementById('app').innerHTML=`
   <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'} · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
 
-  <div class="class-bar">${['',...clsList].map(c=>{const cn=c?allNames.filter(n=>ROSTERS[c].some(s=>s.name===n)).length:allNames.length;const tt=c?ROSTERS[c].length:Object.values(ROSTERS).flat().length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">${c?'groups':'apps'}</span>${c||'전체'}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
+  <div class="class-bar">${clsList.map(c=>{const cn=allNames.filter(n=>ROSTERS[c].some(s=>s.name===n)).length;const tt=ROSTERS[c].length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
 
   <div class="summary-row">
     <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${roster.length}명</span></div></div>
