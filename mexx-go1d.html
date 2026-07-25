@@ -504,12 +504,19 @@ function showCelebration() {
 function closeCelebration() { document.getElementById('celebration').classList.remove('show'); }
 
 // INIT
+// 외부 복습 시험 링크(별도 페이지)
+var LINKS=[
+  {num:'세종어제훈민정음', topic:'고전문법 · 본문 해석', tag:'본문 해석', url:'hunmin.html?v=1785020178481'}
+];
 function buildWeeks(){
   var g=document.getElementById('weekGrid');
   var html=WEEKS.map(function(w,i){
     return '<div class="week-card" onclick="openWeek('+i+')"><div class="wk-num">'+w.label+'</div><div class="wk-topic">'+w.topic+'</div><div class="wk-cnt">'+w.works.length+'작품</div></div>';
   }).join('');
-    g.innerHTML=html;
+  html+=LINKS.map(function(L){
+    return '<div class="week-card" onclick="location.href=\''+L.url+'\'"><div class="wk-num" style="font-size:17px">'+L.num+'</div><div class="wk-topic">'+L.topic+'</div><div class="wk-cnt">'+L.tag+'</div></div>';
+  }).join('');
+  g.innerHTML=html;
 }
 function openWeek(i){
   DATA=WEEKS[i].works; selected.clear();
