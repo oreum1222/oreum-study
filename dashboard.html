@@ -62,6 +62,11 @@ tr:last-child td{border-bottom:none}
 .cls-btn.on{background:var(--green-a);border-color:var(--green-a);color:#06251f}
 .cls-btn.on .cls-cnt{background:rgba(6,37,31,.18);color:#06251f}
 .cls-cnt{font-size:12px;font-weight:700;background:var(--bg-card2);color:var(--text3);padding:2px 8px;border-radius:20px}
+.week-bar{display:flex;align-items:center;gap:8px;margin:-8px 0 24px;flex-wrap:wrap}
+.week-lbl{font-size:12px;color:var(--text4);margin-right:2px}
+.wk-btn{background:transparent;border:1px solid var(--border);color:var(--text3);font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;padding:6px 15px;border-radius:20px;cursor:pointer;transition:.15s}
+.wk-btn:hover{border-color:var(--border-h);color:var(--text)}
+.wk-btn.on{background:var(--mint);border-color:var(--mint);color:#06251f}
 .tab-row{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);overflow-x:auto}
 .tab{padding:10px 18px;font-size:13px;color:var(--text4);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
 .tab:hover{color:var(--text2)}.tab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:600}
@@ -106,6 +111,14 @@ tr:last-child td{border-bottom:none}
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
 let ROSTERS={};       // {반이름:[{name,school}]} — 시트 명단 마커 행에서 로드(공개 저장소엔 개인정보 미포함)
 let currentClass='';  // '' = 전체 반
+let currentWeek='';   // '' = 전체 주차
+// 반별 주차→작품 매핑(시트 저장 작품명과 정확히 일치). 주차 추가 시 여기에 반영.
+const WEEKMAP={
+  '고1 단과':{
+    '1주차':['백수광부의 아내 - 공무도하가','유리왕 - 황조가','작자 미상 - 구지가','작자 미상 - 정읍사'],
+    '2주차':['충담사 - 찬기파랑가 (김완진 해독)','충담사 - 찬기파랑가 (양주동 해독)','월명사 - 제망매가']
+  }
+};
 let rawData=[],students={},workStats={};
 
 async function loadData(){
@@ -168,20 +181,30 @@ function renderAll(){
   const roster=currentClass?(ROSTERS[currentClass]||[]):Object.values(ROSTERS).flat();
   const rosterNames=new Set(roster.map(r=>r.name));
   const names=currentClass?allNames.filter(n=>rosterNames.has(n)):allNames;
-  const missing=roster.filter(r=>!allNames.includes(r.name));
-  // 선택 반 기준으로 작품 통계 재계산
+  // 주차 필터: 유효성 확인 + 주차별 뷰 계산
+  const weeks=WEEKMAP[currentClass]?Object.keys(WEEKMAP[currentClass]):[];
+  if(currentWeek&&weeks.indexOf(currentWeek)<0)currentWeek='';
+  const inWk=(work)=>{ if(!currentWeek)return true; const m=WEEKMAP[currentClass]; return !!(m&&m[currentWeek]&&m[currentWeek].indexOf(work)>=0); };
+  const view={};
+  names.forEach(n=>{
+    const ws=(students[n].works||[]).filter(w=>String(w.work).indexOf('【명단】')!==0 && inWk(w.work));
+    let tc=0,tb=0;ws.forEach(w=>{tc+=Number(w.correct)||0;tb+=Number(w.total)||0;});
+    view[n]={works:ws,summary:{correct:tc,total:tb,rate:tb?Math.round(tc/tb*100):0},has:ws.length>0};
+  });
+  const takers=names.filter(n=>view[n].has);
+  const missing=roster.filter(r=>!(view[r.name]&&view[r.name].has));
+  // 작품 통계(선택 반·주차 기준)
   const wStats={};
-  names.forEach(n=>{(students[n].works||[]).forEach(w=>{
-    if(String(w.work).indexOf('【명단】')===0)return;
+  takers.forEach(n=>{view[n].works.forEach(w=>{
     if(!wStats[w.work])wStats[w.work]={sumRate:0,count:0,wrongMap:{}};
     const ws=wStats[w.work];ws.count++;ws.sumRate+=Number(w.rate)||0;
     if(w.wrongs)String(w.wrongs).split(',').map(s=>s.trim()).filter(Boolean).forEach(wr=>{ws.wrongMap[wr]=(ws.wrongMap[wr]||0)+1;});
   });});
-  let sumR=0,rc=0;names.forEach(n=>{if(students[n].summary){sumR+=students[n].summary.rate;rc++;}});
+  let sumR=0,rc=0;takers.forEach(n=>{sumR+=view[n].summary.rate;rc++;});
   const avgR=rc?Math.round(sumR/rc):0;
-  let a80=0;names.forEach(n=>{if(students[n].summary&&students[n].summary.rate>=80)a80++;});
+  let a80=0;takers.forEach(n=>{if(view[n].summary.rate>=80)a80++;});
   let hw='-',hr=100;Object.entries(wStats).forEach(([w,s])=>{const a=s.count?Math.round(s.sumRate/s.count):0;if(a<hr){hr=a;hw=w;}});
-  const ranked=names.map(n=>({name:n,...students[n].summary,wc:students[n].works.length,time:students[n].latest})).sort((a,b)=>b.rate-a.rate||b.correct-a.correct);
+  const ranked=takers.map(n=>({name:n,...view[n].summary,wc:view[n].works.length,time:students[n].latest})).sort((a,b)=>b.rate-a.rate||b.correct-a.correct);
 
   // 응시 시간대
   const th={};for(let i=0;i<24;i++)th[i]=0;
@@ -199,9 +222,11 @@ function renderAll(){
   const maxWC=topW.length?topW[0][1]:1;
 
   document.getElementById('app').innerHTML=`
-  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'} · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
+  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'}${currentWeek?' · '+currentWeek:''} · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
 
   <div class="class-bar">${clsList.map(c=>{const cn=allNames.filter(n=>ROSTERS[c].some(s=>s.name===n)).length;const tt=ROSTERS[c].length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
+
+  ${weeks.length?`<div class="week-bar"><span class="week-lbl">주차</span>${['',...weeks].map(w=>`<button class="wk-btn${currentWeek===w?' on':''}" onclick="setWeek('${w}')">${w||'전체'}</button>`).join('')}</div>`:''}
 
   <div class="summary-row">
     <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${roster.length}명</span></div></div>
@@ -251,17 +276,20 @@ function renderAll(){
 }
 
 function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));document.querySelectorAll('.tab-content').forEach((t,j)=>t.classList.toggle('active',j===i));}
-function setClass(c){currentClass=c;renderAll();}
+function setClass(c){currentClass=c;currentWeek='';renderAll();}
+function setWeek(w){currentWeek=w;renderAll();}
 
 function showSt(name){
   const st=students[name];if(!st)return;
-  const r=st.summary?st.summary.rate:0;
+  const wks=(st.works||[]).filter(w=>String(w.work).indexOf('【명단】')!==0 && (!currentWeek||((WEEKMAP[currentClass]||{})[currentWeek]||[]).indexOf(w.work)>=0));
+  let tc=0,tb=0;wks.forEach(w=>{tc+=Number(w.correct)||0;tb+=Number(w.total)||0;});
+  const r=tb?Math.round(tc/tb*100):0;
   const g=r>=90?'A':r>=80?'B':r>=70?'C':r>=60?'D':'F';
   document.getElementById('mc').innerHTML=`
     <h3>${name}</h3>
-    <div class="msub">최근: ${st.latest} · 누적: <strong style="color:${r>=80?'var(--green-b)':r>=60?'var(--orange)':'var(--red)'}">${st.summary.correct}/${st.summary.total} (${r}%)</strong> · <span class="grade grade-${g}" style="display:inline-block;vertical-align:middle">${g}</span> · ${st.retries||1}회 제출</div>
+    <div class="msub">최근: ${st.latest} · 누적: <strong style="color:${r>=80?'var(--green-b)':r>=60?'var(--orange)':'var(--red)'}">${tc}/${tb} (${r}%)</strong> · <span class="grade grade-${g}" style="display:inline-block;vertical-align:middle">${g}</span>${currentWeek?' · '+currentWeek:''}</div>
     <table class="modal-table"><thead><tr><th>작품</th><th>정답</th><th>빈칸</th><th>정답률</th><th>오답</th><th>제출일</th></tr></thead><tbody>
-    ${st.works.map(w=>{const wr=Number(w.rate)||0;return `<tr><td style="font-weight:500">${w.work}</td><td>${w.correct}</td><td>${w.total}</td><td class="rate-cell ${wr>=80?'high':wr>=60?'mid':'low'}">${wr}%</td><td class="wrong-list">${w.wrongs||'-'}</td><td style="font-size:11px;color:var(--text4)">${w.time?w.time.split(' ').slice(0,3).join(' '):''}</td></tr>`;}).join('')}
+    ${wks.map(w=>{const wr=Number(w.rate)||0;return `<tr><td style="font-weight:500">${w.work}</td><td>${w.correct}</td><td>${w.total}</td><td class="rate-cell ${wr>=80?'high':wr>=60?'mid':'low'}">${wr}%</td><td class="wrong-list">${w.wrongs||'-'}</td><td style="font-size:11px;color:var(--text4)">${w.time?w.time.split(' ').slice(0,3).join(' '):''}</td></tr>`;}).join('')}
     </tbody></table>
     ${(st.growth||[]).length>1?`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)"><div style="font-size:12px;color:var(--text3);margin-bottom:8px"><span class="material-symbols-outlined">trending_up</span> 성장 추이</div><div style="display:flex;gap:10px;align-items:flex-end">${st.growth.map(p=>{const c=p.rate>=80?'var(--green-b)':p.rate>=60?'var(--orange)':'var(--red)';return `<div style="text-align:center;flex:1"><div style="font-size:13px;font-weight:700;color:${c}">${p.rate}%</div><div style="height:${Math.max(6,p.rate*.5)}px;background:${c};border-radius:3px;margin:4px 0;opacity:.7"></div><div style="font-size:10px;color:var(--text4)">${p.date.replace(/2026\.\s*/,'')}</div></div>`;}).join('')}</div></div>`:''}
   `;
