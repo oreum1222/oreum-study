@@ -43,6 +43,10 @@ tr:last-child td{border-bottom:none}
 .rate-cell{font-weight:700}.rate-cell.high{color:var(--mint)}.rate-cell.mid{color:var(--text2)}.rate-cell.low{color:var(--red)}
 .grade{display:inline-block;width:28px;height:28px;border-radius:6px;text-align:center;line-height:28px;font-weight:700;font-size:12px}
 .grade-A,.grade-B{background:rgba(74,227,192,.12);color:var(--mint)}.grade-C,.grade-D{background:rgba(167,177,197,.12);color:var(--text2)}.grade-F{background:rgba(224,106,106,.14);color:var(--red)}
+.st{display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.st-pass{background:rgba(74,227,192,.14);color:var(--mint)}
+.st-fail{background:rgba(224,106,106,.14);color:var(--red)}
+.st-absent{background:rgba(167,177,197,.12);color:var(--text2)}
 .work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .work-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
 .work-card:hover{border-color:var(--border-h)}
@@ -119,7 +123,7 @@ const WEEKMAP={
     '2주차':['충담사 - 찬기파랑가 (김완진 해독)','충담사 - 찬기파랑가 (양주동 해독)','월명사 - 제망매가']
   }
 };
-let rawData=[],students={},workStats={};
+let rawData=[],students={},workStats={},BAEKJI={};  // BAEKJI: 백지 복습(통과/불통/결석) 결과
 
 async function loadData(){
   try{const r=await fetch(SCRIPT_URL+'?mode=data');const j=await r.json();if(j.error)throw j.error;rawData=j.rows||[];processData();renderAll();}
@@ -127,14 +131,20 @@ async function loadData(){
 }
 
 function processData(){
-  students={};workStats={};ROSTERS={};
+  students={};workStats={};ROSTERS={};BAEKJI={};
   const rmk={};
   rawData.forEach(row=>{
-    const w=String(row.work||'');
+    const w=String(row.work||''), nm=String(row.name||'');
     if(w.indexOf('【명단】')===0){
       const cls=w.replace('【명단】','').trim();
       const list=String(row.wrongs||'').split(',').map(s=>s.trim()).filter(s=>s.indexOf('|')>=0).map(s=>{const p=s.split('|');return{name:p[0].trim(),school:(p[1]||'').trim()};});
       if(list.length&&(!rmk[cls]||row.time>rmk[cls].time))rmk[cls]={time:row.time,list};
+    }
+    if(w==='【백지결과】'&&nm.indexOf('【백지:')===0){
+      const key=nm.replace('【백지:','').replace('】','').trim(); const parts=key.split('|');
+      const cls=parts[0].trim(), week=(parts[1]||'결과').trim();
+      const list=String(row.wrongs||'').split(',').map(s=>s.trim()).filter(s=>s.split('|').length>=2).map(s=>{const p=s.split('|');return{name:p[0].trim(),status:(p[1]||'').trim(),note:(p[2]||'').trim()};});
+      if(list.length){if(!BAEKJI[cls])BAEKJI[cls]={};if(!BAEKJI[cls][week]||row.time>BAEKJI[cls][week].time)BAEKJI[cls][week]={time:row.time,list};}
     }
   });
   Object.keys(rmk).forEach(c=>ROSTERS[c]=rmk[c].list);
@@ -180,6 +190,10 @@ function renderAll(){
   const allNames=Object.keys(students);
   const roster=currentClass?(ROSTERS[currentClass]||[]):Object.values(ROSTERS).flat();
   const rosterNames=new Set(roster.map(r=>r.name));
+  // 백지 복습 반(점수 없음) 또는 백지 주차 선택 시 → 백지 뷰
+  const bjWeeks=BAEKJI[currentClass]?Object.keys(BAEKJI[currentClass]):[];
+  const hasScore=allNames.some(n=>rosterNames.has(n)&&(students[n].works||[]).some(w=>String(w.work).indexOf('【')!==0));
+  if(bjWeeks.length&&(!hasScore||bjWeeks.indexOf(currentWeek)>=0)){renderBaekji();return;}
   const names=currentClass?allNames.filter(n=>rosterNames.has(n)):allNames;
   // 주차 필터: 유효성 확인 + 주차별 뷰 계산
   const weeks=WEEKMAP[currentClass]?Object.keys(WEEKMAP[currentClass]):[];
@@ -278,6 +292,38 @@ function renderAll(){
 function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));document.querySelectorAll('.tab-content').forEach((t,j)=>t.classList.toggle('active',j===i));}
 function setClass(c){currentClass=c;currentWeek='';renderAll();}
 function setWeek(w){currentWeek=w;renderAll();}
+function classParticipants(c){
+  const rn=new Set((ROSTERS[c]||[]).map(r=>r.name)); const set=new Set();
+  Object.keys(students).forEach(n=>{if(rn.has(n)&&(students[n].works||[]).some(w=>String(w.work).indexOf('【')!==0))set.add(n);});
+  if(BAEKJI[c])Object.values(BAEKJI[c]).forEach(o=>o.list.forEach(x=>{if(rn.has(x.name))set.add(x.name);}));
+  return set.size;
+}
+function renderBaekji(){
+  const clsList=Object.keys(ROSTERS);
+  const roster=ROSTERS[currentClass]||[];
+  const bj=BAEKJI[currentClass]||{}; const bjWeeks=Object.keys(bj);
+  if(!currentWeek||bjWeeks.indexOf(currentWeek)<0)currentWeek=bjWeeks[0]||'';
+  const list=(bj[currentWeek]&&bj[currentWeek].list)||[];
+  const pass=list.filter(x=>x.status==='통과'), fail=list.filter(x=>x.status==='불통'), absent=list.filter(x=>x.status==='결석');
+  const retake=list.filter(x=>x.status!=='통과');
+  const badge=s=>s==='통과'?'<span class="st st-pass">통과</span>':s==='결석'?'<span class="st st-absent">결석</span>':'<span class="st st-fail">재시</span>';
+  const clsBar=clsList.map(c=>`<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${classParticipants(c)}/${(ROSTERS[c]||[]).length}</span></button>`).join('');
+  const weekBar=bjWeeks.length>1?`<div class="week-bar"><span class="week-lbl">회차</span>${bjWeeks.map(w=>`<button class="wk-btn${currentWeek===w?' on':''}" onclick="setWeek('${w}')">${w}</button>`).join('')}</div>`:'';
+  document.getElementById('app').innerHTML=`
+  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">백지 복습 · ${currentClass} · ${currentWeek}</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
+  <div class="class-bar">${clsBar}</div>
+  ${weekBar}
+  <div class="summary-row">
+    <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${list.length}<span style="font-size:16px;color:var(--text3)"> / ${roster.length}명</span></div></div>
+    <div class="summary-card c2"><div class="summary-label">통과</div><div class="summary-value" style="color:var(--mint)">${pass.length}<span style="font-size:16px;color:var(--text3)">명</span></div></div>
+    <div class="summary-card c3"><div class="summary-label">재시 대상</div><div class="summary-value" style="color:var(--red)">${retake.length}<span style="font-size:16px;color:var(--text3)">명</span></div></div>
+    <div class="summary-card c4"><div class="summary-label">결석</div><div class="summary-value">${absent.length}<span style="font-size:16px;color:var(--text3)">명</span></div></div>
+  </div>
+  ${retake.length?`<div class="missing-alert"><div class="missing-title"><span class="material-symbols-outlined">replay</span> 재시 대상 ${retake.length}명</div><div class="missing-grid">${retake.map(x=>`<div class="missing-tag">${x.name}<span class="sch">${x.status}</span></div>`).join('')}</div></div>`:'<div style="background:rgba(94,201,126,.06);border:1px solid rgba(94,201,126,.2);border-radius:var(--radius);padding:16px;text-align:center;color:var(--green-b);font-weight:600;margin-bottom:28px"><span class="material-symbols-outlined">check_circle</span> 전원 통과!</div>'}
+  <div class="table-wrap"><table><thead><tr><th style="width:50px">#</th><th>학생</th><th style="width:90px">결과</th><th>비고</th></tr></thead><tbody>
+  ${list.map((x,i)=>`<tr><td class="rank">${i+1}</td><td class="name-cell">${x.name}</td><td>${badge(x.status)}</td><td style="color:var(--text2);font-size:13px">${x.note||'-'}</td></tr>`).join('')}
+  </tbody></table></div>`;
+}
 
 function showSt(name){
   const st=students[name];if(!st)return;
