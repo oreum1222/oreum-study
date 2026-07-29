@@ -244,7 +244,7 @@ function renderAll(){
   document.getElementById('app').innerHTML=`
   <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'}${currentWeek?' · '+currentWeek:''} · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
 
-  <div class="class-bar">${clsList.map(c=>{const cn=allNames.filter(n=>ROSTERS[c].some(s=>s.name===n)).length;const tt=ROSTERS[c].length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
+  <div class="class-bar">${clsList.map(c=>{const cn=classParticipants(c);const tt=ROSTERS[c].length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
 
   ${weeks.length?`<div class="week-bar"><span class="week-lbl">${WEEKLABEL[currentClass]||'주차'}</span>${['',...weeks].map(w=>`<button class="wk-btn${currentWeek===w?' on':''}" onclick="setWeek('${w}')">${w||'전체'}</button>`).join('')}</div>`:''}
 
