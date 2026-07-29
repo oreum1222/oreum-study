@@ -121,8 +121,14 @@ const WEEKMAP={
   '고1 단과':{
     '1주차':['백수광부의 아내 - 공무도하가','유리왕 - 황조가','작자 미상 - 구지가','작자 미상 - 정읍사'],
     '2주차':['충담사 - 찬기파랑가 (김완진 해독)','충담사 - 찬기파랑가 (양주동 해독)','월명사 - 제망매가']
+  },
+  '오름 고전문법':{
+    '세종어제훈민정음':['세종어제훈민정음(고전문법)'],
+    '용비어천가':['용비어천가(고전문법)'],
+    '소학언해':['소학언해(고전문법)']
   }
 };
+const WEEKLABEL={'오름 고전문법':'시험'};  // 주차 바 라벨(기본 '주차')
 let rawData=[],students={},workStats={},BAEKJI={};  // BAEKJI: 백지 복습(통과/불통/결석) 결과
 
 async function loadData(){
@@ -240,7 +246,7 @@ function renderAll(){
 
   <div class="class-bar">${clsList.map(c=>{const cn=allNames.filter(n=>ROSTERS[c].some(s=>s.name===n)).length;const tt=ROSTERS[c].length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
 
-  ${weeks.length?`<div class="week-bar"><span class="week-lbl">주차</span>${['',...weeks].map(w=>`<button class="wk-btn${currentWeek===w?' on':''}" onclick="setWeek('${w}')">${w||'전체'}</button>`).join('')}</div>`:''}
+  ${weeks.length?`<div class="week-bar"><span class="week-lbl">${WEEKLABEL[currentClass]||'주차'}</span>${['',...weeks].map(w=>`<button class="wk-btn${currentWeek===w?' on':''}" onclick="setWeek('${w}')">${w||'전체'}</button>`).join('')}</div>`:''}
 
   <div class="summary-row">
     <div class="summary-card c1"><div class="summary-label">응시 / 전체</div><div class="summary-value">${rc}<span style="font-size:16px;color:var(--text3)"> / ${roster.length}명</span></div></div>
