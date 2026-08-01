@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>고2 단과 3주차 · 품사·형태소·단어 · 김가경 국어 연구소</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--card:#0f1626;--card2:#101a2c;--line:rgba(148,163,190,.16);--line2:rgba(148,163,190,.3);--mint:#4ae3c0;--mint2:#3ec4a8;--mint-soft:rgba(74,227,192,.10);--silver:#e6ebf3;--silver2:#a7b1c5;--muted:#6a7488;--correct:#5ec97e;--wrong:#e06a6a;--serif:'Nanum Myeongjo',serif;--num:'Inter',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;word-break:keep-all;overflow-wrap:break-word}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--silver);line-height:1.7;padding-bottom:120px}
+.wrap{max-width:780px;margin:0 auto;padding:26px 18px}
+.head{text-align:center;margin-bottom:22px}
+.badge{display:inline-block;font-family:var(--serif);font-weight:800;font-size:12px;color:#06251f;background:linear-gradient(135deg,var(--mint2),var(--mint));padding:5px 12px;border-radius:6px;margin-bottom:12px}
+.title{font-family:var(--serif);font-size:24px;font-weight:800}
+.title b{color:var(--mint)}
+.sub{font-size:13px;color:var(--muted);margin-top:6px}
+.namebar{display:flex;gap:10px;justify-content:center;margin-top:18px;max-width:420px;margin-left:auto;margin-right:auto}
+.namebar input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--silver);font-size:15px;font-family:inherit;outline:none}
+.namebar input:focus{border-color:var(--mint);box-shadow:0 0 0 3px var(--mint-soft)}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}
+.sechd{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--mint);margin-bottom:12px}
+.passage{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.8;margin-bottom:16px;color:var(--silver2)}
+.passage b{color:var(--silver)}
+.q{padding:15px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:none;padding-top:2px}
+.qh{display:flex;gap:8px;margin-bottom:11px}
+.qn{flex:none;font-family:var(--num);font-weight:800;color:var(--mint);min-width:22px}
+.qt{font-size:15px;font-weight:500}
+.qt b{color:var(--mint)}
+.ox{display:flex;gap:10px}
+.ox .b{width:52px;height:44px;border-radius:10px;border:1.5px solid var(--line2);background:var(--card2);color:var(--silver2);font-size:20px;font-weight:800;cursor:pointer;transition:.15s;font-family:inherit}
+.ox .b:hover{border-color:var(--mint);color:var(--silver)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--card2);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;cursor:pointer;transition:.15s;font-size:14px;text-align:left;color:var(--silver);font-family:inherit;width:100%}
+.opt:hover{border-color:var(--line2)}
+.opt .cir{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--silver2)}
+.b.sel,.opt.sel{border-color:var(--mint)}
+.b.ok,.opt.ok{border-color:var(--correct);background:rgba(94,201,126,.12);color:var(--correct)}
+.b.ok .cir,.opt.ok .cir{border-color:var(--correct);color:var(--correct)}
+.b.no,.opt.no{border-color:var(--wrong);background:rgba(224,106,106,.12);color:var(--wrong)}
+.b.no .cir,.opt.no .cir{border-color:var(--wrong);color:var(--wrong)}
+.opt.ansmark{border-color:var(--correct)}
+.opt.ansmark .cir{background:var(--correct);border-color:var(--correct);color:#06251f}
+.graded{pointer-events:none}
+.sol{display:none;margin-top:11px;background:rgba(74,227,192,.06);border:1px solid var(--mint-soft);border-left:3px solid var(--mint);border-radius:8px;padding:11px 13px;font-size:13.5px;line-height:1.75;color:var(--silver2)}
+.sol.show{display:block}
+.sol b{color:var(--mint)}
+.sol .verd{font-weight:700;margin-right:6px}
+.sol .verd.o{color:var(--correct)}.sol .verd.x{color:var(--wrong)}
+.material-symbols-outlined{font-family:'Material Symbols Outlined';vertical-align:-3px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(10,12,16,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:13px 18px;z-index:50}
+.barwrap{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.prog{display:flex;align-items:center;gap:9px}
+.ring{width:40px;height:40px}.ring circle{fill:none;stroke-width:3.5}.ring .bg{stroke:var(--line)}.ring .fg{stroke:var(--mint);stroke-linecap:round;transition:stroke-dasharray .4s}
+.pt{font-family:var(--num);font-weight:700;font-size:15px}.pl{font-size:11px;color:var(--muted)}
+.btn{margin-left:auto;background:var(--mint);color:#06251f;border:none;border-radius:10px;padding:12px 20px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer}
+.btn:hover{background:var(--mint2)}
+.toast{position:fixed;left:50%;bottom:94px;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:13px 20px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="badge">김가경 국어 연구소</div>
+    <div class="title">고2 단과 3주차 <b>복습 시험</b></div>
+    <div class="sub">품사와 문장 성분 · 형태소 · 단어의 구조 (O/X 20 · 객관식 5)</div>
+    <div class="namebar"><input type="text" id="studentName" placeholder="이름을 입력하세요"></div>
+  </div>
+  <div id="quiz"></div>
+</div>
+<div class="bar"><div class="barwrap">
+  <div class="prog"><svg class="ring" viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="16"></circle><circle class="fg" id="ring" cx="20" cy="20" r="16" stroke-dasharray="0,100" transform="rotate(-90 20 20)" pathLength="100"></circle></svg><div><div class="pt"><span id="ptxt">0</span>%</div><div class="pl">정답률</div></div></div>
+  <button class="btn" onclick="submitAll()">채점 및 제출</button>
+</div></div>
+<div class="toast" id="toast"></div>
+<iframe name="sf" style="display:none"></iframe>
+<form id="sform" method="POST" target="sf" style="display:none"><input type="hidden" name="data" id="sdata"></form>
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
+const DATA=[{"sec": "01 품사와 문장 성분", "passage": "ㄱ. 솔직한 글을 쓰다.<br>ㄴ. 네가 원하는 것이 그 상자에 들어 있다.", "qs": [{"type": "ox", "q": "ㄱ에서 ‘쓰다’는 행위를 나타내므로 수식언에 속한다.", "a": "X", "sol": "다른 단어나 문장 성분을 꾸며 주는 것을 수식언이라 하는데 관형사와 부사가 이에 해당한다. ‘쓰다’가 행위를 나타내는 것은 맞지만, 수식언이 아닌 <b>용언</b>에 속한다."}, {"type": "ox", "q": "ㄴ의 ‘상자’는 사물의 이름을 나타내므로 체언에 속한다.", "a": "O", "sol": "체언은 문장에서 몸통 역할을 하며 명사·대명사·수사가 이에 해당한다. ‘상자’는 특정한 사물을 가리키는 이름이므로 체언 중 <b>명사</b>에 속한다."}, {"type": "ox", "q": "ㄴ의 ‘것이’에서 ‘이’는 실질적 의미 없이 문법적 관계를 표시하는 조사이다.", "a": "O", "sol": "관계언은 앞말에 붙어 문법적 관계를 표시하며 조사가 이에 해당한다. ‘이’는 실질적 의미 없이 그 말이 주어로 쓰임을 보여 주는 <b>주격 조사</b>이다."}]}, {"sec": "02 품사와 문장 성분", "passage": "• 영선이는 ㉠기쁜 마음으로 아리를 ㉡보살핀다.<br>• 국어 선생님이 ㉢웃으시며 사탕을 ㉣잔뜩 주셨다.", "qs": [{"type": "ox", "q": "㉠은 뒤에 오는 명사 ‘마음’을 꾸며 주므로 관형사이다.", "a": "X", "sol": "관형사는 체언류를 꾸며 주는 수식언이다. ‘기쁜’은 ‘기쁘다’라는 기본형을 가지므로 관형사가 아니다. ‘기쁘다’는 용언이며, 행위가 아닌 상태(감정)를 드러내므로 <b>형용사</b>이다."}, {"type": "ox", "q": "㉡은 ‘보살피다’에 현재형 어미 ‘-ㄴ-’이 붙은 것이므로, 동사임을 알 수 있다.", "a": "O", "sol": "동사는 움직임을 드러내는 용언이다. ‘보살피다’는 ‘보살피고·보살피니’ 등으로 활용하는 용언이며, 현재형 어미 ‘-ㄴ-’이 붙을 수 있으므로 <b>동사</b>이다."}, {"type": "ox", "q": "㉢은 ‘웃다’라는 기본형을 지닌다는 점에서 용언임을 알 수 있다.", "a": "O", "sol": "용언에는 움직임을 나타내는 동사와 성질·상태를 나타내는 형용사가 속한다. ‘웃으시며’는 ‘웃다’라는 기본형을 가지며, 기본형을 지니는 단어는 <b>용언</b>이다."}, {"type": "ox", "q": "㉣은 ‘주셨다’라는 용언을 꾸미고 기본형이 없으므로 부사이다.", "a": "O", "sol": "부사는 체언류 외를 꾸며 주는 수식언이다. ‘잔뜩’은 기본형이 없으며 뒤의 용언 ‘주셨다’를 꾸미므로 <b>부사</b>이다."}]}, {"sec": "03 품사와 문장 성분", "passage": "ㄱ. 어머니는 나에게 중요한 사람이다.<br>ㄴ. 라디오 소리를 살짝 크게 해 주겠니?", "qs": [{"type": "ox", "q": "ㄱ에서 ‘중요한’은 품사로는 형용사, 문장 성분으로는 관형어이다.", "a": "O", "sol": "품사는 단어의 종류를, 문장 성분은 어절의 종류를 말한다(문장 성분은 ‘-어’, 품사는 ‘-사’). ‘중요한’은 ‘중요하다’라는 기본형을 지니며 상태를 드러내므로 <b>형용사</b>이고, 체언 ‘사람’을 꾸미므로 문장 성분은 <b>관형어</b>이다."}, {"type": "ox", "q": "ㄴ의 ‘소리를’은 하나의 단어로 이루어진 목적어이다.", "a": "X", "sol": "‘소리를’은 ‘소리’(명사)와 ‘를’(조사) <b>두 개의 단어</b>로 이루어져 있다."}, {"type": "ox", "q": "ㄴ의 ‘살짝’과 ‘크게’는 모두 부사어이다.", "a": "O", "sol": "‘살짝’은 ‘크게’라는 용언을 수식하므로 부사어, ‘크게’는 ‘해’라는 용언을 수식하므로 부사어이다."}]}, {"sec": "04 형태소", "passage": "ㄱ. 집 &nbsp;&nbsp;&nbsp; ㄴ. 밤낮 &nbsp;&nbsp;&nbsp; ㄷ. 겁쟁이 &nbsp;&nbsp;&nbsp; ㄹ. 드세다", "qs": [{"type": "ox", "q": "ㄱ은 하나의 형태소로만 이루어진 단어이다.", "a": "O", "sol": "형태소는 뜻을 지닌 최소 단위이다. ‘집’은 더 쪼개면 의미 해석이 불가능한, <b>하나의 형태소</b>로 이루어진 단어이다."}, {"type": "ox", "q": "ㄴ의 ‘밤’과 ‘낮’은 둘 다 실질 형태소이다.", "a": "O", "sol": "‘밤’과 ‘낮’은 각각 실질적 의미를 지니는 <b>실질 형태소</b>이다."}, {"type": "ox", "q": "ㄷ의 ‘-쟁이’는 형식 형태소이지만, ㄹ의 ‘드-’는 형식 형태소가 아니다.", "a": "X", "sol": "‘-쟁이’는 접미사로 형식 형태소이다. ‘드-’ 역시 접두사로 <b>형식 형태소</b>이다."}]}, {"sec": "05 단어의 구조", "passage": "ㄱ. 죽음 &nbsp;&nbsp;&nbsp; ㄴ. 사랑니 &nbsp;&nbsp;&nbsp; ㄷ. 염치없다 &nbsp;&nbsp;&nbsp; ㄹ. 혼란스럽다", "qs": [{"type": "ox", "q": "ㄱ은 어근과 접사로 이루어진 단어이다.", "a": "O", "sol": "접사가 하나 이상 결합하면 파생어, 어근끼리 결합하면 합성어이다. ‘죽음’은 어근 ‘죽-’과 접사 ‘-음’이 결합한 <b>파생어</b>이다."}, {"type": "ox", "q": "ㄴ의 ‘사랑’은 어근, ‘니’는 접사이다.", "a": "X", "sol": "‘사랑니’는 ‘사랑’과 ‘이(니)’가 결합한 <b>합성어</b>로, ‘니’는 접사가 아닌 <b>어근</b>이다."}, {"type": "ox", "q": "ㄷ의 어간은 ‘염치’, 어미는 ‘없다’이다.", "a": "X", "sol": "‘염치없다’는 ‘염치없고·염치없으니·염치없는’ 등으로 활용하므로 어간은 <b>‘염치없-’</b>, 어미는 <b>‘-다’</b>이다."}, {"type": "ox", "q": "ㄹ의 어간은 ‘혼란스럽-’이고, 어미는 ‘-다’이다.", "a": "O", "sol": "‘혼란스럽다’는 ‘혼란스럽고·혼란스러우니’ 등으로 활용하므로 어간은 ‘혼란스럽-’, 어미는 ‘-다’이다."}]}, {"sec": "06 단어의 구조", "passage": "ㄱ. 치마 &nbsp;&nbsp;&nbsp; ㄴ. 시누이 &nbsp;&nbsp;&nbsp; ㄷ. 알아보다 &nbsp;&nbsp;&nbsp; ㄹ. 어깨동무", "qs": [{"type": "ox", "q": "ㄱ은 하나의 어근으로만 이루어진 단일어이다.", "a": "O", "sol": "‘치마’는 접사 없이 어근 하나로만 이루어진 <b>단일어</b>이다."}, {"type": "ox", "q": "ㄴ과 ㄷ은 어근과 접사가 결합하여 만들어진 파생어이다.", "a": "X", "sol": "‘시누이’는 접사 ‘시-’와 어근 ‘누이’가 결합한 파생어가 맞지만, ‘알아보다’는 ‘알다’와 ‘보다’ 두 어근이 결합한 <b>합성어</b>이다."}, {"type": "ox", "q": "ㄹ은 어근 ‘어깨’와 어근 ‘동무’가 결합하여 만들어졌으므로 합성어이다.", "a": "O", "sol": "‘어깨’(명사 어근)와 ‘동무’(명사 어근)가 결합한 <b>합성어</b>이다."}]}, {"sec": "07 선택 제약 [2012.09 고2 교육청]", "passage": "<b>&lt;보기&gt;</b> 어떤 용언은 특정한 종류의 체언만을 요구하는 성질을 가지는데, 이때의 용언과 체언 사이의 관계를 <b>선택 제약</b>이라 한다.<br>ㄱ. 철수는 (아버지를/ *강아지를/ *권력을) 존경한다.<br>ㄴ. (강아지가/ 아버지가/ *권력이) 철수와 논다.<br>ㄷ. 그녀는 매일 (우유를/ *나무를) 마신다.<br>ㄹ. 수진이는 살며시 (눈을/ *입을) 감는다.<br>ㅁ. 선생님이 (아이들을/ *옷을) 가르친다.<br><span style='color:#888;font-size:12px'>*는 의미가 어색한 표현임</span>", "qs": [{"type": "mc", "q": "&lt;보기&gt;를 탐구한 것으로 <b>적절하지 않은</b> 것은?", "opts": ["ㄱ을 보면 ‘존경하다’는 사람을 나타내는 명사를 목적어로 요구하는군.", "ㄴ을 보면 ‘놀다’는 짐승을 가리키는 명사만을 주어로 선택하는 것은 아니군.", "ㄷ을 보면 ‘마시다’는 액체를 나타내는 명사를 목적어로 요구하는 성질이 있군.", "ㄹ을 보면 ‘감다’는 특정한 신체 부위를 나타내는 명사를 목적어로 취하는군.", "ㅁ을 보면 ‘가르치다’는 사람을 나타내는 명사를 목적어로 요구하는 것은 아니군."], "a": 5, "sol": "ㅁ의 ‘가르치다’는 ‘아이들(사람)’을 목적어로 취하고 ‘옷’은 어색하므로, 사람을 나타내는 명사를 목적어로 <b>요구한다</b>. 따라서 ‘요구하는 것은 아니’라는 ⑤가 적절하지 않다."}]}, {"sec": "08 동사·형용사 통용 [2014.03 고3 교육청]", "passage": "<b>&lt;보기&gt;</b> 동사는 움직임·작용을, 형용사는 성질·상태를 나타낸다. 그런데 ㉠<b>하나의 단어가 동사와 형용사 두 가지로 사용되는 경우</b>가 있다. ‘밝다’는 ‘달이 밝다’에서는 ‘환하다’의 뜻(형용사), ‘날이 밝는다’에서는 ‘환해지다’의 뜻(동사)으로 쓰인다.", "qs": [{"type": "mc", "q": "&lt;보기&gt;의 ㉠을 설명할 수 있는 사례로 가장 적절한 것은?", "opts": ["그녀의 속눈썹은 길다. / 긴 겨울방학이 끝났다.", "나이보다 얼굴이 젊다. / 젊은 나이에 성공을 했다.", "봄바람이 따뜻하다. / 따뜻한 마음씨를 가져야 한다.", "나는 너에 대한 기대가 크다. / 우리 아들은 키가 쑥쑥 큰다.", "외출하기에는 시간이 너무 늦다. / 그는 늦은 나이에 대학에 진학했다."], "a": 4, "sol": "‘기대가 크다’의 ‘크다’는 ‘큰다’(현재형)가 불가능하므로 형용사, ‘키가 쑥쑥 큰다’의 ‘큰다’는 현재형이므로 동사이다. 즉 ④의 ‘크다’가 동사·형용사 두 가지로 쓰인다. (①길다 ②젊다 ③따뜻하다는 형용사로만, ⑤는 두 문장 모두 형용사)"}]}, {"sec": "09 수사와 수 관형사", "passage": "<b>&lt;보기&gt;</b> ①‘그녀는 슬하에 딸만 다섯이 있다.’의 ‘다섯’은 조사 ‘이’가 붙으므로 수사, ②‘여기에는 모두 다섯 사람이 있다.’의 ‘다섯’은 체언 ‘사람’을 꾸미므로 수 관형사이다.<br><b>[연습]</b><br>ㄱ. 당연히 여덟에 둘을 더하면 열이지.<br>ㄴ. 도서관은 매월 첫째 주 월요일에 쉰다.<br>ㄷ. 이 줄 열두째에 앉은 애가 내 쌍둥이 오빠야.<br>ㄹ. 백 미터 달리기 시합이 곧 시작되니 준비하도록 해.<br>ㅁ. 그렇게 광고를 했는데도 온 사람은 고작 서너 명이었다.", "qs": [{"type": "mc", "q": "ㄱ~ㅁ을 분석한 것으로 <b>적절하지 않은</b> 것은?", "opts": ["ㄱ - ‘둘’은 조사가 붙으므로 수사, ‘열’은 그렇지 않으므로 수 관형사이다.", "ㄴ - ‘첫째’는 뒤에 오는 명사 ‘주’를 꾸며 주므로 수 관형사이다.", "ㄷ - ‘열두째’는 순서를 나타내면서 조사와 함께 쓰이므로 수사이다.", "ㄹ - ‘백’은 단위를 나타내는 의존명사 ‘미터’를 꾸며 주므로 수 관형사이다.", "ㅁ - ‘서너’는 뒤에 오는 의존명사 ‘명’의 수량을 한정하므로 수 관형사이다."], "a": 1, "sol": "수사는 체언이라 조사와 결합 가능하지만, 수 관형사는 (보조사가 아닌) 조사와 결합할 수 없다. ㄱ의 ‘열이지’에서 ‘이지’는 서술격 조사 ‘이다’의 활용형이므로, 조사가 붙은 ‘열’도 <b>수사</b>이다. 따라서 ‘열=수 관형사’라는 ①이 적절하지 않다."}]}, {"sec": "10 부사어 [2008.06 고2 교육청]", "passage": "<b>&lt;보기&gt;</b><br>• 그는 소리 없이 떠났다.<br>• 그는 무척 열심히 일한다.<br>• 확실히 엄마의 약손은 효과가 있었다.", "qs": [{"type": "mc", "q": "&lt;보기&gt;를 통해 ‘부사어’에 대해 탐구한 것으로 <b>적절하지 않은</b> 것은?", "opts": ["부사어는 체언을 수식할 수 있다.", "부사절이 부사어의 기능을 할 수 있다.", "부사어는 문장 내에서 생략할 수 있다.", "부사어는 다른 부사어를 수식할 수 있다.", "부사어는 문장 내에서 위치 이동을 할 수 있다."], "a": 1, "sol": "부사어가 수식하는 것은 용언·관형어·다른 부사어·문장 전체 등이며, <b>체언은 부사어의 수식 대상이 아니다</b>. (②‘소리 없이’=부사절 ④‘무척’이 ‘열심히’ 수식 ⑤위치 이동 가능)"}]}, {"sec": "11 형태소 분석 [2013.03 고1 교육청]", "passage": "<b>&lt;보기&gt;</b> 실질적 의미가 있으면 실질 형태소, 문법적 의미만 있으면 형식 형태소이다. [예문] ‘하늘이 푸르다’ → 실질(하늘·푸르-) / 형식(이·-다)<br><b>[연습]</b> (ㄱ) <b>형은 집에 있다.</b>", "qs": [{"type": "mc", "q": "(ㄱ)의 형태소를 실질·형식으로 바르게 짝지은 것은?", "opts": ["실질: 형, 집 / 형식: 은, 에, 있-, -다", "실질: 집, 있- / 형식: 형, 은, 에, -다", "실질: 형, 집, 있- / 형식: 은, 에, -다", "실질: 형, 집, 은 / 형식: 에, 있-, -다", "실질: 은, 있-, -다 / 형식: 형, 집, 에"], "a": 3, "sol": "‘형·집’은 명사(구체적 대상)로 실질 형태소, 어간 ‘있-’도 상태를 나타내므로 실질 형태소이다. 조사 ‘은·에’와 어미 ‘-다’는 문법적 의미만 지니므로 형식 형태소이다. → ③"}]}];
+const TOTAL=25;
+const st={}; let autoSubmitted=false,pendingSubmit=false,subTimer=null;
+const CIRC=['①','②','③','④','⑤'];
+function build(){
+  const root=document.getElementById('quiz'); let h='';
+  DATA.forEach(function(sec,si){
+    h+='<div class="sec"><div class="sechd">'+sec.sec+'</div>';
+    if(sec.passage) h+='<div class="passage">'+sec.passage+'</div>';
+    sec.qs.forEach(function(q,qi){
+      const id=si+'-'+qi; q._id=id;
+      h+='<div class="q" data-id="'+id+'"><div class="qh"><span class="qn">'+(q._no)+'</span><span class="qt">'+q.q+'</span></div>';
+      if(q.type==='ox'){
+        h+='<div class="ox">'+['O','X'].map(function(v){return '<button type="button" class="b" data-id="'+id+'" data-v="'+v+'">'+(v==='O'?'○':'×')+'</button>';}).join('')+'</div>';
+      }else{
+        h+='<div class="opts">'+q.opts.map(function(o,oi){return '<button type="button" class="opt" data-id="'+id+'" data-v="'+(oi+1)+'"><span class="cir">'+CIRC[oi]+'</span><span>'+o+'</span></button>';}).join('')+'</div>';
+      }
+      h+='<div class="sol" id="sol-'+id+'"></div></div>';
+    });
+    h+='</div>';
+  });
+  root.innerHTML=h;
+}
+function qOf(id){var p=id.split('-');return DATA[+p[0]].qs[+p[1]];}
+function grade(id,v){
+  if(st[id]&&st[id].graded) return;
+  var q=qOf(id); var ok;
+  var wrap=document.querySelector('.q[data-id="'+id+'"]');
+  if(q.type==='ox'){
+    ok=(v===q.a);
+    wrap.querySelectorAll('.ox .b').forEach(function(b){ if(b.dataset.v===v)b.classList.add('sel',ok?'ok':'no'); });
+    if(!ok){ wrap.querySelectorAll('.ox .b').forEach(function(b){ if(b.dataset.v===q.a)b.classList.add('ok'); }); }
+    wrap.querySelector('.ox').classList.add('graded');
+  }else{
+    ok=(+v===q.a);
+    wrap.querySelectorAll('.opt').forEach(function(o){
+      var oi=+o.dataset.v;
+      if(oi===+v) o.classList.add('sel',ok?'ok':'no');
+      if(oi===q.a) o.classList.add('ansmark');
+    });
+    wrap.querySelector('.opts').classList.add('graded');
+  }
+  st[id]={graded:true,correct:ok,val:v};
+  var sol=document.getElementById('sol-'+id);
+  var head = q.type==='ox' ? '<span class="verd '+(ok?'o':'x')+'">'+(ok?'정답':'오답')+'</span> 정답: '+(q.a==='O'?'○':'×')+' — '
+                           : '<span class="verd '+(ok?'o':'x')+'">'+(ok?'정답':'오답')+'</span> 정답: '+CIRC[q.a-1]+' — ';
+  sol.innerHTML=head+q.sol; sol.classList.add('show');
+  updateProg(); maybeSubmit();
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('[data-id][data-v]'):null;
+  if(b) grade(b.dataset.id,b.dataset.v);
+});
+function updateProg(){ var c=0; Object.values(st).forEach(function(s){if(s.graded&&s.correct)c++;}); var p=Math.round(c/TOTAL*100); document.getElementById('ptxt').textContent=p; document.getElementById('ring').setAttribute('stroke-dasharray',p+',100'); }
+function allGraded(){ var g=0; Object.values(st).forEach(function(s){if(s.graded)g++;}); return g>=TOTAL; }
+function resultData(){ var name=document.getElementById('studentName').value.trim(); var cor=0,wrongs=[]; var n=0;
+  DATA.forEach(function(sec,si){sec.qs.forEach(function(q,qi){n++; var s=st[si+'-'+qi]; if(s&&s.graded&&s.correct)cor++; else wrongs.push(String(n));});});
+  return {studentName:name,sections:[{work:'품사·형태소·단어(고2 3주차)',total:TOTAL,correct:cor,rate:Math.round(cor/TOTAL*100),wrongs:wrongs.slice(0,25)}],totalBlanks:TOTAL,totalCorrect:cor,totalRate:Math.round(cor/TOTAL*100)}; }
+function maybeSubmit(){ if(autoSubmitted)return; clearTimeout(subTimer); if(!allGraded())return; subTimer=setTimeout(function(){ if(autoSubmitted||!allGraded())return; var nm=document.getElementById('studentName').value.trim(); if(!nm){pendingSubmit=true;toast('모두 채점됐어요! 이름을 입력하면 자동 제출됩니다.');return;} doSubmit(); },2000); }
+function submitAll(){ var un=TOTAL-Object.values(st).filter(function(s){return s.graded;}).length; if(un>0){toast('아직 '+un+'문항이 남았어요.');return;} var nm=document.getElementById('studentName').value.trim(); if(!nm){toast('이름을 입력해 주세요.');document.getElementById('studentName').focus();return;} doSubmit(); }
+function doSubmit(){ autoSubmitted=true;pendingSubmit=false; var d=resultData(); if(SCRIPT_URL){document.getElementById('sform').action=SCRIPT_URL;document.getElementById('sdata').value=JSON.stringify(d);document.getElementById('sform').submit();} toast('제출되었습니다! ('+d.totalRate+'%)'); }
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},3000);}
+document.getElementById('studentName').addEventListener('input',function(){if(pendingSubmit)maybeSubmit();});
+// 문항 전역 번호
+(function(){var n=0;DATA.forEach(function(sec){sec.qs.forEach(function(q){n++;q._no=n;});});})();
+build(); updateProg();
+</script>
+</body></html>
