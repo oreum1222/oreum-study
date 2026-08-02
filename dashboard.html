@@ -364,8 +364,10 @@ function showSt(name){
 
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('show');}
 
-/* ===== 문자 발송 (고1 종합 · 비공개 발송서버 연동) ===== */
+/* ===== 문자 발송 (고1 종합 · 비공개 발송서버 연동) =====
+   URL·관리키는 공개 소스에 넣지 않음 — 교사 기기 localStorage에만 저장 */
 var SMS_URL=localStorage.getItem('SMS_URL')||'';
+var SMS_KEY=localStorage.getItem('BOKSUP_KEY')||'';
 var smsNames=[], smsSel={};
 function smsOpen(){document.getElementById('smsOverlay').classList.add('show');smsRender();if(SMS_URL)smsLoadList();}
 function smsClose(){document.getElementById('smsOverlay').classList.remove('show');}
@@ -378,18 +380,20 @@ function smsRender(){
      <div style="font-size:12px;color:var(--text3);margin-bottom:6px">발송 서버 URL (Apps Script 웹앱 /exec)</div>
      <div style="display:flex;gap:8px;flex-wrap:wrap">
        <input id="smsUrl" class="sms-inp" value="${smsEsc(SMS_URL)}" placeholder="https://script.google.com/macros/s/…/exec">
+       <input id="smsKey" class="sms-inp" style="max-width:180px" value="${smsEsc(SMS_KEY)}" placeholder="관리키" type="password">
        <button class="dash-btn" onclick="smsSaveUrl()">저장</button>
        <button class="dash-btn" onclick="smsPing()">연결확인</button>
      </div>
      <div id="smsStat" style="font-size:12px;margin-top:8px;color:var(--text3)"></div>
    </div>
-   <div id="smsBody"><div style="color:var(--text4);font-size:13px">발송 서버 URL을 저장하고 연결확인을 누르면 학생 목록이 표시됩니다.</div></div>`;
+   <div id="smsBody"><div style="color:var(--text4);font-size:13px">발송 서버 URL과 관리키를 저장하고 연결확인을 누르면 학생 목록이 표시됩니다.</div></div>`;
 }
 function smsSetStat(t,ok){var e=document.getElementById('smsStat');if(!e)return;e.innerHTML=t;e.style.color=ok===true?'var(--mint)':ok===false?'var(--red)':'var(--text3)';}
 function smsFetch(params){var u=SMS_URL+(SMS_URL.indexOf('?')<0?'?':'&')+params;return fetch(u).then(function(r){return r.json();});}
-function smsSaveUrl(){SMS_URL=document.getElementById('smsUrl').value.trim();localStorage.setItem('SMS_URL',SMS_URL);if(SMS_URL){smsSetStat('저장됨. 목록 불러오는 중…');smsLoadList();}else smsSetStat('URL을 입력하세요.',false);}
-function smsPing(){if(!SMS_URL){smsSetStat('URL을 먼저 입력·저장하세요.',false);return;}smsSetStat('확인 중…');smsFetch('action=ping').then(function(j){smsSetStat(j.ok?'연결됨 · 등록 학생 '+j.total+'명':'응답 오류: '+(j.error||''),!!j.ok);}).catch(function(e){smsSetStat('연결 실패: '+e,false);});}
-function smsLoadList(){smsFetch('action=list').then(function(j){if(!j.ok){smsSetStat('목록 오류',false);return;}smsNames=j.names;smsSel={};smsNames.forEach(function(n){smsSel[n]=true;});smsSetStat('연결됨 · 등록 학생 '+smsNames.length+'명',true);smsRenderBody();}).catch(function(e){smsSetStat('목록 실패: '+e,false);});}
+function smsK(){return SMS_KEY?'&key='+encodeURIComponent(SMS_KEY):'';}
+function smsSaveUrl(){SMS_URL=document.getElementById('smsUrl').value.trim();SMS_KEY=document.getElementById('smsKey').value.trim();localStorage.setItem('SMS_URL',SMS_URL);localStorage.setItem('BOKSUP_KEY',SMS_KEY);if(SMS_URL){smsSetStat('저장됨. 목록 불러오는 중…');smsLoadList();}else smsSetStat('URL을 입력하세요.',false);}
+function smsPing(){if(!SMS_URL){smsSetStat('URL을 먼저 입력·저장하세요.',false);return;}smsSetStat('확인 중…');smsFetch('action=boksup&op=ping').then(function(j){smsSetStat(j.ok?'연결됨 · 등록 학생 '+j.total+'명'+(j.hasKeys?' · 발송 준비됨':' · 발송키 미설정(테스트만)'):'응답 오류: '+(j.error||''),!!j.ok);}).catch(function(e){smsSetStat('연결 실패: '+e,false);});}
+function smsLoadList(){smsFetch('action=boksup&op=list'+smsK()).then(function(j){if(!j.ok){smsSetStat('목록 오류: '+(j.error||'관리키 확인'),false);return;}smsNames=j.names;smsSel={};smsNames.forEach(function(n){smsSel[n]=true;});smsSetStat('연결됨 · 등록 학생 '+smsNames.length+'명',true);smsRenderBody();}).catch(function(e){smsSetStat('목록 실패: '+e,false);});}
 function smsTarget(){var r=document.querySelector('input[name=smsTgt]:checked');return r?r.value:'both';}
 function smsCnt(){var e=document.getElementById('smsCnt');if(!e)return;var n=smsNames.filter(function(x){return smsSel[x];}).length;e.textContent='('+n+'/'+smsNames.length+' 선택)';}
 function smsToggle(n,el){smsSel[n]=el.checked;el.parentElement.classList.toggle('on',el.checked);smsCnt();}
@@ -425,8 +429,8 @@ function smsRenderBody(){
 }
 function smsPreview(){
   var nameEl=document.getElementById('smsPrevName');if(!nameEl)return;var name=nameEl.value,t=smsTarget(),pre=document.getElementById('smsPrev');pre.textContent='불러오는 중…';
-  if(t==='both'){Promise.all([smsFetch('action=preview&target=parent&name='+encodeURIComponent(name)),smsFetch('action=preview&target=student&name='+encodeURIComponent(name))]).then(function(r){var p=r[0],s=r[1];pre.textContent='[학부모]\n'+(p.ok?p.text:'('+(p.error||'없음')+')')+'\n\n──────────\n\n[학생]\n'+(s.ok?s.text:'('+(s.error||'없음')+')');});}
-  else{smsFetch('action=preview&target='+t+'&name='+encodeURIComponent(name)).then(function(j){pre.textContent=j.ok?j.text:'('+(j.error||'없음')+')';});}
+  if(t==='both'){Promise.all([smsFetch('action=boksup&op=preview&target=parent&name='+encodeURIComponent(name)+smsK()),smsFetch('action=boksup&op=preview&target=student&name='+encodeURIComponent(name)+smsK())]).then(function(r){var p=r[0],s=r[1];pre.textContent='[학부모]\n'+(p.ok?p.text:'('+(p.error||'없음')+')')+'\n\n──────────\n\n[학생]\n'+(s.ok?s.text:'('+(s.error||'없음')+')');});}
+  else{smsFetch('action=boksup&op=preview&target='+t+'&name='+encodeURIComponent(name)+smsK()).then(function(j){pre.textContent=j.ok?j.text:'('+(j.error||'없음')+')';});}
 }
 function smsSend(dry){
   var sel=smsNames.filter(function(n){return smsSel[n];});if(!sel.length){alert('선택된 학생이 없습니다.');return;}
@@ -434,7 +438,7 @@ function smsSend(dry){
   if(!dry&&!confirm(sel.length+'명에게 실제 문자를 발송합니다.\n대상: '+tl+'\n\n계속할까요?'))return;
   var res=document.getElementById('smsResult');res.style.color='var(--text3)';res.textContent=dry?'테스트 중…':'발송 중…';
   var names=sel.map(encodeURIComponent).join(',');
-  smsFetch('action=send&target='+t+'&dryRun='+(dry?'1':'0')+'&names='+names).then(function(j){
+  smsFetch('action=boksup&op=send&target='+t+'&dryRun='+(dry?'1':'0')+'&names='+names+smsK()).then(function(j){
     if(!j.ok){res.style.color='var(--red)';res.innerHTML='실패: '+smsEsc(j.error||JSON.stringify(j))+(j.skipped&&j.skipped.length?'<br>제외: '+smsEsc(j.skipped.join(', ')):'');return;}
     if(j.dryRun){res.style.color='var(--mint)';res.innerHTML='✓ 테스트 성공 · 실제 발송 시 <b>'+j.count+'건</b> 전송됩니다.'+(j.skipped&&j.skipped.length?'<br><span style="color:var(--text3)">제외 '+j.skipped.length+'건: '+smsEsc(j.skipped.join(', '))+'</span>':'');}
     else{res.style.color='var(--mint)';res.innerHTML='✓ 발송 완료 · <b>'+j.count+'건</b> (응답코드 '+j.code+')'+(j.skipped&&j.skipped.length?'<br><span style="color:var(--text3)">제외 '+j.skipped.length+'건: '+smsEsc(j.skipped.join(', '))+'</span>':'');}
