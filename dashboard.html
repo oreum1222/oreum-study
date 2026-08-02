@@ -106,11 +106,22 @@ tr:last-child td{border-bottom:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:768px){.summary-row{grid-template-columns:repeat(2,1fr)}.work-grid,.growth-grid,.retry-grid{grid-template-columns:1fr}.summary-value{font-size:22px}th,td{padding:8px 10px;font-size:12px}.tab{padding:8px 12px;font-size:12px}}
 @media(max-width:480px){.summary-row{grid-template-columns:1fr}}
+.sms-box{background:var(--bg-card2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px}
+.sms-inp{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px;font-family:inherit}
+.sms-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:170px;overflow:auto;padding:2px}
+.sms-chip{font-size:12px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text3);user-select:none;transition:.15s}
+.sms-chip.on{background:rgba(62,196,168,.16);border-color:var(--green-a);color:var(--mint)}
+.sms-rad{font-size:12px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:5px}
+.dash-btn.sm{padding:5px 10px;font-size:11px}
+.dash-btn.primary{background:var(--green-a);color:#06251f;border-color:var(--green-a);font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.dash-btn.primary .material-symbols-outlined{font-size:16px}
+.sms-pre{white-space:pre-wrap;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:12px;font-family:inherit;line-height:1.7;margin:0;max-height:220px;overflow:auto;color:var(--text2)}
 </style>
 </head>
 <body>
 <div class="app" id="app"><div class="loading"><div class="spinner"></div><div>데이터를 불러오는 중...</div></div></div>
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="mc"></div></div>
+<div class="modal-overlay" id="smsOverlay" onclick="if(event.target.id==='smsOverlay')smsClose()"><div class="modal" id="smsc" style="max-width:720px"></div></div>
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz7CrlG8u1xTzQOQ_cyUwXC8_cqhx_mhUVHXG8tulb2PPsjdFTid0r_1JAgc0C9JVw05Q/exec';
 let ROSTERS={};       // {반이름:[{name,school}]} — 시트 명단 마커 행에서 로드(공개 저장소엔 개인정보 미포함)
@@ -245,7 +256,7 @@ function renderAll(){
   const maxWC=topW.length?topW[0][1]:1;
 
   document.getElementById('app').innerHTML=`
-  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'}${currentWeek?' · '+currentWeek:''} · 실시간 학습 현황</div></div></div><button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div>
+  <div class="dash-header"><div class="dash-brand"><div class="dash-badge">김가경 국어 연구소</div><div><div class="dash-title"><span>가경T</span> 대시보드</div><div class="dash-sub">본문 해석 복습 · ${currentClass?currentClass+' 반':'전체 반'}${currentWeek?' · '+currentWeek:''} · 실시간 학습 현황</div></div></div><div style="display:flex;gap:8px">${currentClass==='고1 종합'?'<button class="dash-btn" onclick="smsOpen()"><span class="material-symbols-outlined">send</span> 문자 발송</button>':''}<button class="dash-btn" onclick="loadData()"><span class="material-symbols-outlined">refresh</span> 새로고침</button></div></div>
 
   <div class="class-bar">${clsList.map(c=>{const cn=classParticipants(c);const tt=ROSTERS[c].length;return `<button class="cls-btn${currentClass===c?' on':''}" onclick="setClass('${c}')"><span class="material-symbols-outlined">groups</span>${c}<span class="cls-cnt">${cn}/${tt}</span></button>`;}).join('')||'<span style="color:var(--text4);font-size:13px">시트에 명단이 아직 없습니다</span>'}</div>
 
@@ -352,6 +363,83 @@ function showSt(name){
 }
 
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('show');}
+
+/* ===== 문자 발송 (고1 종합 · 비공개 발송서버 연동) ===== */
+var SMS_URL=localStorage.getItem('SMS_URL')||'';
+var smsNames=[], smsSel={};
+function smsOpen(){document.getElementById('smsOverlay').classList.add('show');smsRender();if(SMS_URL)smsLoadList();}
+function smsClose(){document.getElementById('smsOverlay').classList.remove('show');}
+function smsEsc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function smsRender(){
+  document.getElementById('smsc').innerHTML=`
+   <h3>문자 발송 · 고1 종합 1주차 복습시험</h3>
+   <div class="msub">세종어제훈민정음 성적 리포트를 학부모·학생에게 전송합니다. 연락처와 문구는 비공개 발송서버(Apps Script)에만 저장되며 공개 사이트엔 없습니다.</div>
+   <div class="sms-box">
+     <div style="font-size:12px;color:var(--text3);margin-bottom:6px">발송 서버 URL (Apps Script 웹앱 /exec)</div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+       <input id="smsUrl" class="sms-inp" value="${smsEsc(SMS_URL)}" placeholder="https://script.google.com/macros/s/…/exec">
+       <button class="dash-btn" onclick="smsSaveUrl()">저장</button>
+       <button class="dash-btn" onclick="smsPing()">연결확인</button>
+     </div>
+     <div id="smsStat" style="font-size:12px;margin-top:8px;color:var(--text3)"></div>
+   </div>
+   <div id="smsBody"><div style="color:var(--text4);font-size:13px">발송 서버 URL을 저장하고 연결확인을 누르면 학생 목록이 표시됩니다.</div></div>`;
+}
+function smsSetStat(t,ok){var e=document.getElementById('smsStat');if(!e)return;e.innerHTML=t;e.style.color=ok===true?'var(--mint)':ok===false?'var(--red)':'var(--text3)';}
+function smsFetch(params){var u=SMS_URL+(SMS_URL.indexOf('?')<0?'?':'&')+params;return fetch(u).then(function(r){return r.json();});}
+function smsSaveUrl(){SMS_URL=document.getElementById('smsUrl').value.trim();localStorage.setItem('SMS_URL',SMS_URL);if(SMS_URL){smsSetStat('저장됨. 목록 불러오는 중…');smsLoadList();}else smsSetStat('URL을 입력하세요.',false);}
+function smsPing(){if(!SMS_URL){smsSetStat('URL을 먼저 입력·저장하세요.',false);return;}smsSetStat('확인 중…');smsFetch('action=ping').then(function(j){smsSetStat(j.ok?'연결됨 · 등록 학생 '+j.total+'명':'응답 오류: '+(j.error||''),!!j.ok);}).catch(function(e){smsSetStat('연결 실패: '+e,false);});}
+function smsLoadList(){smsFetch('action=list').then(function(j){if(!j.ok){smsSetStat('목록 오류',false);return;}smsNames=j.names;smsSel={};smsNames.forEach(function(n){smsSel[n]=true;});smsSetStat('연결됨 · 등록 학생 '+smsNames.length+'명',true);smsRenderBody();}).catch(function(e){smsSetStat('목록 실패: '+e,false);});}
+function smsTarget(){var r=document.querySelector('input[name=smsTgt]:checked');return r?r.value:'both';}
+function smsCnt(){var e=document.getElementById('smsCnt');if(!e)return;var n=smsNames.filter(function(x){return smsSel[x];}).length;e.textContent='('+n+'/'+smsNames.length+' 선택)';}
+function smsToggle(n,el){smsSel[n]=el.checked;el.parentElement.classList.toggle('on',el.checked);smsCnt();}
+function smsAll(v){smsNames.forEach(function(n){smsSel[n]=!!v;});document.querySelectorAll('#smsBody .sms-chip').forEach(function(l){l.classList.toggle('on',!!v);l.querySelector('input').checked=!!v;});smsCnt();}
+function smsRenderBody(){
+  var b=document.getElementById('smsBody');if(!smsNames.length){b.innerHTML='<div style="color:var(--text4);font-size:13px">등록된 학생이 없습니다.</div>';return;}
+  var chips=smsNames.map(function(n){return '<label class="sms-chip on"><input type="checkbox" checked onchange="smsToggle(\''+n+'\',this)" style="display:none">'+n+'</label>';}).join('');
+  var opts=smsNames.map(function(n){return '<option>'+n+'</option>';}).join('');
+  b.innerHTML=`
+   <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+     <div style="font-size:13px;font-weight:600">대상</div>
+     <label class="sms-rad"><input type="radio" name="smsTgt" value="both" checked onchange="smsPreview()"> 학부모+학생</label>
+     <label class="sms-rad"><input type="radio" name="smsTgt" value="parent" onchange="smsPreview()"> 학부모만</label>
+     <label class="sms-rad"><input type="radio" name="smsTgt" value="student" onchange="smsPreview()"> 학생만</label>
+   </div>
+   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+     <div style="font-size:13px;font-weight:600">학생 <span id="smsCnt" style="color:var(--text3);font-weight:400"></span></div>
+     <div style="display:flex;gap:6px"><button class="dash-btn sm" onclick="smsAll(1)">전체</button><button class="dash-btn sm" onclick="smsAll(0)">해제</button></div>
+   </div>
+   <div class="sms-chips">${chips}</div>
+   <div style="margin:16px 0 8px;font-size:13px;font-weight:600">미리보기</div>
+   <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+     <select id="smsPrevName" onchange="smsPreview()" style="padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px">${opts}</select>
+     <span style="font-size:12px;color:var(--text4)">대상 선택에 따라 문구가 바뀝니다</span>
+   </div>
+   <pre id="smsPrev" class="sms-pre"></pre>
+   <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+     <button class="dash-btn" onclick="smsSend(true)">테스트(발송 안 함)</button>
+     <button class="dash-btn primary" onclick="smsSend(false)"><span class="material-symbols-outlined">send</span> 실제 발송</button>
+   </div>
+   <div id="smsResult" style="margin-top:14px;font-size:12px;line-height:1.6"></div>`;
+  smsCnt();smsPreview();
+}
+function smsPreview(){
+  var nameEl=document.getElementById('smsPrevName');if(!nameEl)return;var name=nameEl.value,t=smsTarget(),pre=document.getElementById('smsPrev');pre.textContent='불러오는 중…';
+  if(t==='both'){Promise.all([smsFetch('action=preview&target=parent&name='+encodeURIComponent(name)),smsFetch('action=preview&target=student&name='+encodeURIComponent(name))]).then(function(r){var p=r[0],s=r[1];pre.textContent='[학부모]\n'+(p.ok?p.text:'('+(p.error||'없음')+')')+'\n\n──────────\n\n[학생]\n'+(s.ok?s.text:'('+(s.error||'없음')+')');});}
+  else{smsFetch('action=preview&target='+t+'&name='+encodeURIComponent(name)).then(function(j){pre.textContent=j.ok?j.text:'('+(j.error||'없음')+')';});}
+}
+function smsSend(dry){
+  var sel=smsNames.filter(function(n){return smsSel[n];});if(!sel.length){alert('선택된 학생이 없습니다.');return;}
+  var t=smsTarget(),tl={both:'학부모+학생',parent:'학부모',student:'학생'}[t];
+  if(!dry&&!confirm(sel.length+'명에게 실제 문자를 발송합니다.\n대상: '+tl+'\n\n계속할까요?'))return;
+  var res=document.getElementById('smsResult');res.style.color='var(--text3)';res.textContent=dry?'테스트 중…':'발송 중…';
+  var names=sel.map(encodeURIComponent).join(',');
+  smsFetch('action=send&target='+t+'&dryRun='+(dry?'1':'0')+'&names='+names).then(function(j){
+    if(!j.ok){res.style.color='var(--red)';res.innerHTML='실패: '+smsEsc(j.error||JSON.stringify(j))+(j.skipped&&j.skipped.length?'<br>제외: '+smsEsc(j.skipped.join(', ')):'');return;}
+    if(j.dryRun){res.style.color='var(--mint)';res.innerHTML='✓ 테스트 성공 · 실제 발송 시 <b>'+j.count+'건</b> 전송됩니다.'+(j.skipped&&j.skipped.length?'<br><span style="color:var(--text3)">제외 '+j.skipped.length+'건: '+smsEsc(j.skipped.join(', '))+'</span>':'');}
+    else{res.style.color='var(--mint)';res.innerHTML='✓ 발송 완료 · <b>'+j.count+'건</b> (응답코드 '+j.code+')'+(j.skipped&&j.skipped.length?'<br><span style="color:var(--text3)">제외 '+j.skipped.length+'건: '+smsEsc(j.skipped.join(', '))+'</span>':'');}
+  }).catch(function(e){res.style.color='var(--red)';res.textContent='오류: '+e;});
+}
 
 loadData();
 </script>
