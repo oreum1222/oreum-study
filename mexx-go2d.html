@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>MEXX 고2 단과 복습 시험</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--card:#0f1626;--card2:#101a2c;--line:rgba(148,163,190,.16);--line2:rgba(148,163,190,.3);--mint:#4ae3c0;--mint2:#3ec4a8;--mint-soft:rgba(74,227,192,.10);--silver:#e6ebf3;--silver2:#a7b1c5;--muted:#6a7488;--serif:'Nanum Myeongjo',serif;--num:'Inter',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;word-break:keep-all}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--silver);line-height:1.7;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto;padding:48px 18px}
+.head{text-align:center;margin-bottom:34px}
+.badge{display:inline-block;font-family:var(--serif);font-weight:800;font-size:12px;color:#06251f;background:linear-gradient(135deg,var(--mint2),var(--mint));padding:5px 12px;border-radius:6px;margin-bottom:14px}
+.title{font-family:var(--serif);font-size:27px;font-weight:800}
+.title b{color:var(--mint)}
+.sub{font-size:14px;color:var(--muted);margin-top:8px}
+.desc{font-size:13px;color:var(--silver2);margin-top:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.card{display:block;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;transition:.16s;color:var(--silver)}
+.card:hover{border-color:var(--mint);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.card .ic{width:44px;height:44px;border-radius:11px;background:var(--mint-soft);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.card .ic .ms{font-family:'Material Symbols Outlined';color:var(--mint);font-size:24px}
+.card .wk{font-family:var(--num);font-weight:800;font-size:13px;color:var(--mint);letter-spacing:.3px}
+.card .t{font-size:17px;font-weight:700;margin-top:5px}
+.card .g{font-size:13px;color:var(--silver2);margin-top:6px}
+.card .cnt{font-size:12px;color:var(--muted);margin-top:10px}
+.card.soon{opacity:.5;pointer-events:none}
+.card.soon .ms,.card.soon .wk{color:var(--muted)}
+.foot{text-align:center;font-size:12px;color:var(--muted);margin-top:34px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.title{font-size:23px}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="badge">김가경 국어 연구소</div>
+    <div class="title">MEXX 고2 단과 <b>복습 시험</b></div>
+    <div class="sub">주차를 선택하세요</div>
+  </div>
+  <div class="grid">
+    <a class="card" href="mexx-go2-w3.html">
+      <div class="ic"><span class="ms">quiz</span></div>
+      <div class="wk">3주차</div>
+      <div class="t">품사 · 형태소 · 단어</div>
+      <div class="g">품사와 문장 성분 · 형태소 · 단어의 구조</div>
+      <div class="cnt">O/X 20 · 객관식 5</div>
+    </a>
+    <a class="card" href="mexx-go2-w5.html">
+      <div class="ic"><span class="ms">quiz</span></div>
+      <div class="wk">5주차</div>
+      <div class="t">음운</div>
+      <div class="g">음운의 개념과 종류 · 음절과 음절의 제약</div>
+      <div class="cnt">O/X 11 · 객관식 3</div>
+    </a>
+  </div>
+  <div class="foot">국어 가뿐하게, 경쾌하게! 김가경T</div>
+</div>
+</body></html>
