@@ -219,7 +219,9 @@ function renderAll(){
   // 주차 필터: 유효성 확인 + 주차별 뷰 계산
   const weeks=WEEKMAP[currentClass]?Object.keys(WEEKMAP[currentClass]):[];
   if(currentWeek&&weeks.indexOf(currentWeek)<0)currentWeek='';
-  const inWk=(work)=>{ if(!currentWeek)return true; const m=WEEKMAP[currentClass]; return !!(m&&m[currentWeek]&&m[currentWeek].indexOf(work)>=0); };
+  const cmap=WEEKMAP[currentClass];
+  const clsWorks=cmap?new Set(Object.values(cmap).flat()):null;  // 이 반에 등록된 전체 작품
+  const inWk=(work)=>{ if(currentWeek){ return !!(cmap&&cmap[currentWeek]&&cmap[currentWeek].indexOf(work)>=0); } return clsWorks?clsWorks.has(work):true; };  // 전체=이 반 주차 작품만(타 반 작품 유입 차단)
   const view={};
   names.forEach(n=>{
     const ws=(students[n].works||[]).filter(w=>String(w.work).indexOf('【명단】')!==0 && inWk(w.work));
@@ -348,7 +350,8 @@ function renderBaekji(){
 
 function showSt(name){
   const st=students[name];if(!st)return;
-  const wks=(st.works||[]).filter(w=>String(w.work).indexOf('【명단】')!==0 && (!currentWeek||((WEEKMAP[currentClass]||{})[currentWeek]||[]).indexOf(w.work)>=0));
+  const _cm=WEEKMAP[currentClass], _cw=_cm?new Set(Object.values(_cm).flat()):null;
+  const wks=(st.works||[]).filter(w=>String(w.work).indexOf('【명단】')!==0 && (currentWeek?((_cm||{})[currentWeek]||[]).indexOf(w.work)>=0:(_cw?_cw.has(w.work):true)));
   let tc=0,tb=0;wks.forEach(w=>{tc+=Number(w.correct)||0;tb+=Number(w.total)||0;});
   const r=tb?Math.round(tc/tb*100):0;
   const g=r>=90?'A':r>=80?'B':r>=70?'C':r>=60?'D':'F';
